@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<!DOCTYPE hibernate-configuration PUBLIC
+
+  "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+
+  "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+
+<hibernate-configuration>
+	<session-factory>
+		<!-- JDBC connection settings -->
+		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+		<property name="hibernate.connection.url">jdbc:mysql://localhost/ylpzhaoxi</property>
+		<property name="hibernate.connection.username">root</property>
+		<property name="hibernate.connection.password">root</property>
+		<!-- JDBC connection pool, use Hibernate internal connection pool -->
+		<property name="hibernate.connection.pool_size">5</property>
+		<!-- Defines the SQL dialect used in Hiberante's application -->
+		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		<!-- Enable Hibernate's automatic session context management -->
+		<property name="hibernate.current_session_context_class">thread</property>
+		<!-- Disable the second-level cache -->
+		<property name="hibernate.cache.provider_class">org.hibernate.cache.NoCacheProvider</property>
+		<!-- Display and format all executed SQL to stdout -->
+		<property name="hibernate.show_sql">true</property>
+		<property name="hibernate.format_sql">true</property>
+		<!-- Drop and re-create the database schema on startup -->
+		<property name="hibernate.hbm2ddl.auto">update</property>
+		<!-- 注解类声明 -->
+		<mapping class="com.ylp.date.mgr.user.impl.User" />
+	</session-factory>
+</hibernate-configuration>
