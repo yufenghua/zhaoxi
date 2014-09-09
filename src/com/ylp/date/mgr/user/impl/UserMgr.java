@@ -33,10 +33,10 @@ public class UserMgr implements IUserMgr {
 		logger.debug("usermgr destroy");
 	}
 
-	public IBaseObj getObj(String id) {
+	public User getObj(String id) {
 		Session session = Server.getInstance().getCurentSession();
 		try {
-			return (IBaseObj) session.get(User.class, id);
+			return  (User) session.get(User.class, id);
 		} finally {
 			session.getTransaction().commit();
 		}

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import com.ylp.date.app.ApplicationListener;
 import com.ylp.date.mgr.user.IUserMgr;
 import com.ylp.date.mgr.user.impl.UserMgr;
+import com.ylp.date.security.impl.RolePmcheckMgr;
 
 /**
  * Application root object。 singleton
@@ -80,11 +81,22 @@ public class Server {
 
 	/**
 	 * get usermgr from spring context
+	 * 
 	 * @return IUserMgr object .Actually return an UserMgr instance
 	 */
 	public IUserMgr userMgr() {
 		return ApplicationListener.getWebApplicationContext().getBean(
 				SpringNames.UserMgr, UserMgr.class);
+	}
+
+	/**
+	 * get role pmchecker
+	 * 
+	 * @return
+	 */
+	public RolePmcheckMgr getRoleCheckerMgr() {
+		return ApplicationListener.getWebApplicationContext().getBean(
+				SpringNames.RolePmChecker, RolePmcheckMgr.class);
 	}
 
 }
