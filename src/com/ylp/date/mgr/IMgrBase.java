@@ -28,7 +28,7 @@ public interface IMgrBase {
 	 * list IBaseObj instance with the giving range
 	 * 
 	 * @param page
-	 *            page range object £¬if null ,will return all ins
+	 *            page range object if null ,will return all ins
 	 * @return
 	 */
 	List<IBaseObj> list(PageCondition page);
