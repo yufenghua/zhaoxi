@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 
+import com.ylp.date.mgr.condtion.ConditionPair;
 import com.ylp.date.server.Server;
 import com.ylp.date.storage.HibernateStorageUtil;
 
@@ -39,7 +40,7 @@ public abstract class BaseObjMgr implements IMgrBase {
 		return list(page, null);
 	}
 
-	public List<IBaseObj> list(PageCondition page, Condition cond) {
+	public List<IBaseObj> list(PageCondition page, ConditionPair cond) {
 		Session session = Server.getInstance().getCurentSession();
 		try {
 			Criteria criteria = session.createCriteria(getBean());
@@ -56,7 +57,9 @@ public abstract class BaseObjMgr implements IMgrBase {
 	 * @param criteria
 	 * @param cond
 	 */
-	protected abstract void setCondition(Criteria criteria, Condition cond);
+	protected void setCondition(Criteria criteria, ConditionPair cond) {
+
+	}
 
 	/**
 	 * handle with pageCondition 。usually subclass don`t need to override this

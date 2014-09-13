@@ -2,6 +2,8 @@ package com.ylp.date.mgr;
 
 import java.util.List;
 
+import com.ylp.date.mgr.condtion.ConditionPair;
+
 /**
  * The root interface for manager objects
  * 
@@ -40,7 +42,7 @@ public interface IMgrBase {
 	 * @param cond Condition object
 	 * @return
 	 */
-	List<IBaseObj> list(PageCondition page, Condition cond);
+	List<IBaseObj> list(PageCondition page, ConditionPair cond);
 
 	/**
 	 * add an ins
