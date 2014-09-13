@@ -1,0 +1,52 @@
+form.match-form{
+    padding: 10px 0;
+}
+form.match-form div.male,
+form.match-form div.female{
+    display: none;
+}
+ul.list{
+    margin-bottom:50px;
+}
+ul.list li{
+    position: relative;
+    float: left;
+    width:188px;
+    margin: 0 105px 0 0;
+    padding: 0;
+    list-style-type: none;
+    border: 1px solid #eee;
+    cursor: pointer;
+}
+ul.list li a.send-flower{
+    position: absolute;
+    left: 100%;
+    bottom: 0;
+    width: 25px;
+    height: 50px;
+    background: url(../img/flower2.png) no-repeat;
+}
+ul.list li:last-child{
+    margin-right: 0px;
+}
+ul.list li img{
+    max-width: 186px;
+    max-height: 208px
+}
+ul.list li.selected{
+    border: 1px solid #999;
+}
+ul.list li p{
+    margin-bottom: 0px;
+    font-size: 13px;
+    padding-left: 2em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis;
+}
+.submit-area{
+    text-align: center;
+}
+.submit-area button{
+    margin-right: 20px;
+}

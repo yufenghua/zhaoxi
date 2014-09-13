@@ -1,0 +1,22 @@
+h4{
+    text-align: center;
+}
+.avatar img{
+    max-width: 300px;
+}
+.col-sm-10{
+    padding-top: 6px;
+}
+input[type=radio]{
+    margin-left: 15px;
+}
+.navbar-btn.btn-xs{
+    margin-top: 7px;
+}
+form{
+    width: 605px;
+    margin: 0 auto;
+}
+.form-horizontal .form-group:first-child{
+    margin-bottom: 8px;
+}
