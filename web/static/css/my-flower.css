@@ -1,0 +1,35 @@
+ul.link-list li{
+    float: left;
+    clear: both;
+    list-style-type: none;
+    margin-top: 30px;
+}
+li span.time,
+li span.from,
+li > div{
+    float: left;
+}
+li span.time {
+    line-height: 165px;
+    width: 165px;
+}
+li span.from{
+    width: 100px;
+    line-height: 165px;
+    text-align: center;
+}
+li > div.link{
+    height: 165px;
+    width: 125px;
+    margin: 0 40px;
+    border: 1px solid #eee;
+    overflow: hidden;
+    text-align: center;
+}
+li > div.link img{
+    display: block;
+    max-height: 138px;
+}
+.chat{
+    padding-top: 60px;
+}

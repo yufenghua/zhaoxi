@@ -1,0 +1,33 @@
+body{
+    background: transparent url(../img/bg.jpg) no-repeat 0 0 scroll;
+    background-size: 100% auto;
+    color: #333;
+}
+.container{
+    width: 835px;
+}
+.form-wrapper{
+    width: 260px;
+    margin: 320px auto 0;
+}
+.form-wrapper .form-group{
+    margin-bottom: 5px;
+}
+#login{
+    float: left;
+    width: 260px;
+    margin-top: 94px;
+    display: none;
+}
+#login input[type=submit]{
+    margin-top: 30px;
+}
+/*span.tip{
+    position:relative;
+    top:-33px;
+    left:266px;
+}*/
+.toggle-btn{
+    position: absolute;
+    top: 538px;
+}
