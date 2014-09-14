@@ -86,17 +86,7 @@ public abstract class BaseObjMgr implements IMgrBase {
 	}
 
 	public boolean remove(String id) {
-		IBaseObj user;
-		try {
-			user = (IBaseObj) getBean().newInstance();
-		} catch (InstantiationException e) {
-			throw new RuntimeException(
-					"must have an accessable none parameter constructor");
-		} catch (IllegalAccessException e) {
-			throw new RuntimeException(
-					"must have an accessable none parameter constructor");
-		}
-		user.setId(id);
+		IBaseObj user=this.getObj(id);
 		return HibernateStorageUtil.removeObj(getBean().getName(), user);
 	}
 

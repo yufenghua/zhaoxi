@@ -70,7 +70,7 @@ public class User implements IUser {
 		this.flower = flower;
 	}
 
-	@Column(name = "IMAGE_")
+	@Column(name = "FLOWER_")
 	private int flower;
 
 	public byte[] getCardImgBytes() {

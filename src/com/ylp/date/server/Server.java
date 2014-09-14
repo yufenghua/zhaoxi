@@ -89,7 +89,7 @@ public class Server {
 	 * @return IUserMgr object .Actually return an UserMgr instance
 	 */
 	public IUserMgr userMgr() {
-		return ApplicationListener.getWebApplicationContext().getBean(
+		return ApplicationListener.getApplicationContext().getBean(
 				SpringNames.UserMgr, UserMgr.class);
 	}
 
@@ -99,22 +99,22 @@ public class Server {
 	 * @return
 	 */
 	public RolePmcheckMgr getRoleCheckerMgr() {
-		return ApplicationListener.getWebApplicationContext().getBean(
+		return ApplicationListener.getApplicationContext().getBean(
 				SpringNames.RolePmChecker, RolePmcheckMgr.class);
 	}
 
 	public RelationMgr getRelationMgr() {
-		return ApplicationListener.getWebApplicationContext().getBean(
+		return ApplicationListener.getApplicationContext().getBean(
 				SpringNames.RelationMgr, RelationMgr.class);
 	}
 
 	public UserTagMgr getUserTagMgr() {
-		return ApplicationListener.getWebApplicationContext().getBean(
+		return ApplicationListener.getApplicationContext().getBean(
 				SpringNames.TagMgr, UserTagMgr.class);
 	}
 
 	public UserTagSugMgr getUserTagSugMgr() {
-		return ApplicationListener.getWebApplicationContext().getBean(
+		return ApplicationListener.getApplicationContext().getBean(
 				SpringNames.TagSugMgr, UserTagSugMgr.class);
 	}
 

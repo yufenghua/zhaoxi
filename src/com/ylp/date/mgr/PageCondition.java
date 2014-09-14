@@ -1,15 +1,26 @@
 package com.ylp.date.mgr;
 /**
- * ·ÖÒ³²éÑ¯Ìõ¼ş
+ * ï¿½ï¿½Ò³ï¿½ï¿½Ñ¯ï¿½ï¿½ï¿½ï¿½
  * @author Qiaolin Pan
  *
  */
 public class PageCondition {
+	private int start;
+	private int length;
+	
 	public int getStart() {
-		return 0;
+		return start;
+	}
+
+	public void setStart(int start) {
+		this.start = start;
+	}
+
+	public void setLength(int length) {
+		this.length = length;
 	}
 
 	public int getLength() {
-		return 0;
+		return length;
 	}
 }

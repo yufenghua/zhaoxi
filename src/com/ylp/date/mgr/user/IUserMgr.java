@@ -1,8 +1,13 @@
 package com.ylp.date.mgr.user;
 
+import java.util.List;
+
 import com.ylp.date.mgr.IMgrBase;
+import com.ylp.date.mgr.PageCondition;
+import com.ylp.date.mgr.condtion.ConditionPair;
 
 public interface IUserMgr extends IMgrBase {
 	IUser getObj(String id);
 
+	List<IUser> listUser(PageCondition condition,ConditionPair pair);
 }
