@@ -1,42 +1,73 @@
 package com.ylp.date.mgr.relation.impl;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import com.ylp.date.mgr.relation.IRelation;
 
+@Entity
+@Table(name = "DATE_RELATION")
 public class UserRelation implements IRelation {
+	@Column(name = "ID_", nullable = false)
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private String id;
+	@Column(name = "PART_", nullable = false)
+	private String one;
+	@Column(name = "OTHREPART_", nullable = false)
+	private String otherOne;
+	@Column(name = "TYPE_", nullable = false)
+	private int type;
+	@Column(name = "RECOGNITION _", nullable = false)
+	private int recognition = 1;
 
 	public String getId() {
-		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 	public String getCaption() {
-		// TODO Auto-generated method stub
-		return null;
+		return id;
 	}
 
 	public void setId(String id) {
-		// TODO Auto-generated method stub
+		this.id = id;
 
 	}
 
 	public String getOne() {
-		// TODO Auto-generated method stub
-		return null;
+		return one;
 	}
 
 	public String getOtherOne() {
-		// TODO Auto-generated method stub
-		return null;
+		return otherOne;
 	}
 
 	public int getType() {
-		// TODO Auto-generated method stub
-		return 0;
+		return type;
 	}
 
 	public int getRecognition() {
-		// TODO Auto-generated method stub
-		return 0;
+		return recognition;
+	}
+
+	public void setOne(String one) {
+		this.one = one;
+	}
+
+	public void setOtherOne(String otherOne) {
+		this.otherOne = otherOne;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public void setRecognition(int recognition) {
+		this.recognition = recognition;
 	}
 
 }

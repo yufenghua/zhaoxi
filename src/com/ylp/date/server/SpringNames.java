@@ -6,5 +6,6 @@ public class SpringNames {
 	public static final String RolePmChecker="rolechecker";
 	public static final String TagMgr="usertagmgr";
 	public static final String TagSugMgr="usertagsugmgr";
+	public static final String RelationMgr="relationmgr";
 
 }

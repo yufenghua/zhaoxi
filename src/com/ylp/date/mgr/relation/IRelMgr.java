@@ -24,10 +24,18 @@ public interface IRelMgr extends IMgrBase {
 	 */
 	List<IRelation> listFlower(String userId);
 	/**
-	 * 二者能否建立关系
+	 * 二者能否建立关系，能建立关系的条件是:
+	 * 花，或者连线任一一个成立
 	 * @param userId
 	 * @param userId1
 	 * @return
 	 */
 	boolean canBuild(String userId,String userId1);
+	/**
+	 * 
+	 * @param userId
+	 * @param userId1
+	 * @return
+	 */
+	IRelation listFlowerBetween(String userId,String userId1);
 }

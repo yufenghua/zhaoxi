@@ -26,6 +26,9 @@ public class SimglePair implements ConditionPair {
 
 	}
 
+	public void setSecond(Condition second) {
+	}
+
 	public ConditionType getRelation() {
 		// TODO Auto-generated method stub
 		return null;

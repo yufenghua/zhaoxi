@@ -10,6 +10,11 @@ public class Condition {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public void eq(String prop, int recogLine) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

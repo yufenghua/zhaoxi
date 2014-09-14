@@ -12,6 +12,10 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.ylp.date.app.ApplicationListener;
+import com.ylp.date.mgr.relation.impl.RelationMgr;
+import com.ylp.date.mgr.relation.impl.UserRelation;
+import com.ylp.date.mgr.tag.impl.UserTagMgr;
+import com.ylp.date.mgr.tag.impl.UserTagSugMgr;
 import com.ylp.date.mgr.user.IUserMgr;
 import com.ylp.date.mgr.user.impl.UserMgr;
 import com.ylp.date.security.impl.RolePmcheckMgr;
@@ -97,6 +101,21 @@ public class Server {
 	public RolePmcheckMgr getRoleCheckerMgr() {
 		return ApplicationListener.getWebApplicationContext().getBean(
 				SpringNames.RolePmChecker, RolePmcheckMgr.class);
+	}
+
+	public RelationMgr getRelationMgr() {
+		return ApplicationListener.getWebApplicationContext().getBean(
+				SpringNames.RelationMgr, RelationMgr.class);
+	}
+
+	public UserTagMgr getUserTagMgr() {
+		return ApplicationListener.getWebApplicationContext().getBean(
+				SpringNames.TagMgr, UserTagMgr.class);
+	}
+
+	public UserTagSugMgr getUserTagSugMgr() {
+		return ApplicationListener.getWebApplicationContext().getBean(
+				SpringNames.TagSugMgr, UserTagSugMgr.class);
 	}
 
 }
