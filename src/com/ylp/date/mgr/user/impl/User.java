@@ -66,6 +66,13 @@ public class User implements IUser {
 	@Column(name = "IMAGE_")
 	private byte[] img;
 
+	public void setFlower(int flower) {
+		this.flower = flower;
+	}
+
+	@Column(name = "IMAGE_")
+	private int flower;
+
 	public byte[] getCardImgBytes() {
 		return cardImgBytes;
 	}
@@ -250,6 +257,11 @@ public class User implements IUser {
 
 	public void setImg(byte[] img) {
 		this.img = img;
+	}
+
+	public int getFlower() {
+		// TODO Auto-generated method stub
+		return flower;
 	}
 
 }

@@ -1,10 +1,13 @@
 package com.ylp.date.mgr.tag.impl;
 
+import org.springframework.stereotype.Component;
+
 import com.ylp.date.mgr.BaseObjMgr;
 import com.ylp.date.mgr.IBaseObj;
 import com.ylp.date.mgr.tag.ITagSug;
 import com.ylp.date.mgr.tag.ITagSugMgr;
-
+import com.ylp.date.server.SpringNames;
+@Component(SpringNames.TagSugMgr)
 public class UserTagSugMgr extends BaseObjMgr implements ITagSugMgr {
 
 	@Override

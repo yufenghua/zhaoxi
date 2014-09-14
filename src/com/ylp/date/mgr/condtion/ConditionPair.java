@@ -21,6 +21,7 @@ public interface ConditionPair {
 	/**
 	 * 
 	 * @param builder
+	 * @throws Exception
 	 */
-	void build(ConditionBuilder builder);
+	void build(ConditionBuilder builder) throws Exception;
 }

@@ -6,7 +6,7 @@ package com.ylp.date.mgr.condtion.impl;
  */
 public class Condition {
 
-	public void eq(String string, String sugId) {
+	public void eq(String prop, String value) {
 		// TODO Auto-generated method stub
 		
 	}

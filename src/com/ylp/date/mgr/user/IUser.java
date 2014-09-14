@@ -53,5 +53,10 @@ public interface IUser extends IBaseObj {
 
 	String getRole();
 	IUser getInviter();
+	/**
+	 * the flower count that can be used
+	 * @return
+	 */
+	int getFlower();
 
 }
