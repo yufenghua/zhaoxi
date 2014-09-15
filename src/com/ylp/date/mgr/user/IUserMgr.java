@@ -10,4 +10,6 @@ public interface IUserMgr extends IMgrBase {
 	IUser getObj(String id);
 
 	List<IUser> listUser(PageCondition condition,ConditionPair pair);
+
+	void addCupidValue(String userId, String id) throws Exception;
 }

@@ -24,12 +24,10 @@ public class HibernateStorageUtil {
 	 * @param ins
 	 * @return
 	 */
-	public static final boolean addObj(String entityName, IBaseObj ins) {
+	public static final IBaseObj addObj(String entityName, IBaseObj ins) {
 		Session session = Server.getInstance().getCurentSession();
 		try {
-			session.save(entityName, ins);
-			session.getTransaction().commit();
-			return true;
+			return (IBaseObj) session.save(entityName, ins);
 		} catch (Exception e) {
 			session.getTransaction().rollback();
 			logger.error(
@@ -39,6 +37,8 @@ public class HibernateStorageUtil {
 				throw (RuntimeException) e;
 			}
 			throw new RuntimeException(e);
+		} finally {
+			session.getTransaction().commit();
 		}
 
 	}

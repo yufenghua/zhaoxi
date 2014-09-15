@@ -51,7 +51,7 @@ public interface IMgrBase {
 	 *            ins ,can not be null
 	 * @return true if success or false
 	 */
-	boolean add(IBaseObj obj);
+	IBaseObj add(IBaseObj obj);
 
 	/**
 	 * remove an ins.

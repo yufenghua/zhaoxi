@@ -1,11 +1,15 @@
 package com.ylp.date.mgr;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ylp.date.mgr.condtion.ConditionPair;
+import com.ylp.date.mgr.condtion.impl.HibernateBuilder;
 import com.ylp.date.server.Server;
 import com.ylp.date.storage.HibernateStorageUtil;
 
@@ -16,6 +20,9 @@ import com.ylp.date.storage.HibernateStorageUtil;
  * 
  */
 public abstract class BaseObjMgr implements IMgrBase {
+	private static final Logger logger = LoggerFactory
+			.getLogger(BaseObjMgr.class);
+
 	/**
 	 * get the real class of ibaseobj
 	 * 
@@ -47,18 +54,25 @@ public abstract class BaseObjMgr implements IMgrBase {
 			setPage(criteria, page);
 			setCondition(criteria, cond);
 			return criteria.list();
+		} catch (Exception e) {
+			Server.getInstance().handleException(e);
+			logger.error("查询数据时发生异常", e);
 		} finally {
 			session.getTransaction().commit();
 		}
+		return Collections.emptyList();
 	}
 
 	/**
 	 * 
 	 * @param criteria
 	 * @param cond
+	 * @throws Exception
 	 */
-	protected void setCondition(Criteria criteria, ConditionPair cond) {
-
+	protected void setCondition(Criteria criteria, ConditionPair cond)
+			throws Exception {
+		HibernateBuilder builder = new HibernateBuilder(criteria);
+		cond.build(builder);
 	}
 
 	/**
@@ -81,12 +95,12 @@ public abstract class BaseObjMgr implements IMgrBase {
 		criteria.setMaxResults(size);
 	}
 
-	public boolean add(IBaseObj obj) {
+	public IBaseObj add(IBaseObj obj) {
 		return HibernateStorageUtil.addObj(getBean().getName(), obj);
 	}
 
 	public boolean remove(String id) {
-		IBaseObj user=this.getObj(id);
+		IBaseObj user = this.getObj(id);
 		return HibernateStorageUtil.removeObj(getBean().getName(), user);
 	}
 

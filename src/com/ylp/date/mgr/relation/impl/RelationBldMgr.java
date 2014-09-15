@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.springframework.context.annotation.DependsOn;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.stereotype.Component;
+
 import com.ylp.date.mgr.BaseObjMgr;
 import com.ylp.date.mgr.IBaseObj;
 import com.ylp.date.mgr.condtion.impl.Condition;
@@ -12,7 +16,11 @@ import com.ylp.date.mgr.relation.IRelation;
 import com.ylp.date.mgr.relation.IRelationBuilder;
 import com.ylp.date.mgr.relation.IRelationBuilderMgr;
 import com.ylp.date.server.Server;
+import com.ylp.date.server.SpringNames;
 
+@Component(SpringNames.RelationBuilderMgr)
+@DependsOn(SpringNames.Server)
+@Lazy(false)
 public class RelationBldMgr extends BaseObjMgr implements IRelationBuilderMgr {
 	public RelationBuilder getObj(String id) {
 		return (RelationBuilder) super.getObj(id);

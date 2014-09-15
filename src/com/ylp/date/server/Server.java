@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.ylp.date.app.ApplicationListener;
+import com.ylp.date.mgr.relation.impl.RelationBldMgr;
 import com.ylp.date.mgr.relation.impl.RelationMgr;
 import com.ylp.date.mgr.relation.impl.UserRelation;
 import com.ylp.date.mgr.tag.impl.UserTagMgr;
@@ -116,6 +117,24 @@ public class Server {
 	public UserTagSugMgr getUserTagSugMgr() {
 		return ApplicationListener.getApplicationContext().getBean(
 				SpringNames.TagSugMgr, UserTagSugMgr.class);
+	}
+
+	public RelationBldMgr getRelationBuilderMgr() {
+		return ApplicationListener.getApplicationContext().getBean(
+				SpringNames.RelationBuilderMgr, RelationBldMgr.class);
+	}
+
+	/**
+	 * global method to handle exception
+	 * 
+	 * @param e
+	 */
+	public void handleException(Exception e) {
+		if (e instanceof RuntimeException) {
+			throw (RuntimeException) e;
+		}
+		throw new RuntimeException(e);
+
 	}
 
 }

@@ -54,5 +54,25 @@ public class UserMgr extends BaseObjMgr implements IUserMgr {
 		}
 		return result;
 	}
-	
+
+	/**
+	 * @throws Exception
+	 * 
+	 */
+	public void addCupidValue(String userId, String id) throws Exception {
+		User user = getObj(userId);
+		user.setCupidvalue(user.getCupidvalue() + calcScore(userId, id));
+		update(userId, user);
+	}
+
+	/**
+	 * 
+	 * @param userId
+	 * @param id
+	 * @return
+	 */
+	public int calcScore(String userId, String id) {
+		return 1;
+	}
+
 }
