@@ -104,6 +104,9 @@ public class HibernateBuilder implements ConditionBuilder {
 	}
 
 	private Criterion handleCondtion(Condition first) {
+		if (first == null) {
+			return null;
+		}
 		Map<String, Object> map = first.getEqs();
 		if (map.isEmpty()) {
 			return null;

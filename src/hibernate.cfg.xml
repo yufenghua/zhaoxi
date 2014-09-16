@@ -29,5 +29,9 @@
 		<property name="hibernate.hbm2ddl.auto">update</property>
 		<!-- 注解类声明 -->
 		<mapping class="com.ylp.date.mgr.user.impl.User" />
+		<mapping class="com.ylp.date.mgr.tag.impl.UserTag" />
+		<mapping class="com.ylp.date.mgr.tag.impl.UserTagSug" />
+		<mapping class="com.ylp.date.mgr.relation.impl.RelationBuilder" />
+		<mapping class="com.ylp.date.mgr.relation.impl.UserRelation" />
 	</session-factory>
 </hibernate-configuration>

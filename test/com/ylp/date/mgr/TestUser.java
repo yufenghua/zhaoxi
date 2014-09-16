@@ -17,6 +17,7 @@ import com.ylp.date.server.Server;
 import junit.framework.TestCase;
 
 public class TestUser extends TestBase {
+	@Test
 	public void testAdd() {
 		TestContextInitor.init();
 		User user = getUser();
@@ -58,6 +59,7 @@ public class TestUser extends TestBase {
 
 	@Test
 	public void testRemove() {
+		TestContextInitor.init();
 		IUserMgr userMgr = Server.getInstance().userMgr();
 		List<IBaseObj> list = userMgr.list();
 		if (list.isEmpty()) {
@@ -73,6 +75,7 @@ public class TestUser extends TestBase {
 
 	@Test
 	public void testList() {
+		TestContextInitor.init();
 		IUserMgr userMgr = Server.getInstance().userMgr();
 		List<IBaseObj> list = userMgr.list();
 		if (list.isEmpty()) {

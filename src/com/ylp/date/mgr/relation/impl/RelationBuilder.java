@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.ylp.date.mgr.relation.IRelation;
 import com.ylp.date.mgr.relation.IRelationBuilder;
 import com.ylp.date.server.Server;
@@ -18,7 +20,8 @@ import com.ylp.date.server.Server;
 public class RelationBuilder implements IRelationBuilder {
 	@Column(name = "ID_", nullable = false)
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(generator = "uuidger")  
+	@GenericGenerator(name = "uuidger", strategy = "uuid")  
 	private String id;
 	@Column(name = "RELID_", nullable = false)
 	private String relationId;

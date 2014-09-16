@@ -25,6 +25,8 @@ import com.ylp.date.mgr.condtion.impl.SimglePair;
 import com.ylp.date.mgr.relation.IRelMgr;
 import com.ylp.date.mgr.relation.IRelation;
 import com.ylp.date.mgr.relation.IRelationBuilder;
+import com.ylp.date.mgr.user.IUser;
+import com.ylp.date.mgr.user.impl.User;
 import com.ylp.date.server.Server;
 import com.ylp.date.server.SpringNames;
 
@@ -121,7 +123,6 @@ public class RelationMgr extends BaseObjMgr implements IRelMgr {
 		pair = new SimglePair();
 		condition = new Condition();
 		condition.eq("one", userId1);
-		pair = new SimglePair();
 		pair.setFirst(condition);
 		condition = new Condition();
 		condition.eq("otherOne", userId);
@@ -145,8 +146,8 @@ public class RelationMgr extends BaseObjMgr implements IRelMgr {
 			return false;
 		}
 		IRelation flower = getFlowerBetween(userId, userId1);
-		boolean b = flower != null
-				&& flower.getRecognition() == IRelation.RECOG_FLOWER;
+		// 不存在 或者没有成立
+		boolean b = (flower == null || flower.getRecognition() < IRelation.RECOG_FLOWER);
 		return b;
 	}
 
@@ -204,6 +205,8 @@ public class RelationMgr extends BaseObjMgr implements IRelMgr {
 					throw new BusinessException(BusinessException.BUILD_DONE);
 				}
 			}
+		} else {
+			throw new BusinessException(BusinessException.CODE_RELATION_EXIST);
 		}
 
 	}
@@ -258,6 +261,40 @@ public class RelationMgr extends BaseObjMgr implements IRelMgr {
 			return null;
 		}
 		return list.get(0);
+	}
+
+	public void sendFlower(String sender, String receiver) {
+		User user = (User) Server.getInstance().userMgr().getObj(sender);
+		if (user == null) {
+			throw new BusinessException(BusinessException.CODE_NO_SUCH_USER,
+					sender);
+		}
+		int flower = user.getFlower();
+		if (flower == 0) {
+			throw new BusinessException(BusinessException.CODE_NO_FLOWER,
+					sender);
+		}
+		if (canBuild(sender, receiver)) {
+			IRelation rel = getFlowerBetween(sender, receiver);
+			if (rel != null) {
+				throw new BusinessException(BusinessException.CODE_SEND_FLOWER);
+			}
+			UserRelation relation = new UserRelation();
+			relation.setOne(sender);
+			relation.setOtherOne(receiver);
+			relation.setRecognition(1);
+			relation.setType(IRelation.TYPE_FLOWER);
+			relation = (UserRelation) add(relation);
+			handleBuilder(relation.getId(), sender);
+			user.setFlower(flower - 1);
+			try {
+				Server.getInstance().userMgr().update(sender, user);
+			} catch (Exception e) {
+				logger.error("更新用户信息失败,用户id" + sender + "原始鲜花数量" + flower, e);
+			}
+		} else {
+			throw new BusinessException(BusinessException.CODE_RELATION_EXIST);
+		}
 	}
 
 }

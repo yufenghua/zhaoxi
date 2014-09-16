@@ -71,6 +71,9 @@ public abstract class BaseObjMgr implements IMgrBase {
 	 */
 	protected void setCondition(Criteria criteria, ConditionPair cond)
 			throws Exception {
+		if (cond == null) {
+			return;
+		}
 		HibernateBuilder builder = new HibernateBuilder(criteria);
 		cond.build(builder);
 	}

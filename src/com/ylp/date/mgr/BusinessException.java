@@ -8,6 +8,10 @@ package com.ylp.date.mgr;
  */
 public class BusinessException extends RuntimeException {
 	/**
+	 * 用户不存在
+	 */
+	public static final int CODE_NO_SUCH_USER = 101;
+	/**
 	 * 连线已成功 无法再次连线
 	 */
 	public static final int CODE_LINE_FULL = 301;
@@ -19,11 +23,28 @@ public class BusinessException extends RuntimeException {
 	 * 添加丘比特值时 发生错误
 	 */
 	public static final int CODE_ADD_CUPID = 303;
+	/**
+	 * 没有可用的鲜花
+	 */
+	public static final int CODE_NO_FLOWER = 304;
+	/**
+	 * 已经存在关系
+	 */
+	public static final int CODE_RELATION_EXIST = 305;
+	/**
+	 * 已经送过花了
+	 */
+	public static final int CODE_SEND_FLOWER = 306;
 	private int code;
+	private String objId;
 
 	public BusinessException(int code) {
-		super(getErrorMsg(code));
 		this.code = code;
+	}
+
+	public BusinessException(int code, String objId) {
+		this.code = code;
+		this.objId = objId;
 	}
 
 	public int getCode() {

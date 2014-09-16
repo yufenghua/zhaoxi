@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.ylp.date.mgr.relation.IRelation;
 
 @Entity
@@ -14,7 +16,8 @@ import com.ylp.date.mgr.relation.IRelation;
 public class UserRelation implements IRelation {
 	@Column(name = "ID_", nullable = false)
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(generator = "uuidger")  
+	@GenericGenerator(name = "uuidger", strategy = "uuid")  
 	private String id;
 	@Column(name = "PART_", nullable = false)
 	private String one;
@@ -22,7 +25,7 @@ public class UserRelation implements IRelation {
 	private String otherOne;
 	@Column(name = "TYPE_", nullable = false)
 	private int type;
-	@Column(name = "RECOGNITION _", nullable = false)
+	@Column(name = "RECOGNITION_")
 	private int recognition = 1;
 
 	public String getId() {

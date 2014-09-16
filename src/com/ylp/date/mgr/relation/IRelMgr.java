@@ -62,4 +62,10 @@ public interface IRelMgr extends IMgrBase {
 	 * @throws Exception
 	 */
 	void buildLine(String userId, String one, String other) throws Exception;
+	/**
+	 * send flower
+	 * @param sender
+	 * @param receiver
+	 */
+	void sendFlower(String sender,String receiver);
 }

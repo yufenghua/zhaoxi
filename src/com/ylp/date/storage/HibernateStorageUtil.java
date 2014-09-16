@@ -1,6 +1,7 @@
 package com.ylp.date.storage;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,10 +27,11 @@ public class HibernateStorageUtil {
 	 */
 	public static final IBaseObj addObj(String entityName, IBaseObj ins) {
 		Session session = Server.getInstance().getCurentSession();
+		Transaction transaction = session.getTransaction();
 		try {
-			return (IBaseObj) session.save(entityName, ins);
+			return (IBaseObj) session.get(entityName, session.save(entityName, ins));
 		} catch (Exception e) {
-			session.getTransaction().rollback();
+			transaction.rollback();
 			logger.error(
 					"插入对象时出现异常,对象id:" + ins.getId() + " 对象标题:"
 							+ ins.getCaption(), e);
@@ -38,7 +40,7 @@ public class HibernateStorageUtil {
 			}
 			throw new RuntimeException(e);
 		} finally {
-			session.getTransaction().commit();
+			transaction.commit();
 		}
 
 	}
