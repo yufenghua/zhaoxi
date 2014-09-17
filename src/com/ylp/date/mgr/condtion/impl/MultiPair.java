@@ -86,6 +86,9 @@ public class MultiPair implements ConditionPair {
 	}
 
 	public void build(ConditionBuilder builder) throws Exception {
+		if(isCycle(null)){
+			throw new Exception("条件成环！");
+		}
 		builder.build(this);
 	}
 

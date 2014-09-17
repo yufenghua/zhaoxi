@@ -52,7 +52,7 @@ public class HibernateBuilder implements ConditionBuilder {
 			} else if (sec == null) {
 				result = first;
 			} else {
-				switch (pair.getRelation()) {
+				switch (pair2.getRelation()) {
 				case PAIR_AND:
 					result = Restrictions.and(first, sec);
 					break;
@@ -80,7 +80,7 @@ public class HibernateBuilder implements ConditionBuilder {
 		}
 		if (pair instanceof MultiPair) {
 			Criterion first = buildCriterion(((MultiPair) pair).getFirst());
-			Criterion sec = buildCriterion(((MultiPair) pair).getFirst());
+			Criterion sec = buildCriterion(((MultiPair) pair).getSecond());
 			Criterion result = null;
 			if (first == null) {
 				result = sec;

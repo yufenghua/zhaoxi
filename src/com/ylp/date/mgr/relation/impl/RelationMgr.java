@@ -142,7 +142,9 @@ public class RelationMgr extends BaseObjMgr implements IRelMgr {
 		condition.eq("recognition", IRelation.RECOG_LINE);
 		pair.setSecond(condition);
 		pair.setRelation(ConditionType.PAIR_AND);
-		if (!listRelation(null, multi).isEmpty()) {
+		userType.setSecond(pair);
+		userType.setRelation(ConditionType.PAIR_AND);
+		if (!listRelation(null, userType).isEmpty()) {
 			return false;
 		}
 		IRelation flower = getFlowerBetween(userId, userId1);
@@ -172,6 +174,7 @@ public class RelationMgr extends BaseObjMgr implements IRelMgr {
 		condition = new Condition();
 		condition.eq("type", IRelation.TYPE_FLOWER);
 		pair.setFirst(condition);
+		multi.setSecond(pair);;
 		multi.setRelation(ConditionType.PAIR_AND);
 		List<IRelation> list = listRelation(null, multi);
 		if (list.isEmpty()) {
@@ -188,7 +191,7 @@ public class RelationMgr extends BaseObjMgr implements IRelMgr {
 				relation = new UserRelation();
 				relation.setOne(one);
 				relation.setOtherOne(other);
-				relation.setType(IRelation.TYPE_FLOWER);
+				relation.setType(IRelation.TYPE_LINE);
 				relation.setRecognition(1);
 				relation = (UserRelation) add(relation);
 				handleBuilder(relation.getId(), userId);
