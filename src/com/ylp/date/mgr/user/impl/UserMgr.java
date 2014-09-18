@@ -11,6 +11,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import com.ylp.date.login.Login;
 import com.ylp.date.mgr.BaseObjMgr;
 import com.ylp.date.mgr.IBaseObj;
 import com.ylp.date.mgr.PageCondition;

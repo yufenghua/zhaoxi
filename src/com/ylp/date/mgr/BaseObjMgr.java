@@ -1,5 +1,6 @@
 package com.ylp.date.mgr;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import com.ylp.date.storage.HibernateStorageUtil;
 public abstract class BaseObjMgr implements IMgrBase {
 	private static final Logger logger = LoggerFactory
 			.getLogger(BaseObjMgr.class);
+	private List<ObjListener> lists = new ArrayList<ObjListener>(5);
 
 	/**
 	 * get the real class of ibaseobj
@@ -29,6 +31,10 @@ public abstract class BaseObjMgr implements IMgrBase {
 	 * @return
 	 */
 	protected abstract Class getBean();
+
+	public void regListener(ObjListener lis) {
+		lists.add(lis);
+	}
 
 	public IBaseObj getObj(String id) {
 		Session session = Server.getInstance().getCurentSession();
@@ -99,16 +105,30 @@ public abstract class BaseObjMgr implements IMgrBase {
 	}
 
 	public IBaseObj add(IBaseObj obj) {
-		return HibernateStorageUtil.addObj(getBean().getName(), obj);
+		IBaseObj addObj = HibernateStorageUtil.addObj(getBean().getName(), obj);
+		for (ObjListener lis : lists) {
+			lis.fileAdd(addObj);
+		}
+		return addObj;
 	}
 
 	public boolean remove(String id) {
 		IBaseObj user = this.getObj(id);
-		return HibernateStorageUtil.removeObj(getBean().getName(), user);
+		boolean removeObj = HibernateStorageUtil.removeObj(getBean().getName(),
+				user);
+		for (ObjListener lis : lists) {
+			lis.fireRemove(id);
+		}
+		return removeObj;
 	}
 
 	public boolean update(String id, IBaseObj obj) throws Exception {
-		return HibernateStorageUtil.updateObj(getBean().getName(), id, obj);
+		boolean updateObj = HibernateStorageUtil.updateObj(getBean().getName(),
+				id, obj);
+		for (ObjListener lis : lists) {
+			lis.fireUpdate(id, obj);
+		}
+		return updateObj;
 	}
 
 }

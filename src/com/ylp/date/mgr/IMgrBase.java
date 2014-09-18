@@ -71,5 +71,10 @@ public interface IMgrBase {
 	 * @throws Exception
 	 */
 	boolean update(String id, IBaseObj obj) throws Exception;
+	/**
+	 * reg a listener which will do something when an object to be added ,updated,removed
+	 * @param lis
+	 */
+	void regListener(ObjListener lis);
 
 }
