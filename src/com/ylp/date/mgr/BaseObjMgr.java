@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import org.hibernate.criterion.Projections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -123,12 +124,30 @@ public abstract class BaseObjMgr implements IMgrBase {
 	}
 
 	public boolean update(String id, IBaseObj obj) throws Exception {
+		IBaseObj old = getObj(id);
 		boolean updateObj = HibernateStorageUtil.updateObj(getBean().getName(),
 				id, obj);
 		for (ObjListener lis : lists) {
-			lis.fireUpdate(id, obj);
+			lis.fireUpdate(id, old, obj);
 		}
 		return updateObj;
+	}
+
+	@Override
+	public int count(ConditionPair pair) {
+		Session session = Server.getInstance().getCurentSession();
+		try {
+			Criteria criteria = session.createCriteria(getBean());
+			setCondition(criteria, pair);
+			criteria.setProjection(Projections.rowCount());
+			return Integer.parseInt(criteria.uniqueResult().toString());
+		} catch (Exception e) {
+			Server.getInstance().handleException(e);
+			logger.error("查询数据时发生异常", e);
+		} finally {
+			session.getTransaction().commit();
+		}
+		return 0;
 	}
 
 }

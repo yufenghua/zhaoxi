@@ -76,5 +76,11 @@ public interface IMgrBase {
 	 * @param lis
 	 */
 	void regListener(ObjListener lis);
+	/**
+	 * 
+	 * @param pair
+	 * @return
+	 */
+	int count(ConditionPair pair);
 
 }

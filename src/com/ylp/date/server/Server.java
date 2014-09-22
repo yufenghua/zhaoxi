@@ -20,6 +20,7 @@ import com.ylp.date.mgr.tag.impl.UserTagSugMgr;
 import com.ylp.date.mgr.user.IUserMgr;
 import com.ylp.date.mgr.user.impl.UserMgr;
 import com.ylp.date.security.impl.RolePmcheckMgr;
+import com.ylp.date.service.LineService;
 
 /**
  * Application root object。 singleton
@@ -122,6 +123,16 @@ public class Server {
 	public RelationBldMgr getRelationBuilderMgr() {
 		return ApplicationListener.getApplicationContext().getBean(
 				SpringNames.RelationBuilderMgr, RelationBldMgr.class);
+	}
+
+	public ServerConfigRation getConfigRation() {
+		return ApplicationListener.getApplicationContext().getBean(
+				SpringNames.ServerConfigRation, ServerConfigRation.class);
+	}
+
+	public LineService getLineService() {
+		return ApplicationListener.getApplicationContext().getBean(
+				SpringNames.LineService, LineService.class);
 	}
 
 	/**

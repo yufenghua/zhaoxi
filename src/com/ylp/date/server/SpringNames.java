@@ -8,4 +8,6 @@ public class SpringNames {
 	public static final String TagSugMgr = "usertagsugmgr";
 	public static final String RelationMgr = "relationmgr";
 	public static final String RelationBuilderMgr = "relationbuildermgr";
+	public static final String ServerConfigRation = "serverconfigration";
+	public static final String LineService = "lineservice";
 }

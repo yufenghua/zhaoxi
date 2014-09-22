@@ -8,6 +8,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletException;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -26,6 +27,7 @@ public class ApplicationListener implements ServletContextListener {
 	private static ApplicationContext context;
 
 	public void contextDestroyed(ServletContextEvent arg0) {
+		//sina appengine 上面获取的xml解析工厂竟然为空  增加一次判定
 		context = WebApplicationContextUtils.getWebApplicationContext(arg0
 				.getServletContext());
 		logger.debug("get the Spring context" + context);

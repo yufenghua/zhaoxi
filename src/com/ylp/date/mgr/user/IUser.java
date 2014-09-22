@@ -6,6 +6,9 @@ import java.util.Date;
 import com.ylp.date.mgr.IBaseObj;
 
 public interface IUser extends IBaseObj {
+	int MALE = 1;
+	int FEMALE = 0;
+
 	/**
 	 * get password the password is encrypted
 	 * 
@@ -52,9 +55,12 @@ public interface IUser extends IBaseObj {
 	int getLastShowNum();
 
 	String getRole();
+
 	IUser getInviter();
+
 	/**
 	 * the flower count that can be used
+	 * 
 	 * @return
 	 */
 	int getFlower();
