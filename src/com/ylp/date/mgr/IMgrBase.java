@@ -39,7 +39,8 @@ public interface IMgrBase {
 	 * list IBaseObj instance with the giving range and condition
 	 * 
 	 * @param page
-	 * @param cond Condition object
+	 * @param cond
+	 *            Condition object
 	 * @return
 	 */
 	List<IBaseObj> list(PageCondition page, ConditionPair cond);
@@ -54,33 +55,47 @@ public interface IMgrBase {
 	IBaseObj add(IBaseObj obj);
 
 	/**
-	 * remove an ins.
-	 * if this ins does not exist,will throw an exception
+	 * remove an ins. if this ins does not exist,will throw an exception
 	 * 
-	 * @param id the id for the instance want to be removed
+	 * @param id
+	 *            the id for the instance want to be removed
 	 * @return true if success or false
 	 */
 	boolean remove(String id);
 
 	/**
-	 * update an ins
-	 *  if this ins does not exist,will throw an exception
-	 * @param id the id for the instance want to be updated
+	 * update an ins if this ins does not exist,will throw an exception
+	 * 
+	 * @param id
+	 *            the id for the instance want to be updated
 	 * @param obj
 	 * @return
 	 * @throws Exception
 	 */
 	boolean update(String id, IBaseObj obj) throws Exception;
+
 	/**
-	 * reg a listener which will do something when an object to be added ,updated,removed
+	 * reg a listener which will do something when an object to be added
+	 * ,updated,removed
+	 * 
 	 * @param lis
 	 */
 	void regListener(ObjListener lis);
+
 	/**
 	 * 
 	 * @param pair
 	 * @return
 	 */
 	int count(ConditionPair pair);
+
+	/**
+	 * hql query
+	 * 
+	 * @param hql
+	 * @param params
+	 * @return
+	 */
+	List<IBaseObj> executeQuery(String hql, Object[] params);
 
 }

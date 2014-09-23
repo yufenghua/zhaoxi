@@ -116,4 +116,31 @@ public class LineUsersObj {
 			write.unlock();
 		}
 	}
+
+	public boolean isFulled() {
+		read.lock();
+		try {
+			return males.size() == 4 && females.size() == 4;
+		} finally {
+			read.unlock();
+		}
+	}
+
+	public boolean isMaleFulled() {
+		read.lock();
+		try {
+			return males.size() == 4;
+		} finally {
+			read.unlock();
+		}
+	}
+
+	public boolean isFemaleFulled() {
+		read.lock();
+		try {
+			return females.size() == 4;
+		} finally {
+			read.unlock();
+		}
+	}
 }

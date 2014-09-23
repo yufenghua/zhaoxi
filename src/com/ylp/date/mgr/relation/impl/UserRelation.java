@@ -1,5 +1,7 @@
 package com.ylp.date.mgr.relation.impl;
 
+import java.util.Date;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -16,8 +18,8 @@ import com.ylp.date.mgr.relation.IRelation;
 public class UserRelation implements IRelation {
 	@Column(name = "ID_", nullable = false)
 	@Id
-	@GeneratedValue(generator = "uuidger")  
-	@GenericGenerator(name = "uuidger", strategy = "uuid")  
+	@GeneratedValue(generator = "uuidger")
+	@GenericGenerator(name = "uuidger", strategy = "uuid")
 	private String id;
 	@Column(name = "PART_", nullable = false)
 	private String one;
@@ -27,9 +29,39 @@ public class UserRelation implements IRelation {
 	private int type;
 	@Column(name = "RECOGNITION_")
 	private int recognition = 1;
+	@Column(name = "ONEREG_")
+	private Date oneReg;
+	@Column(name = "OTHERONEREG_")
+	private Date otherOneReg;
+	@Column(name = "OKTIME_")
+	private Date okTime;
 
 	public String getId() {
 		return id;
+	}
+
+	public Date getOneReg() {
+		return oneReg;
+	}
+
+	public void setOneReg(Date oneReg) {
+		this.oneReg = oneReg;
+	}
+
+	public Date getOtherOneReg() {
+		return otherOneReg;
+	}
+
+	public void setOtherOneReg(Date otherOneReg) {
+		this.otherOneReg = otherOneReg;
+	}
+
+	public Date getOkTime() {
+		return okTime;
+	}
+
+	public void setOkTime(Date okTime) {
+		this.okTime = okTime;
 	}
 
 	public String getCaption() {

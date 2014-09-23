@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Projections;
 import org.slf4j.Logger;
@@ -150,4 +151,24 @@ public abstract class BaseObjMgr implements IMgrBase {
 		return 0;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<IBaseObj> executeQuery(String hql, Object[] params) {
+		Session session = Server.getInstance().getCurentSession();
+		try {
+			Query query = session.createQuery(hql);
+			if (params != null) {
+				for (int i = 0; i < params.length; i++) {
+					query.setParameter(i, params[i]);
+				}
+			}
+			return query.list();
+		} catch (Exception e) {
+			Server.getInstance().handleException(e);
+			logger.error("查询数据时发生异常", e);
+		} finally {
+			session.getTransaction().commit();
+		}
+		return Collections.emptyList();
+	}
 }
