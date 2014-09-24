@@ -1,15 +1,20 @@
 package com.ylp.date.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.SortType;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
@@ -33,6 +38,7 @@ import com.ylp.date.server.SpringNames;
 @DependsOn({ SpringNames.Server, SpringNames.ServerConfigRation })
 @Lazy(false)
 public class LineService implements ObjListener, Runnable {
+	private static final int ONE_DAY = 1000 * 60 * 60 * 24;
 	private ReadWriteLock lock = new ReentrantReadWriteLock();
 	private Lock read = lock.readLock();
 	private Lock write = lock.writeLock();
@@ -44,6 +50,7 @@ public class LineService implements ObjListener, Runnable {
 	private SortedMap<String, Integer> userDisplay;
 	private boolean isMaleFulled;
 	private boolean isFemaleFulled;
+	private Date today;
 
 	public void init() {
 		write.lock();
@@ -64,19 +71,97 @@ public class LineService implements ObjListener, Runnable {
 	 * @param login
 	 * @return
 	 */
-	List<IUser> getLineUser(Login login) {
+	LineUsersObj getLineUser(Login login) {
 		read.lock();
 		try {
-			return null;
+			if (!login.isLogined()) {
+				return null;
+			}
+			String id = login.getUser().getId();
+			// 有一次都还没有展示的 那么 展示此组
+			if (userDisplay.size() != userPool.size()) {
+				String key = null;
+				for (Map.Entry<String, LineUsersObj> entry : userPool
+						.entrySet()) {
+					String key2 = entry.getKey();
+					if (userDisplay.containsKey(key2)) {
+						continue;
+					}
+					if (entry.getValue().contains(id)) {
+						continue;
+					}
+					key = key2;
+
+				}
+				if (StringUtils.isNotEmpty(key)) {
+					userDisplay.put(key, 1);
+					return userPool.get(key);
+				}
+			}
+			// 否则 随机选取一组 有两种情况 ：1.所有的组都未被展示 2.所有的组都已被展示
+			if (userDisplay.isEmpty()) {
+				for (Map.Entry<String, LineUsersObj> entry : userPool
+						.entrySet()) {
+					LineUsersObj value = entry.getValue();
+					if (value.contains(id)) {
+						continue;
+					}
+					userDisplay.put(entry.getKey(), 1);
+					return value;
+				}
+				return null;
+			} else {
+				for (Map.Entry<String, Integer> entry : userDisplay.entrySet()) {
+					String key2 = entry.getKey();
+					LineUsersObj lineUsersObj = userPool.get(key2);
+					if (lineUsersObj.contains(id)) {
+						continue;
+					}
+					userDisplay.put(key2, entry.getValue() + 1);
+					return lineUsersObj;
+				}
+			}
 		} finally {
 			read.unlock();
 		}
+		return null;
 	}
 
 	@Override
 	public void fileAdd(IBaseObj obj) {
 		write.lock();
 		try {
+			if (!(obj instanceof IUser)) {
+				return;
+			}
+			IUser user = (IUser) obj;
+			String id = obj.getId();
+			for (Map.Entry<String, LineUsersObj> entry : userPool.entrySet()) {
+				LineUsersObj value = entry.getValue();
+				if (value.contains(id)) {
+					return;
+				}
+				int gender = user.getGender();
+				int femaleSize = value.getFemale().size();
+				int maleSize = value.getMale().size();
+				if ((!value.isFemaleFulled() && gender == IUser.FEMALE)
+						&& maleSize - femaleSize == 1) {
+					value.addUser(user);
+					return;
+				}
+				if ((!value.isMaleFulled() && gender == IUser.MALE)
+						&& femaleSize - maleSize == 1) {
+					value.addUser(user);
+					return;
+				}
+			}
+			if (userPool.size() != defaultLength) {
+				LineUsersObj lineobj = new LineUsersObj();
+				lineobj.addUser(user);
+				userPool.put(lineobj.getKey(), lineobj);
+				return;
+
+			}
 		} finally {
 			write.unlock();
 		}
@@ -86,6 +171,20 @@ public class LineService implements ObjListener, Runnable {
 	public void fireRemove(String id) {
 		write.lock();
 		try {
+			List<String> keys = new ArrayList<String>();
+			for (Map.Entry<String, LineUsersObj> entry : userPool.entrySet()) {
+				LineUsersObj value = entry.getValue();
+				if (value.contains(id)) {
+					keys.add(entry.getKey());
+				}
+			}
+			if (keys.isEmpty()) {
+				return;
+			}
+			for (String string : keys) {
+				userPool.remove(string);
+				userDisplay.remove(string);
+			}
 		} finally {
 			write.unlock();
 		}
@@ -109,6 +208,12 @@ public class LineService implements ObjListener, Runnable {
 	public void run() {
 		write.lock();
 		try {
+			Calendar cal = Calendar.getInstance();
+			cal.set(Calendar.HOUR_OF_DAY, 0);
+			cal.set(Calendar.MINUTE, 0);
+			cal.set(Calendar.SECOND, 0);
+			cal.set(Calendar.MILLISECOND, 0);
+			today = cal.getTime();
 			// 设计的随机算法原则如下：
 			// 1.根据shownum降序
 			List<IBaseObj> firstMale = getFirst(true);
@@ -318,10 +423,23 @@ public class LineService implements ObjListener, Runnable {
 	public void fireUpdate(String id, IBaseObj old, IBaseObj newObj) {
 		write.lock();
 		try {
+			if (!(old instanceof IUser)) {
+				return;
+			}
+			if (!(newObj instanceof IUser)) {
+				return;
+			}
+			IUser newUser = (IUser) newObj;
+			Date lastLine = newUser.getLastLine();
+			if (lastLine == null) {
+				return;
+			}
+			if (lastLine.after(today)) {
+				this.fireRemove(id);
+			}
 		} finally {
 			write.unlock();
 		}
 
 	}
-
 }

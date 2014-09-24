@@ -79,6 +79,12 @@ public class User implements IUser {
 
 	private transient File cardImage;
 	private transient File image;
+	@Column(name = "LASTLINE_")
+	private Date lastLine;
+
+	public void setLastLine(Date lastLine) {
+		this.lastLine = lastLine;
+	}
 
 	public void setCardImgBytes(byte[] cardImgBytes) {
 		this.cardImgBytes = cardImgBytes;
@@ -262,6 +268,11 @@ public class User implements IUser {
 	public int getFlower() {
 		// TODO Auto-generated method stub
 		return flower;
+	}
+
+	@Override
+	public Date getLastLine() {
+		return lastLine;
 	}
 
 }

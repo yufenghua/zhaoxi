@@ -65,4 +65,11 @@ public interface IUser extends IBaseObj {
 	 */
 	int getFlower();
 
+	/**
+	 * the time when the last line was builded success
+	 * 
+	 * @return
+	 */
+	Date getLastLine();
+
 }
