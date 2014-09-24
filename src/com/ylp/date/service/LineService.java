@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -51,6 +52,7 @@ public class LineService implements ObjListener, Runnable {
 	private boolean isMaleFulled;
 	private boolean isFemaleFulled;
 	private Date today;
+	private Random random;
 
 	public void init() {
 		write.lock();
@@ -350,13 +352,30 @@ public class LineService implements ObjListener, Runnable {
 	 * @return
 	 */
 	private int genarateIndex(int size) {
-		// TODO Auto-generated method stub
-		return 0;
+		random = new java.util.Random();
+		return random.nextInt(size);
 	}
 
 	private List<IBaseObj> getUsersSecond(boolean b) {
-		// TODO Auto-generated method stub
-		return null;
+		String hql = "select * from User user_ "
+				+ "where user_.gender=? and"
+				// 联系三天连线未成功
+				+ " (user_.lastLine is not null and  user_.lastLine <?) and"
+				+ " user_.id not in "
+				+ "("
+				// 有连线成功，没有确认的人
+				+ "select rel_.one from UserRelation rel_ where rel_.type=? and  rel_.recognition=? and rel_.oneReg is  null "
+				+ "union "
+				+ "select rel_.otherOne from UserRelation rel_ where rel_.type=? and  rel_.recognition=? and rel_.otherOneReg is  null"
+				+ ") order by user_.lastShowNum";
+		List<Object> list = new ArrayList<Object>(5);
+		list.add(b ? IUser.MALE : IUser.FEMALE);
+		list.add(new Date(System.currentTimeMillis() - 2 * ONE_DAY));
+		list.add(IRelation.TYPE_LINE);
+		list.add(IRelation.RECOG_LINE);
+		list.add(IRelation.TYPE_LINE);
+		list.add(IRelation.RECOG_LINE);
+		return Server.getInstance().userMgr().executeQuery(hql, list.toArray());
 	}
 
 	private void adjustUsers(List<IBaseObj> firstMale, boolean b) {
@@ -404,14 +423,19 @@ public class LineService implements ObjListener, Runnable {
 	 */
 	private List<IBaseObj> getFirst(boolean b) {
 		String hql = "select * from User user_ "
-				+ "where user_.gender=? and user_.id in "
+				+ "where user_.gender=? and"
+				// 联系三天连线未成功
+				+ " (user_.lastLine is null or user_.lastLine <?) and"
+				+ " user_.id not in "
 				+ "("
+				// 有连线成功，没有确认的人
 				+ "select rel_.one from UserRelation rel_ where rel_.type=? and  rel_.recognition=? and rel_.oneReg is  null "
 				+ "union "
 				+ "select rel_.otherOne from UserRelation rel_ where rel_.type=? and  rel_.recognition=? and rel_.otherOneReg is  null"
 				+ ") order by user_.lastShowNum";
 		List<Object> list = new ArrayList<Object>(5);
 		list.add(b ? IUser.MALE : IUser.FEMALE);
+		list.add(new Date(System.currentTimeMillis() - 2 * ONE_DAY));
 		list.add(IRelation.TYPE_LINE);
 		list.add(IRelation.RECOG_LINE);
 		list.add(IRelation.TYPE_LINE);
