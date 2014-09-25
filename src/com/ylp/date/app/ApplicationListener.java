@@ -27,15 +27,16 @@ public class ApplicationListener implements ServletContextListener {
 	private static ApplicationContext context;
 
 	public void contextDestroyed(ServletContextEvent arg0) {
-		//sina appengine 上面获取的xml解析工厂竟然为空  增加一次判定
-		context = WebApplicationContextUtils.getWebApplicationContext(arg0
-				.getServletContext());
+		// sina appengine 上面获取的xml解析工厂竟然为空 增加一次判定
+		context = null;
 		logger.debug("get the Spring context" + context);
 
 	}
 
 	public void contextInitialized(ServletContextEvent arg0) {
-		context = null;
+		context = WebApplicationContextUtils.getWebApplicationContext(arg0
+				.getServletContext());
+		logger.debug("get the Spring context" + context);
 	}
 
 	public static final ApplicationContext getApplicationContext() {

@@ -17,6 +17,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.SortType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -26,7 +29,9 @@ import com.ylp.date.mgr.IBaseObj;
 import com.ylp.date.mgr.ObjListener;
 import com.ylp.date.mgr.relation.IRelation;
 import com.ylp.date.mgr.user.IUser;
+import com.ylp.date.mgr.user.impl.UserMgr;
 import com.ylp.date.server.Server;
+import com.ylp.date.server.ServerConfigRation;
 import com.ylp.date.server.SpringNames;
 
 /**
@@ -39,6 +44,8 @@ import com.ylp.date.server.SpringNames;
 @DependsOn({ SpringNames.Server, SpringNames.ServerConfigRation })
 @Lazy(false)
 public class LineService implements ObjListener, Runnable {
+	private static final Logger logger = LoggerFactory
+			.getLogger(LineService.class);
 	private static final int ONE_DAY = 1000 * 60 * 60 * 24;
 	private ReadWriteLock lock = new ReentrantReadWriteLock();
 	private Lock read = lock.readLock();
@@ -53,12 +60,15 @@ public class LineService implements ObjListener, Runnable {
 	private boolean isFemaleFulled;
 	private Date today;
 	private Random random;
+	@Autowired
+	private ServerConfigRation configration;
+	@Autowired
+	private UserMgr userMgr;
 
 	public void init() {
 		write.lock();
 		try {
-			defaultLength = Server.getInstance().getConfigRation()
-					.getLineLength();
+			defaultLength = configration.getLineLength();
 			int max = Math.max(16, defaultLength);
 			userPool = new HashMap<String, LineUsersObj>(max);
 			userDisplay = new TreeMap<String, Integer>();
@@ -245,6 +255,10 @@ public class LineService implements ObjListener, Runnable {
 	private void handWithMale() {
 		// 查询出 所有没有匹配成功
 		List<IBaseObj> users = getUsersSecond(true);
+		if (users.isEmpty()) {
+			logger.warn("没有符合条件的用户");
+			return;
+		}
 		List<Integer> selectedIndexes = new ArrayList<Integer>();
 		boolean needCreate = userPool.size() != defaultLength;
 		while (true) {
@@ -293,9 +307,13 @@ public class LineService implements ObjListener, Runnable {
 		List<Integer> selectedIndexes = new ArrayList<Integer>();
 		// 是否需要创建
 		boolean needCreate = userPool.size() != defaultLength;
-		// 循环退出条件是 line池满了 或者所有用户都已经遍历一边
+		if (users.isEmpty()) {
+			logger.warn("没有符合条件的用户");
+			return;
+		} // 循环退出条件是 line池满了 或者所有用户都已经遍历一边
+		int size = users.size();
 		while (true) {
-			int index = genarateIndex(users.size());
+			int index = genarateIndex(size);
 			while (!selectedIndexes.contains(index)) {
 				selectedIndexes.add(index);
 			}
@@ -317,13 +335,13 @@ public class LineService implements ObjListener, Runnable {
 			if (allFulled(false)) {
 				break;
 			}
-			if (selectedIndexes.size() == users.size()) {
+			if (selectedIndexes.size() == size) {
 				break;
 			}
 		}
 		// 如果需要创建的情况
-		int index = genarateIndex(users.size());
-		while (needCreate && selectedIndexes.size() != users.size()) {
+		int index = genarateIndex(size);
+		while (needCreate && selectedIndexes.size() != size) {
 			while (!selectedIndexes.contains(index)) {
 				selectedIndexes.add(index);
 			}
@@ -357,25 +375,26 @@ public class LineService implements ObjListener, Runnable {
 	}
 
 	private List<IBaseObj> getUsersSecond(boolean b) {
-		String hql = "select * from User user_ "
+		String hql = "from User user_ "
 				+ "where user_.gender=? and"
-				// 联系三天连线未成功
-				+ " (user_.lastLine is not null and  user_.lastLine <?) and"
+				// 三天内连线成功，但今天没有
+				+ " (user_.lastLine is not null and  user_.lastLine >? and user_.lastLine<?) and"
 				+ " user_.id not in "
 				+ "("
 				// 有连线成功，没有确认的人
-				+ "select rel_.one from UserRelation rel_ where rel_.type=? and  rel_.recognition=? and rel_.oneReg is  null "
-				+ "union "
+				+ "select rel_.one from UserRelation rel_ where rel_.type=? and  rel_.recognition=? and rel_.oneReg is  null) "
+				+ " and  user_.id not in ("
 				+ "select rel_.otherOne from UserRelation rel_ where rel_.type=? and  rel_.recognition=? and rel_.otherOneReg is  null"
 				+ ") order by user_.lastShowNum";
 		List<Object> list = new ArrayList<Object>(5);
 		list.add(b ? IUser.MALE : IUser.FEMALE);
 		list.add(new Date(System.currentTimeMillis() - 2 * ONE_DAY));
+		list.add(today);
 		list.add(IRelation.TYPE_LINE);
 		list.add(IRelation.RECOG_LINE);
 		list.add(IRelation.TYPE_LINE);
 		list.add(IRelation.RECOG_LINE);
-		return Server.getInstance().userMgr().executeQuery(hql, list.toArray());
+		return userMgr.executeQuery(hql, list.toArray());
 	}
 
 	private void adjustUsers(List<IBaseObj> firstMale, boolean b) {
@@ -422,25 +441,25 @@ public class LineService implements ObjListener, Runnable {
 	 * @return
 	 */
 	private List<IBaseObj> getFirst(boolean b) {
-		String hql = "select * from User user_ "
+		String hql = "from User user_ "
 				+ "where user_.gender=? and"
 				// 联系三天连线未成功
 				+ " (user_.lastLine is null or user_.lastLine <?) and"
 				+ " user_.id not in "
 				+ "("
 				// 有连线成功，没有确认的人
-				+ "select rel_.one from UserRelation rel_ where rel_.type=? and  rel_.recognition=? and rel_.oneReg is  null "
-				+ "union "
+				+ "select rel_.one from UserRelation rel_ where rel_.type=? and  rel_.recognition=? and rel_.oneReg is  null)"
+				+ "and  user_.id not in("
 				+ "select rel_.otherOne from UserRelation rel_ where rel_.type=? and  rel_.recognition=? and rel_.otherOneReg is  null"
 				+ ") order by user_.lastShowNum";
 		List<Object> list = new ArrayList<Object>(5);
 		list.add(b ? IUser.MALE : IUser.FEMALE);
-		list.add(new Date(System.currentTimeMillis() - 2 * ONE_DAY));
+		list.add(new Date(System.currentTimeMillis() - 3 * ONE_DAY));
 		list.add(IRelation.TYPE_LINE);
 		list.add(IRelation.RECOG_LINE);
 		list.add(IRelation.TYPE_LINE);
 		list.add(IRelation.RECOG_LINE);
-		return Server.getInstance().userMgr().executeQuery(hql, list.toArray());
+		return userMgr.executeQuery(hql, list.toArray());
 	}
 
 	@Override
