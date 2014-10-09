@@ -11,18 +11,19 @@
     <!-- 让spring支持对象注解类型的action  -->
     <mvc:annotation-driven />
     <!-- 自动扫描注解类的路径，包含子目录的对象 -->  
-    <context:component-scan base-package="com.esen.xui,com.esen.weblib" />
+    <context:component-scan base-package="com.ylp.date.controller"/>
+    <!-- <context:component-scan base-package="com.esen.xui,com.esen.weblib" /> -->
     <!-- 视图解析器，让我们在action里面可以省去写后缀.jsp的工作，
      重定向到一个/aaa/bbb/ccc.jsp，只需要写一个return "/aaa/bbb/ccc" 即可
      -->
    <bean id="viewResolver"
         class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/"></property>
-        <property name="suffix" value=".jsp"></property>
+        <property name="suffix" value=".html"></property>
     </bean>
     <!-- 静态转向，访问jsrunner.do，forword到/xui/testframe/jsrunner.jsp上 -->
-    <mvc:view-controller path="/jsrunner.do" view-name="/xui/testframe/jsrunner" />
+    <!--  <mvc:view-controller path="/jsrunner.do" view-name="/xui/testframe/jsrunner" />
     <mvc:view-controller path="/xuirunner.do"
-        view-name="/xui/testframe/xuirunner" />
+        view-name="/xui/testframe/xuirunner" />-->
  
 </beans>
