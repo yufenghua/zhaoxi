@@ -27,4 +27,11 @@ public class StringTools {
 		}
 		return null;
 	}
+	public static final boolean validatePwd(String password,String hash){
+		try {
+			return PasswordHash.validatePassword(password, hash);
+		} catch(Exception e){
+			return false;
+		}
+	}
 }

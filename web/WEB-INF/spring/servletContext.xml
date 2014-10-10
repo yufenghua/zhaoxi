@@ -19,7 +19,7 @@
    <bean id="viewResolver"
         class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/"></property>
-        <property name="suffix" value=".html"></property>
+        <property name="suffix" value=".jsp"></property>
     </bean>
     <!-- 静态转向，访问jsrunner.do，forword到/xui/testframe/jsrunner.jsp上 -->
     <!--  <mvc:view-controller path="/jsrunner.do" view-name="/xui/testframe/jsrunner" />

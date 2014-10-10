@@ -23,7 +23,9 @@ public class LoginController extends ParameterMethodNameResolver {
 		String password=request.getParameter("password");
 		Login login=ControlUtil.getLogin(request);
 		if(!login.isLogined()){
-			login.login(username, password);
+			if(!login.login(username, password)){
+				throw new RuntimeException("用户名或密码错误！");
+			}
 		}
 		return new ModelAndView("pages/match");
 	}

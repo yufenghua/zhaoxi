@@ -38,7 +38,7 @@ public class Login implements Serializable {
 	 * @return
 	 */
 	public boolean isLogined() {
-		return getUser() == null;
+		return getUser() != null;
 	}
 
 	/**
@@ -62,8 +62,7 @@ public class Login implements Serializable {
 		if (user == null) {
 			return false;
 		}
-		if (StringUtils.equals(StringTools.encryptPassword(passWord),
-				user.getPwd())) {
+		if (StringTools.validatePwd(passWord, user.getPwd())) {
 			this.user = user;
 			return true;
 		}

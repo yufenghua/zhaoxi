@@ -5,12 +5,7 @@
 	id="WebApp_ID" version="2.5">
 	<display-name>zhaoxi</display-name>
 	<welcome-file-list>
-		<welcome-file>/pages/join.html</welcome-file>
-		<welcome-file>index.htm</welcome-file>
 		<welcome-file>index.jsp</welcome-file>
-		<welcome-file>default.html</welcome-file>
-		<welcome-file>default.htm</welcome-file>
-		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
 	<context-param>
 		<param-name>contextConfigLocation</param-name>

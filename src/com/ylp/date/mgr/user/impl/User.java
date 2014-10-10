@@ -31,7 +31,7 @@ public class User implements IUser {
 	@Id
 	@Column(name = "ID_", nullable = false, unique = true)
 	private String id;
-	@Column(name = "CAPTION_", nullable = false)
+	@Column(name = "CAPTION_")
 	private String caption;
 	@Column(name = "PASSWORD_")
 	private String pwd;
