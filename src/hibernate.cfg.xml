@@ -13,7 +13,7 @@
 		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
 		<property name="hibernate.connection.url">jdbc:mysql://localhost/ylpzhaoxi</property>
 		<property name="hibernate.connection.username">root</property>
-		<property name="hibernate.connection.password">root</property>
+		<property name="hibernate.connection.password">mysql</property>
 		<!-- JDBC connection pool, use Hibernate internal connection pool -->
 		<property name="hibernate.connection.pool_size">5</property>
 		<!-- Defines the SQL dialect used in Hiberante's application -->

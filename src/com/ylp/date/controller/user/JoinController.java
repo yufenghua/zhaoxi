@@ -41,9 +41,9 @@ public class JoinController extends BaseController {
 	 * @return
 	 * @throws Exception
 	 */
-	public String register(HttpServletRequest req,
-			HttpServletResponse response) throws Exception {
-		HttpServletReqEx request=(HttpServletReqEx)req;
+	public String register(HttpServletRequest req, HttpServletResponse response)
+			throws Exception {
+		HttpServletReqEx request = (HttpServletReqEx) req;
 		String username = request.getParameter("username");
 		if (!StringUtils.isNotEmpty(username)) {
 			throw new RuntimeException("用户名不能为空");
@@ -58,7 +58,7 @@ public class JoinController extends BaseController {
 		}
 		boolean isMultipart = ServletFileUpload.isMultipartContent(request);// 检查输入请求是否为multipart表单数据。
 		if (isMultipart == true) {
-			List<FileItem> items =request.getItems();
+			List<FileItem> items = request.getItems();
 			Iterator<FileItem> itr = items.iterator();
 			while (itr.hasNext()) {
 				FileItem item = (FileItem) itr.next();
@@ -80,7 +80,8 @@ public class JoinController extends BaseController {
 					if (!login.isLogined()) {
 						login.login(username, password);
 					}
-					return "pages/detail";
+					response.sendRedirect("userinfo.do?userid="+username);
+					return null;
 
 				} finally {
 					stm.close();
