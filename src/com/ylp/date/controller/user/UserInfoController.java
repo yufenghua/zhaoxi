@@ -122,11 +122,14 @@ public class UserInfoController extends BaseController {
 			}
 			InputStream stm = item.getInputStream();
 			try {
-				byte[] img = new byte[stm.available()];
-				int read = stm.read(img);
-				user.setImg(img);
-				userMgr.update(userid, user);
-				return null;
+				if(stm.available()>0){
+					
+					byte[] img = new byte[stm.available()];
+					int read = stm.read(img);
+					user.setImg(img);
+					userMgr.update(userid, user);
+				}
+				return "pages/my-match";
 
 			} finally {
 				stm.close();
