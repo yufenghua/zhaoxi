@@ -59,7 +59,12 @@ public class HttpServletReqEx implements HttpServletRequest {
 				FileItem item = (FileItem) itr.next();
 				// 检查当前项目是普通表单项目还是上传文件。
 				if (item.isFormField()) {// 如果是普通表单项目，显示表单内容。
-					params.put(item.getFieldName(), item.getString());
+					try {
+						params.put(item.getFieldName(), item.getString("UTF-8"));
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		} else {
@@ -152,6 +157,10 @@ public class HttpServletReqEx implements HttpServletRequest {
 	public String getParameter(String arg0) {
 		// TODO Auto-generated method stub
 		return params.get(arg0);
+	}
+
+	public Map<String, String> getParams() {
+		return Collections.unmodifiableMap(params);
 	}
 
 	@Override

@@ -28,6 +28,11 @@ import com.ylp.date.server.Server;
 @Entity
 @Table(name = "DATE_USER")
 public class User implements IUser {
+	public static final int AGE_18_20 = 1;
+	public static final int AGE_20_23 = 2;
+	public static final int AGE_23_26 = 3;
+	public static final int AGE_26_30 = 4;
+	public static final int AGE_30_OLD = 5;
 	@Id
 	@Column(name = "ID_", nullable = false, unique = true)
 	private String id;
@@ -65,6 +70,16 @@ public class User implements IUser {
 	@Lob
 	@Column(name = "IMAGE_")
 	private byte[] img;
+	@Column(name = "AGETRANGE_")
+	private int ageRange;
+
+	public int getAgeRange() {
+		return ageRange;
+	}
+
+	public void setAgeRange(int ageRange) {
+		this.ageRange = ageRange;
+	}
 
 	public void setFlower(int flower) {
 		this.flower = flower;

@@ -8,6 +8,10 @@ import com.ylp.date.mgr.user.IUser;
 public interface ITagSug extends IBaseObj{
 	IUser getCreator();
 	Date getCreateDate();
+	/**
+	 * 有效范围 userids
+	 * @return
+	 */
 	String getRange();
 
 }

@@ -1,3 +1,8 @@
+<%@page import="org.apache.commons.lang.StringUtils"%>
+<%@page import="com.ylp.date.mgr.user.IUser"%>
+<%@page import="com.ylp.date.mgr.IBaseObj"%>
+<%@page import="java.util.List"%>
+<%@page import="com.ylp.date.mgr.user.impl.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -16,40 +21,58 @@
     <link rel="stylesheet" href="../static/css/detail.css">
   </head>
   <body>
+  <%
+  User user=(User)request.getAttribute("user");
+  boolean userNull=user==null;
+  boolean isGender=true;
+  String checked=" checked=\"checked\"";
+  boolean age1=userNull||user.getAgeRange()==User.AGE_18_20;
+  boolean age2=!userNull&&user.getAgeRange()==User.AGE_20_23;
+  boolean age3=!userNull&&user.getAgeRange()==User.AGE_23_26;
+  boolean age4=!userNull&&user.getAgeRange()==User.AGE_26_30;
+  boolean age5=!userNull&&user.getAgeRange()==User.AGE_30_OLD;
+  if(!userNull){
+	  //设置用户信息
+	  isGender=user.getGender()==IUser.MALE;
+  }
+  %>
     <div class="container">
         <h4>注册成功，给自己贴几个标签吧</h4>
         <div class="form-wrapper">
-            <form class="form-horizontal" role="form">
+            <form class="form-horizontal" role="form" action="userinfo.do" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="userid" value="<%=request.getAttribute("userid")%>"/>
+              <input type="hidden" name="action" value="update"/>
               <div class="form-group">
                 <label for="" class="col-sm-2 control-label">性别</label>
                 <div class="col-sm-10">
-                  <label><input type="radio" name="gender" value="male" checked>男</label> <label><input type="radio" name="gender" value="female">女</label>
+                  <label><input type="radio" name="gender" value="10" <%=isGender?checked:"" %>>男</label> <label><input type="radio" name="gender" value="11" <%=!isGender?checked:"" %>>女</label>
                 </div>
               </div>
               <div class="form-group">
                 <label for="" class="col-sm-2 control-label">年龄</label>
                 <div class="col-sm-10">
-                  <label><input type="radio" name="age" value="1">18-20</label> <label><input type="radio" name="age" value="2" checked>20-23</label> <label><input type="radio" name="age" value="3">23-26</label> <label><input type="radio" name="age" value="4">26-30</label> <label><input type="radio" name="age" value="5">30+</label>
+                  <label><input type="radio" name="age" value="<%=User.AGE_18_20 %>"  <%=age1?checked:"" %>>18-20</label> 
+                  <label><input type="radio" name="age" value="<%=User.AGE_20_23 %>"   <%=age2?checked:""%>>20-23</label> 
+                  <label><input type="radio" name="age" value="<%=User.AGE_23_26 %>"  <%=age3?checked:""%>>23-26</label> 
+                  <label><input type="radio" name="age" value="<%=User.AGE_26_30 %>" <%=age4?checked:""%>>26-30</label> 
+                  <label><input type="radio" name="age" value="<%=User.AGE_30_OLD %>" <%=age5?checked:""%>>30+</label>
                 </div>
               </div>
-              <div class="form-group">
-                <label for="fav" class="col-sm-2 control-label">喜欢做的事</label>
+              <%
+              List<IBaseObj> sugs=(List)request.getAttribute("sugList");
+              if(sugs!=null&&!sugs.isEmpty()){
+            	  for(IBaseObj obj:sugs){
+              %>
+               <div class="form-group">
+                <label for="fav" class="col-sm-2 control-label"><%=obj.getCaption() %></label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" id="fav" placeholder="贴一个标签">
+                  <input type="text" class="form-control" id="<%="sugid:"+obj.getId() %>" name="<%="sugid:"+obj.getId() %>" placeholder="贴一个标签" value="<%=request.getAttribute(obj.getId())%>">
                 </div>
               </div>
-              <div class="form-group">
-                <label for="idol" class="col-sm-2 control-label">喜欢的偶像</label>
-                <div class="col-sm-10">
-                  <input type="text" class="form-control" id="idol" placeholder="贴一个标签">
-                </div>
-              </div>
-              <div class="form-group">
-                <label for="others" class="col-sm-2 control-label">其他</label>
-                <div class="col-sm-10">
-                  <input type="text" class="form-control" id="others" placeholder="贴一个标签">
-                </div>
-              </div>
+             <%
+            	  }
+              }
+              %>
               <div class="form-group">
                 <label for="" class="col-sm-2 control-label">美照</label>
                 <div class="col-sm-10">
