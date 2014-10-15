@@ -3,6 +3,7 @@ package com.ylp.date.controller.user;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,8 +17,7 @@ import com.ylp.date.login.Login;
 @RequestMapping("/user/login")
 public class LoginController extends BaseController {
 
-	public ModelAndView login(HttpServletRequest request,
-			HttpServletResponse response) {
+	public String login(HttpServletRequest request, HttpServletResponse response) {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 		Login login = ControlUtil.getLogin(request);
@@ -26,12 +26,16 @@ public class LoginController extends BaseController {
 				throw new RuntimeException("用户名或密码错误！");
 			}
 		}
-		return new ModelAndView("pages/match");
+		return "pages/match";
 	}
 
 	@Override
 	protected String hanldleReq(HttpServletRequest req, HttpServletResponse res)
 			throws Exception {
+		String action = req.getParameter("action");
+		if (StringUtils.equals(action, "login")) {
+			return login(req, res);
+		}
 		return null;
 	}
 }

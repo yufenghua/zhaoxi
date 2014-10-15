@@ -21,31 +21,37 @@
 <body>
 	<div class="container">
 		<div class="form-wrapper">
-			<form id="register" action="join.do" method="post" enctype="multipart/form-data">
-			<input type="hidden" name="action" value="reg" />
+			<form id="register" action="join.do" method="post"
+				enctype="multipart/form-data">
+				<input type="hidden" name="action" value="reg" />
 				<div class="form-group">
-					<input type="text"  name="username" class="form-control" placeholder="用户名" />
+					<input type="text" name="username" class="form-control"
+						placeholder="用户名" />
 				</div>
 				<div class="form-group">
-					<input type="password" class="form-control"  name="password" placeholder="密码" />
+					<input type="password" class="form-control" name="password"
+						placeholder="密码" />
 				</div>
 				<div class="form-group">
-					<input type="text" class="form-control" name="email" placeholder="email" />
+					<input type="text" class="form-control" name="email"
+						placeholder="email" />
 				</div>
 				<div class="form-group">
-					<input type="file" class="form-control"  name="file"/> <span class="tip">请上传证件照片</span>
+					<input type="file" class="form-control" name="file" /> <span
+						class="tip">请上传证件照片</span>
 				</div>
 				<div class="form-group">
 					<input type="submit" class="btn btn-embossed btn-primary btn-wide"
 						value="注册" />
 				</div>
 			</form>
-			<form id="login">
+			<form id="login" action="login.do" method="post">
+				<input type="hidden" name="action" value="login" />
 				<div class="form-group">
-					<input type="text" class="form-control" placeholder="用户名" />
+					<input type="text" class="form-control" name="username" placeholder="用户名" />
 				</div>
 				<div class="form-group">
-					<input type="text" class="form-control" placeholder="密码" />
+					<input type="password" class="form-control" placeholder="密码"  name="password"/>
 				</div>
 				<div class="form-group">
 					<input type="submit" class="btn btn-embossed btn-primary btn-wide"
