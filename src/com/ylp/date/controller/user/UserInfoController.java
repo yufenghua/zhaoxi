@@ -72,6 +72,7 @@ public class UserInfoController extends BaseController {
 			String id = iBaseObj.getId();
 			ITag tag = getTag(tags, id);
 			if (tag == null) {
+				req.setAttribute(id, "");
 				continue;
 			}
 			req.setAttribute(id, tag.getCaption());
@@ -122,8 +123,8 @@ public class UserInfoController extends BaseController {
 			}
 			InputStream stm = item.getInputStream();
 			try {
-				if(stm.available()>0){
-					
+				if (stm.available() > 0) {
+
 					byte[] img = new byte[stm.available()];
 					int read = stm.read(img);
 					user.setImg(img);

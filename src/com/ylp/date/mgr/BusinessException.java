@@ -8,6 +8,10 @@ package com.ylp.date.mgr;
  */
 public class BusinessException extends RuntimeException {
 	/**
+	 * 用户已存在
+	 */
+	public static final int CODE_OBJ_EXISTS = 102;
+	/**
 	 * 用户不存在
 	 */
 	public static final int CODE_NO_SUCH_USER = 101;

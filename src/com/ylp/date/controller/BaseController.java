@@ -7,6 +7,8 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 public abstract class BaseController {
+	public static final String DATE_SERVER_EXCEPTION = "date_server_exception";
+
 	@RequestMapping
 	public String action(HttpServletRequest req, HttpServletResponse res) {
 		try {
@@ -15,10 +17,12 @@ public abstract class BaseController {
 			}
 			return hanldleReq(req, res);
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			req.setAttribute(DATE_SERVER_EXCEPTION, e);
+			if (e instanceof RuntimeException) {
+				throw (RuntimeException) e;
+			}
+			throw new RuntimeException(e);
 		}
-		return null;
 	}
 
 	protected abstract String hanldleReq(HttpServletRequest req,

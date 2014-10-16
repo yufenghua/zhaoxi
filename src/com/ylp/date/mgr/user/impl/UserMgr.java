@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import com.ylp.date.login.Login;
 import com.ylp.date.mgr.BaseObjMgr;
+import com.ylp.date.mgr.BusinessException;
 import com.ylp.date.mgr.IBaseObj;
 import com.ylp.date.mgr.PageCondition;
 import com.ylp.date.mgr.condtion.ConditionPair;
@@ -44,6 +46,20 @@ public class UserMgr extends BaseObjMgr implements IUserMgr {
 		return (User) super.getObj(id);
 	}
 
+	@Override
+	public IBaseObj add(IBaseObj obj) {
+		String id = obj.getId();
+		Object lock = getLock(id);
+		synchronized (lock) {
+			IBaseObj old = getObj(id);
+			if (old != null) {
+				throw new BusinessException(BusinessException.CODE_OBJ_EXISTS,
+						id);
+			}
+			return super.add(obj);
+		}
+	}
+
 	public List<IUser> listUser(PageCondition page, ConditionPair pair) {
 		List<IBaseObj> list = list(page, pair);
 		if (list.isEmpty()) {
@@ -61,9 +77,12 @@ public class UserMgr extends BaseObjMgr implements IUserMgr {
 	 * 
 	 */
 	public void addCupidValue(String userId, String id) throws Exception {
-		User user = getObj(userId);
-		user.setCupidvalue(user.getCupidvalue() + calcScore(userId, id));
-		update(userId, user);
+		Object lock = getLock(userId);
+		synchronized (lock) {
+			User user = getObj(userId);
+			user.setCupidvalue(user.getCupidvalue() + calcScore(userId, id));
+			update(userId, user);
+		}
 	}
 
 	/**

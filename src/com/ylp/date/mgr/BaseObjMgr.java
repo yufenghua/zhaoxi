@@ -3,7 +3,10 @@ package com.ylp.date.mgr;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -18,7 +21,7 @@ import com.ylp.date.storage.HibernateStorageUtil;
 
 /**
  * abstract class for object manager
- * 
+ * 更新和删除操作添加同步，以防止对于多线程问题
  * @author Qiaolin Pan
  * 
  */
@@ -26,6 +29,18 @@ public abstract class BaseObjMgr implements IMgrBase {
 	private static final Logger logger = LoggerFactory
 			.getLogger(BaseObjMgr.class);
 	private List<ObjListener> lists = new ArrayList<ObjListener>(5);
+	private ConcurrentMap<String, Object> lockMap = new ConcurrentHashMap<String, Object>();
+
+	/**
+	 * 获取某id的锁 在当前系统中，用户id是唯一的，其余的id均是以uuid作为主键 此方法不允许覆盖
+	 * 
+	 * @param id
+	 *            调用者保证该id的唯一性
+	 * @return
+	 */
+	public Object getLock(String id) {
+		return lockMap.putIfAbsent(id, new Object());
+	}
 
 	/**
 	 * get the real class of ibaseobj
@@ -115,23 +130,30 @@ public abstract class BaseObjMgr implements IMgrBase {
 	}
 
 	public boolean remove(String id) {
-		IBaseObj user = this.getObj(id);
-		boolean removeObj = HibernateStorageUtil.removeObj(getBean().getName(),
-				user);
-		for (ObjListener lis : lists) {
-			lis.fireRemove(id);
+		Object lock = getLock(id);
+		synchronized (lock) {
+			IBaseObj user = this.getObj(id);
+			boolean removeObj = HibernateStorageUtil.removeObj(getBean()
+					.getName(), user);
+			for (ObjListener lis : lists) {
+				lis.fireRemove(id);
+			}
+			lockMap.remove(id);
+			return removeObj;
 		}
-		return removeObj;
 	}
 
 	public boolean update(String id, IBaseObj obj) throws Exception {
-		IBaseObj old = getObj(id);
-		boolean updateObj = HibernateStorageUtil.updateObj(getBean().getName(),
-				id, obj);
-		for (ObjListener lis : lists) {
-			lis.fireUpdate(id, old, obj);
+		Object lock = getLock(id);
+		synchronized (lock) {
+			IBaseObj old = getObj(id);
+			boolean updateObj = HibernateStorageUtil.updateObj(getBean()
+					.getName(), id, obj);
+			for (ObjListener lis : lists) {
+				lis.fireUpdate(id, old, obj);
+			}
+			return updateObj;
 		}
-		return updateObj;
 	}
 
 	@Override
