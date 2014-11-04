@@ -15,6 +15,7 @@ public abstract class BaseController {
 			if (StringUtils.isNotEmpty(req.getCharacterEncoding())) {
 				req.setCharacterEncoding("UTF-8");
 			}
+			res.setCharacterEncoding("UTF-8");
 			return hanldleReq(req, res);
 		} catch (Exception e) {
 			req.setAttribute(DATE_SERVER_EXCEPTION, e);

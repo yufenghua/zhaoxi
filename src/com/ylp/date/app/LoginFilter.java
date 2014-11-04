@@ -45,7 +45,7 @@ public class LoginFilter implements Filter {
 			return;
 		}
 		HttpServletResponse res = (HttpServletResponse) arg1;
-		res.sendRedirect("/user/join.do");
+		res.sendRedirect(req.getContextPath()+"/user/join.do");
 	}
 
 	@Override

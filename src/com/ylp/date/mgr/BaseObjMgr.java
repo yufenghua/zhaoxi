@@ -20,8 +20,8 @@ import com.ylp.date.server.Server;
 import com.ylp.date.storage.HibernateStorageUtil;
 
 /**
- * abstract class for object manager
- * 更新和删除操作添加同步，以防止对于多线程问题
+ * abstract class for object manager 更新和删除操作添加同步，以防止对于多线程问题
+ * 
  * @author Qiaolin Pan
  * 
  */
@@ -39,7 +39,8 @@ public abstract class BaseObjMgr implements IMgrBase {
 	 * @return
 	 */
 	public Object getLock(String id) {
-		return lockMap.putIfAbsent(id, new Object());
+		lockMap.putIfAbsent(id, new Object());
+		return lockMap.get(id);
 	}
 
 	/**

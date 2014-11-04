@@ -37,117 +37,11 @@
         </div>
       </nav>
     </header>
-    <div class="container">
-        <form class="match-form">
-          <!--上列表（隐藏）-->
-          <div class="male">
-            <input type="radio" name="male" value="1">
-            <input type="radio" name="male" value="2">
-            <input type="radio" name="male" value="3">
-            <input type="radio" name="male" value="4">
-          </div>
-          <!--下列表（隐藏）-->
-          <div class="female">
-            <input type="radio" name="female" value="1">
-            <input type="radio" name="female" value="2">
-            <input type="radio" name="female" value="3">
-            <input type="radio" name="female" value="4">
-          </div>
-          <!--上列表-->
-          <ul class="list clearfix">
-            <li>
-              <div class="photo">
-                <img src="../static/img/photo/photo.png">
-              </div>
-              <div class="info">
-                <p>喜欢做xxx</p>
-                <p>偶像xxx</p>
-                <p>其他xxx</p>
-              </div>
-              <a class="send-flower" href="" title="送花"></a>
-            </li>
-            <li>
-              <div class="photo">
-                <img src="../static/img/photo/photo.png">
-              </div>
-              <div class="info">
-                <p>喜欢做xxx</p>
-                <p>偶像xxx</p>
-                <p>其他xxx</p>
-              </div>
-              <a class="send-flower" href="" title="送花"></a>
-            </li>
-            <li>
-              <div class="photo">
-                <img src="../static/img/photo/photo.png">
-              </div>
-              <div class="info">
-                <p>喜欢做xxx</p>
-                <p>偶像xxx</p>
-                <p>其他xxx</p>
-              </div>
-              <a class="send-flower" href="" title="送花"></a>
-            </li>
-            <li>
-              <div class="photo">
-                <img src="../static/img/photo/photo.png">
-              </div>
-              <div class="info">
-                <p>喜欢做xxx</p>
-                <p>偶像xxx</p>
-                <p>其他xxx</p>
-              </div>
-              <a class="send-flower" href="" title="送花"></a>
-            </li>
-          </ul>
-          <!--下列表-->
-          <ul class="list clearfix">
-            <li>
-              <div class="photo">
-                <img src="../static/img/photo/photo2.png">
-              </div>
-              <div class="info">
-                <p>喜欢做xxx</p>
-                <p>偶像xxx</p>
-                <p>其他xxx</p>
-              </div>
-            </li>
-            <li>
-              <div class="photo">
-                <img src="../static/img/photo/photo2.png">
-              </div>
-              <div class="info">
-                <p>喜欢做xxx</p>
-                <p>偶像xxx</p>
-                <p>其他xxx</p>
-              </div>
-            </li>
-            <li>
-              <div class="photo">
-                <img src="../static/img/photo/photo2.png">
-              </div>
-              <div class="info">
-                <p>喜欢做xxx</p>
-                <p>偶像xxx</p>
-                <p>其他xxx</p>
-              </div>
-            </li>
-            <li>
-              <div class="photo">
-                <img src="../static/img/photo/photo2.png">
-              </div>
-              <div class="info">
-                <p>喜欢做xxx</p>
-                <p>偶像xxx</p>
-                <p>其他xxx</p>
-              </div>
-            </li>
-          </ul>
+    <div class="container" id="matchlistContainer">
           <div class="submit-area">
             <button class="btn btn-default btn-wide" id="refresh-btn">换一组</button>
             <button type="submit" class="btn btn-primary btn-wide">确定</button>
           </div>
-        </form>
     </div>
 
     <script src="../static/thirdparty/flat-ui/js/jquery-1.8.3.min.js"></script>
@@ -160,8 +54,13 @@
     <script src="../static/thirdparty/flat-ui/js/flatui-radio.js"></script>
     <script src="../static/thirdparty/flat-ui/js/jquery.tagsinput.js"></script>
     <script src="../static/thirdparty/flat-ui/js/jquery.placeholder.js"></script>
+     <script src="../pages/js/match.js"></script>
     <script>
+    var userId='<%=request.getAttribute("userid")%>';
         $(function () {
+        	var matchMgr=new MatchInfoMgr(window,$('#matchlistContainer'));
+        	matchMgr.setUserId(userId);
+        	matchMgr.refresh();
             $('#refresh-btn').on('click', function (e) {
               e.preventDefault();
               window.location.reload();

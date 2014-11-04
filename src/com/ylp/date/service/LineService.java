@@ -83,7 +83,7 @@ public class LineService implements ObjListener, Runnable {
 	 * @param login
 	 * @return
 	 */
-	LineUsersObj getLineUser(Login login) {
+	public LineUsersObj getLineUser(Login login) {
 		read.lock();
 		try {
 			if (!login.isLogined()) {
@@ -230,8 +230,8 @@ public class LineService implements ObjListener, Runnable {
 			// 1.根据shownum降序
 			List<IBaseObj> firstMale = getFirst(true);
 			List<IBaseObj> firstFemale = getFirst(false);
-			adjustUsers(firstMale, true);
-			adjustUsers(firstFemale, true);
+			adjustMale(firstMale);
+			adjustFamale(firstFemale);
 			// 如果上述完成 返回
 			if (isMaleFulled && isFemaleFulled) {
 				return;
@@ -397,41 +397,54 @@ public class LineService implements ObjListener, Runnable {
 		return userMgr.executeQuery(hql, list.toArray());
 	}
 
-	private void adjustUsers(List<IBaseObj> firstMale, boolean b) {
-		// 男性时候 进行创建
-		if (b) {
-			int size = firstMale.size();
-			if (userPool.isEmpty()) {
-				LineUsersObj obj = new LineUsersObj();
-				for (int i = 0; i <= size; i++) {
-					if (i != size) {
-						obj.addUser((IUser) firstMale.get(i));
-					}
-					if ((i % 4 == 0 && i != 0) || i == size) {
-						userPool.put(obj.getKey(), obj);
-						obj = new LineUsersObj();
+	private void adjustFamale(List<IBaseObj> firstMale) {
+		int count = 0;
+		for (Map.Entry<String, LineUsersObj> lineUsers : userPool.entrySet()) {
+			LineUsersObj value = lineUsers.getValue();
+			while (!value.isFemaleFulled()) {
+				if (count < firstMale.size()) {
+					IUser user = (IUser) firstMale.get(count);
+					value.addUser(user);
+					logger.debug(user.getId() + "加入" + value.getKey());
+				}
+				if (value.isFemaleFulled() || count == firstMale.size()) {
+					userPool.put(lineUsers.getKey(), value);
+					if (count == firstMale.size()) {
+						break;
 					}
 				}
+				count++;
 			}
-		} else {
-			// 女性时加入
-			int count = 0;
-			for (Map.Entry<String, LineUsersObj> lineUsers : userPool
-					.entrySet()) {
-				for (int i = 0; i <= 4; i++) {
-					LineUsersObj value = lineUsers.getValue();
-					if (count != firstMale.size()) {
-						value.addUser((IUser) firstMale.get(count));
+			if (count < firstMale.size()) {
+				// TODO
+
+			}
+		}
+	}
+
+	private void adjustMale(List<IBaseObj> firstMale) {
+		int size = firstMale.size();
+		if (userPool.isEmpty()) {
+			LineUsersObj obj = new LineUsersObj();
+			String key = obj.getKey();
+			logger.debug("创建对象{}", key);
+			for (int i = 0; i <= size; i++) {
+				if (i != size) {
+					IUser user = (IUser) firstMale.get(i);
+					obj.addUser(user);
+					logger.debug(user.getId() + "加入" + key);
+				}
+
+				if (obj.isMaleFulled() || i == size) {
+					userPool.put(key, obj);
+					if (i != size) {
+						obj = new LineUsersObj();
+						key = obj.getKey();
+						logger.debug("创建对象{}", key);
 					}
-					if ((count % 4 == 0 && count != 0)
-							|| count == firstMale.size()) {
-						userPool.put(lineUsers.getKey(), value);
-					}
-					count++;
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -453,12 +466,21 @@ public class LineService implements ObjListener, Runnable {
 				+ "select rel_.otherOne from UserRelation rel_ where rel_.type=? and  rel_.recognition=? and rel_.otherOneReg is  null"
 				+ ") order by user_.lastShowNum";
 		List<Object> list = new ArrayList<Object>(5);
-		list.add(b ? IUser.MALE : IUser.FEMALE);
-		list.add(new Date(System.currentTimeMillis() - 3 * ONE_DAY));
+		int gender = b ? IUser.MALE : IUser.FEMALE;
+		list.add(gender);
+		logger.debug("params:" + gender);
+		// 三天内全部没有匹配成功
+		Date date = new Date(System.currentTimeMillis() - 3 * ONE_DAY);
+		list.add(date);
+		logger.debug("params:" + date);
 		list.add(IRelation.TYPE_LINE);
+		logger.debug("params:" + IRelation.TYPE_LINE);
 		list.add(IRelation.RECOG_LINE);
+		logger.debug("params" + IRelation.RECOG_LINE);
 		list.add(IRelation.TYPE_LINE);
+		logger.debug("params" + IRelation.TYPE_LINE);
 		list.add(IRelation.RECOG_LINE);
+		logger.debug("params" + IRelation.RECOG_LINE);
 		return userMgr.executeQuery(hql, list.toArray());
 	}
 

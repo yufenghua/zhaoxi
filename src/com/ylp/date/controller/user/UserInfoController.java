@@ -1,5 +1,6 @@
 package com.ylp.date.controller.user;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.Iterator;
@@ -58,7 +59,33 @@ public class UserInfoController extends BaseController {
 				return update(ex, res);
 			}
 		}
+		if (StringUtils.equals(action, "img")) {
+			handleImg(req, res);
+			return null;
+		}
 		return null;
+	}
+
+	private void handleImg(HttpServletRequest req, HttpServletResponse res)
+			throws Exception {
+		String userId = req.getParameter("userid");
+		User user = (User) Server.getInstance().userMgr().getObj(userId);
+		byte[] img = user.getImg();
+		if (img == null||img.length == 0 ) {
+			img = user.getCardImgBytes();
+		}
+		if (img == null||img.length == 0) {
+			InputStream resourceAsStream = this.getClass().getResourceAsStream(
+					"/default.jpg");
+			try {
+				img = new byte[resourceAsStream.available()];
+				resourceAsStream.read(img);
+			} finally {
+				resourceAsStream.close();
+			}
+		}
+		res.setContentType("image/jpg");
+		res.getOutputStream().write(img, 0, img.length);
 	}
 
 	private void handleTag(List<IBaseObj> list, HttpServletRequest req,
@@ -128,13 +155,14 @@ public class UserInfoController extends BaseController {
 					byte[] img = new byte[stm.available()];
 					int read = stm.read(img);
 					user.setImg(img);
-					userMgr.update(userid, user);
 				}
-				return "pages/my-match";
 
 			} finally {
 				stm.close();
 			}
+			// 允许没有图片的情况下 更新用户数据
+			userMgr.update(userid, user);
+			return "pages/my-match";
 		}
 		return null;
 	}

@@ -17,6 +17,7 @@ public class LineUsersObj {
 	private ReadWriteLock lock = new ReentrantReadWriteLock();
 	private Lock read = lock.readLock();
 	private Lock write = lock.writeLock();
+	private int size = MAX_MALE;
 
 	/**
 	 * 对象的唯一标示
@@ -120,7 +121,7 @@ public class LineUsersObj {
 	public boolean isFulled() {
 		read.lock();
 		try {
-			return males.size() == 4 && females.size() == 4;
+			return males.size() == size && females.size() == size;
 		} finally {
 			read.unlock();
 		}
@@ -129,7 +130,7 @@ public class LineUsersObj {
 	public boolean isMaleFulled() {
 		read.lock();
 		try {
-			return males.size() == 4;
+			return males.size() == size;
 		} finally {
 			read.unlock();
 		}
@@ -138,9 +139,27 @@ public class LineUsersObj {
 	public boolean isFemaleFulled() {
 		read.lock();
 		try {
-			return females.size() == 4;
+			return females.size() == size;
 		} finally {
 			read.unlock();
 		}
+	}
+
+	/**
+	 * 获取size
+	 * 
+	 * @return
+	 */
+	public int getSize() {
+		return size;
+	}
+
+	/**
+	 * 设置size
+	 * 
+	 * @param size
+	 */
+	public void setSize(int size) {
+		this.size = size;
 	}
 }
