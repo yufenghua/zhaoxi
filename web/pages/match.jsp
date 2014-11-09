@@ -40,9 +40,12 @@
     <div class="container" id="matchlistContainer">
          
     </div>
-
-    <script src="../static/thirdparty/flat-ui/js/jquery-1.8.3.min.js"></script>
+  </body>
+</html>
+ <script src="../static/thirdparty/flat-ui/js/jquery-1.8.3.min.js"></script>
     <script src="../static/thirdparty/flat-ui/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="../static/thirdparty/flat-ui/js/jquery-ui-1.10.4.custom.min.js"></script>
+    <script src="code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
     <script src="../static/thirdparty/flat-ui/js/jquery.ui.touch-punch.min.js"></script>
     <script src="../static/thirdparty/flat-ui/js/bootstrap.min.js"></script>
     <script src="../static/thirdparty/flat-ui/js/bootstrap-select.js"></script>
@@ -52,7 +55,7 @@
     <script src="../static/thirdparty/flat-ui/js/jquery.tagsinput.js"></script>
     <script src="../static/thirdparty/flat-ui/js/jquery.placeholder.js"></script>
      <script src="../pages/js/match.js"></script>
-    <script>
+ <script>
     var userId='<%=request.getAttribute("userid")%>';
         $(function () {
         	var matchMgr=new MatchInfoMgr(window,$('#matchlistContainer'));
@@ -64,5 +67,3 @@
             });
         });
     </script>
-  </body>
-</html>

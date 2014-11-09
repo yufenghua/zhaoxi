@@ -1,65 +1,4 @@
 /**
- * 
- * json对象数据结构
- * {
-“me”: “male”, //当前用户的性别
-“male”: [
-{
-“id”: 3434353455,
-“photo”: “xxxxxxx.png”,
-“favorite”: “呵呵”,
-“idol”: “潘巧林”,
-“others”: “xxxxx”
-},{
-“id”: 3434353455,
-“photo”: “xxxxxxx.png”,
-“favorite”: “呵呵”,
-“idol”: “潘巧林”,
-“others”: “xxxxx”
-},{
-“id”: 3434353455,
-“photo”: “xxxxxxx.png”,
-“favorite”: “呵呵”,
-“idol”: “潘巧林”,
-“others”: “xxxxx”
-},{
-“id”: 3434353455,
-“photo”: “xxxxxxx.png”,
-“favorite”: “呵呵”,
-“idol”: “潘巧林”,
-“others”: “xxxxx”
-}
-],
-“female”: [
-{
-“id”: 3434353455,
-“photo”: “xxxxxxx.png”,
-“favorite”: “呵呵”,
-“idol”: “潘巧林”,
-“others”: “xxxxx”
-},{
-“id”: 3434353455,
-“photo”: “xxxxxxx.png”,
-“favorite”: “呵呵”,
-“idol”: “潘巧林”,
-“others”: “xxxxx”
-},{
-“id”: 3434353455,
-“photo”: “xxxxxxx.png”,
-“favorite”: “呵呵”,
-“idol”: “潘巧林”,
-“others”: “xxxxx”
-},{
-“id”: 3434353455,
-“photo”: “xxxxxxx.png”,
-“favorite”: “呵呵”,
-“idol”: “潘巧林”,
-“others”: “xxxxx”
-}
-]
-}
- */
-/**
  * <ul class="list clearfix">
  <li>
  <div class="photo">
@@ -161,6 +100,7 @@ function MatchInfoMgr(window, parent) {
 MatchInfoMgr.prototype._init = function() {
 	this.sameUser={};
 	this.opsiteUser={};
+	this.users={};
 	this.opsiteUl = $('<ul>');
 	this.opsiteUl.addClass('list');
 	this.opsiteUl.addClass('clearfix');
@@ -274,7 +214,7 @@ MatchInfoMgr.prototype.getUserObj = function() {
  * @returns 返回异性列表的数组
  */
 MatchInfoMgr.prototype.getOppositeSex = function() {
-
+return this.opsiteUsers;
 };
 /**
  * 获取同性
@@ -282,14 +222,14 @@ MatchInfoMgr.prototype.getOppositeSex = function() {
  * @returns
  */
 MatchInfoMgr.prototype.getSameSex = function() {
-
+	return this.sameUsers;
 };
 /**
  * 
  * @param id
  */
 MatchInfoMgr.prototype.getItem = function(id) {
-
+	return this.users[id];
 };
 /**
  * 连线动作
@@ -298,7 +238,19 @@ MatchInfoMgr.prototype.getItem = function(id) {
  * @param id2
  */
 MatchInfoMgr.prototype.match = function(id1, id2) {
-
+	var self = this;
+	$.ajax({
+	    type: "POST",
+	    url: "../match.do?action=MatchUser",
+	    data: { user: id1, other: id2},
+	    success: function(data) {
+	    	alert('连线成功！');
+	    	self.refresh();
+	    },
+	    error: function (xhr, textStatus, errorThrown) {
+	    	alert('出现错误' + textStatus);
+	    }
+	});
 };
 /**
  *清除方法
@@ -308,6 +260,7 @@ MatchInfoMgr.prototype.clear=function(){
 	this.opsiteUl.empty();
 	this.sameUsers={};
 	this.opsiteUsers={};
+	this.users={};
 };
 /**
  * 
@@ -333,14 +286,28 @@ function MatchUser(userObj, mgr, isSame) {
  */
 MatchUser.prototype.init = function() {
 	this.liDom = $('<li>');
-	// this.liDom.draggable({
-	// 	start: function(event,ui) {
-	// 	//TODO
-	// 	},
-	// 	stop:function(event,ui){
-	// 	//TODO
-	// 	}
-	// });
+	var self=this;
+	//拖动执行函数
+	$(this.liDom).draggable({
+		stop:function(event,ui){
+			var position=ui.offset;
+			var opsiteSex=self.isSame?self.mgr.getOppositeSex():self.mgr.getSameSex();
+			if (!opsiteSex) {
+				return false;
+			};
+			$.each(opsiteSex,function(userObjId,value){
+				var tagetPosition=value.getPosition();
+				//是否重合的算法 逻辑是 二者的定位误差不超过20像素
+				if(Math.abs(position.left-tagetPosition.left)<=20&&Math.abs(position.top-tagetPosition.top)<=20){
+					if(confirm('确认连线'+self.userObj.name+'和'+value.userObj.name+'吗？')){
+						self.mgr.match(self.userObj.id,userObjId);
+					}
+				};
+			});
+		}
+	});
+	//拖动之后回到起始位置
+	$(this.liDom).draggable({ revert: true });
 
 
 	this.imgDiv = $('<div>');
@@ -368,15 +335,22 @@ MatchUser.prototype.init = function() {
 		this.flowerDiv.append(this.flower);
 		this.liDom.append(this.flowerDiv);
 		this.mgr.opsiteUl.append(this.liDom);
-		this.mgr.opsiteUser[this.userObj.id] = this;
+		this.mgr.opsiteUsers[this.userObj.id] = this;
 	} else {
 		this.mgr.sameUl.append(this.liDom);
-		this.mgr.sameUser[this.userObj.id] = this;
+		this.mgr.sameUsers[this.userObj.id] = this;
 	}
+	this.mgr.users[this.userObj.id] = this;
 };
 /**
  * 
  */
 MatchUser.prototype.canMatch = function(id) {
 
+};
+/**
+ * 获取用户展示的当前位置
+ */
+MatchUser.prototype.getPosition=function(){
+	return this.liDom.offset();
 };

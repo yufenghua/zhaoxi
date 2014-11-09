@@ -41,7 +41,19 @@ public class MatchController extends BaseController {
 			res.getWriter().print(obj.toString());
 			return null;
 		}
+		if(StringUtils.equals(action, "MatchUser")){
+			res.setContentType("application/json; charset=utf-8");
+			matchUsers(req,res);
+			return null;
+		}
 		return null;
+	}
+
+	private void matchUsers(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		String userid1=req.getParameter("user");
+		String other=req.getParameter("other");
+		Login login = ControlUtil.getLogin(req);
+		Server.getInstance().getRelationMgr().buildLine(login.getUser().getId(), userid1, other);
 	}
 
 	private void handleLineUser(LineUsersObj lineUser, JSONObject obj,
