@@ -1,3 +1,21 @@
+function initLogOut(){
+	var global_LogOut_Btn=$("a.logout-btn");
+	if (global_LogOut_Btn) {
+		global_LogOut_Btn.click(function(){
+			$.ajax({
+			    type: "POST",
+			    url: "../user/login.do?action=logout",
+			    success: function(data) {
+			    	window.location.href='/index.do';
+			    },
+			    error: function (xhr, textStatus, errorThrown) {
+			    	alert('出现错误' + textStatus);
+			    }
+			});
+		})
+	};
+};
+initLogOut();
 /**
  * 验证函数，默认进行非空验证，如果有其他逻辑，请实现验证器的逻辑
  * 
@@ -19,3 +37,4 @@ function validate(value, validator) {
 function isEmpty(str) {
 	return str == undefined || str == null || str == '';
 };
+

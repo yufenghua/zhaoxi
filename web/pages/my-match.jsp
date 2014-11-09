@@ -84,6 +84,7 @@
 	<script src="../static/thirdparty/flat-ui/js/flatui-radio.js"></script>
 	<script src="../static/thirdparty/flat-ui/js/jquery.tagsinput.js"></script>
 	<script src="../static/thirdparty/flat-ui/js/jquery.placeholder.js"></script>
+	        <script src="../pages/js/util.js"></script>
 	<script>
 		$(function() {
 			$('#refresh-btn').on('click', function(e) {

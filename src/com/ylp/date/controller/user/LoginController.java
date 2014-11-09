@@ -36,6 +36,13 @@ public class LoginController extends BaseController {
 		if (StringUtils.equals(action, "login")) {
 			return login(req, res);
 		}
+		if(StringUtils.equals(action, "logout")){
+			logout(req,res);
+		}
 		return null;
+	}
+
+	private void logout(HttpServletRequest req, HttpServletResponse res) {
+		ControlUtil.getLogin(req).logout();
 	}
 }

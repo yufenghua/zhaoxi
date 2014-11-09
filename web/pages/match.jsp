@@ -55,6 +55,7 @@
     <script src="../static/thirdparty/flat-ui/js/jquery.tagsinput.js"></script>
     <script src="../static/thirdparty/flat-ui/js/jquery.placeholder.js"></script>
      <script src="../pages/js/match.js"></script>
+         <script src="../pages/js/util.js"></script>
  <script>
     var userId='<%=request.getAttribute("userid")%>';
         $(function () {
