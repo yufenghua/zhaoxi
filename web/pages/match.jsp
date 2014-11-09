@@ -38,10 +38,7 @@
       </nav>
     </header>
     <div class="container" id="matchlistContainer">
-          <div class="submit-area">
-            <button class="btn btn-default btn-wide" id="refresh-btn">换一组</button>
-            <button type="submit" class="btn btn-primary btn-wide">确定</button>
-          </div>
+         
     </div>
 
     <script src="../static/thirdparty/flat-ui/js/jquery-1.8.3.min.js"></script>

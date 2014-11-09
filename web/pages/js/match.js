@@ -171,8 +171,37 @@ MatchInfoMgr.prototype._init = function() {
 
 	this.parent.append(this.opsiteUl);
 	this.parent.append(this.sameUl);
+	/**
+	 *  <div class="submit-area">
+            <button class="btn btn-default btn-wide" id="refresh-btn">换一组</button>
+            <button type="submit" class="btn btn-primary btn-wide">确定</button>
+          </div>
+	 */
+	this.btnArea=$('<div>');
+	this.btnArea.addClass('submit-area');
+	//换一组 按钮
+	this.refreshBtn=$('<button>');
+	this.refreshBtn.addClass('btn');
+	this.refreshBtn.addClass('btn-default');
+	this.refreshBtn.addClass('btn-wide');
+	this.refreshBtn.text('换一组');
+	this.refreshBtn.owner=this;
+	var self=this;
+	this.refreshBtn.bind('click', function() { 
+		self.refresh();
+	 });
+	this.btnArea.append(this.refreshBtn);
+	//FIXME 2014 1109 确定按钮感觉没有存在的必要，暂时不管他
+	this.parent.append(this.btnArea);
 };
+MatchInfoMgr.prototype.getRefreshBtn=function(){
+	return this.refreshBtn;
+};
+/**
+ * 刷新
+ */
 MatchInfoMgr.prototype.refresh = function() {
+	this.clear();
 	var self = this;
 	$.ajax({
 	    type: "POST",
@@ -272,6 +301,15 @@ MatchInfoMgr.prototype.match = function(id1, id2) {
 
 };
 /**
+ *清除方法
+ */
+MatchInfoMgr.prototype.clear=function(){
+	this.sameUl.empty();
+	this.opsiteUl.empty();
+	this.sameUsers={};
+	this.opsiteUsers={};
+};
+/**
  * 
  */
 function MatchUser(userObj, mgr, isSame) {
@@ -295,6 +333,15 @@ function MatchUser(userObj, mgr, isSame) {
  */
 MatchUser.prototype.init = function() {
 	this.liDom = $('<li>');
+	// this.liDom.draggable({
+	// 	start: function(event,ui) {
+	// 	//TODO
+	// 	},
+	// 	stop:function(event,ui){
+	// 	//TODO
+	// 	}
+	// });
+
 
 	this.imgDiv = $('<div>');
 	this.imgDiv.addClass('photo');
