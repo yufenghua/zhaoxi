@@ -29,6 +29,7 @@ import com.ylp.date.mgr.IBaseObj;
 import com.ylp.date.mgr.ObjListener;
 import com.ylp.date.mgr.relation.IRelation;
 import com.ylp.date.mgr.user.IUser;
+import com.ylp.date.mgr.user.impl.User;
 import com.ylp.date.mgr.user.impl.UserMgr;
 import com.ylp.date.server.Server;
 import com.ylp.date.server.ServerConfigRation;
@@ -54,6 +55,7 @@ public class LineService implements ObjListener, Runnable {
 	 * 其id 是一个md5值 通过所有的用户id求出的MD5
 	 */
 	private Map<String, LineUsersObj> userPool;
+	private List<LineUsersObj> lineUsers;
 	private int defaultLength;
 	private SortedMap<String, Integer> userDisplay;
 	private boolean isMaleFulled;
@@ -72,6 +74,7 @@ public class LineService implements ObjListener, Runnable {
 			int max = Math.max(16, defaultLength);
 			userPool = new HashMap<String, LineUsersObj>(max);
 			userDisplay = new TreeMap<String, Integer>();
+			lineUsers = new ArrayList<LineUsersObj>();
 			run();
 		} finally {
 			write.unlock();
@@ -349,6 +352,7 @@ public class LineService implements ObjListener, Runnable {
 			LineUsersObj obj = new LineUsersObj();
 			obj.addUser(user);
 			userPool.put(obj.getKey(), obj);
+			lineUsers.add(obj);
 			needCreate = userPool.size() != defaultLength;
 		}
 	}
@@ -399,16 +403,15 @@ public class LineService implements ObjListener, Runnable {
 
 	private void adjustFamale(List<IBaseObj> firstMale) {
 		int count = 0;
-		for (Map.Entry<String, LineUsersObj> lineUsers : userPool.entrySet()) {
-			LineUsersObj value = lineUsers.getValue();
-			while (!value.isFemaleFulled()) {
+		for (LineUsersObj lineUser : this.lineUsers) {
+			while (!lineUser.isFemaleFulled()) {
 				if (count < firstMale.size()) {
 					IUser user = (IUser) firstMale.get(count);
-					value.addUser(user);
-					logger.debug(user.getId() + "加入" + value.getKey());
+					lineUser.addUser(user);
+					logger.debug(user.getId() + "加入" + lineUser.getKey());
 				}
-				if (value.isFemaleFulled() || count == firstMale.size()) {
-					userPool.put(lineUsers.getKey(), value);
+				if (lineUser.isFemaleFulled() || count == firstMale.size()) {
+					userPool.put(lineUser.getKey(), lineUser);
 					if (count == firstMale.size()) {
 						break;
 					}
@@ -437,6 +440,7 @@ public class LineService implements ObjListener, Runnable {
 
 				if (obj.isMaleFulled() || i == size) {
 					userPool.put(key, obj);
+					lineUsers.add(obj);
 					if (i != size) {
 						obj = new LineUsersObj();
 						key = obj.getKey();
