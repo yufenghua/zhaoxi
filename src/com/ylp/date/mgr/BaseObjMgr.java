@@ -55,11 +55,11 @@ public abstract class BaseObjMgr implements IMgrBase {
 	}
 
 	public IBaseObj getObj(String id) {
-		Session session = Server.getInstance().getCurentSession();
+		Session session = Server.getInstance().openSession();
 		try {
 			return (IBaseObj) session.get(getBean(), id);
 		} finally {
-			session.getTransaction().commit();
+			session.close();
 		}
 	}
 
@@ -72,7 +72,7 @@ public abstract class BaseObjMgr implements IMgrBase {
 	}
 
 	public List<IBaseObj> list(PageCondition page, ConditionPair cond) {
-		Session session = Server.getInstance().getCurentSession();
+		Session session = Server.getInstance().openSession();
 		try {
 			Criteria criteria = session.createCriteria(getBean());
 			setPage(criteria, page);
@@ -82,7 +82,7 @@ public abstract class BaseObjMgr implements IMgrBase {
 			Server.getInstance().handleException(e);
 			logger.error("查询数据时发生异常", e);
 		} finally {
-			session.getTransaction().commit();
+			session.close();
 		}
 		return Collections.emptyList();
 	}
@@ -159,7 +159,7 @@ public abstract class BaseObjMgr implements IMgrBase {
 
 	@Override
 	public int count(ConditionPair pair) {
-		Session session = Server.getInstance().getCurentSession();
+		Session session = Server.getInstance().openSession();
 		try {
 			Criteria criteria = session.createCriteria(getBean());
 			setCondition(criteria, pair);
@@ -169,7 +169,7 @@ public abstract class BaseObjMgr implements IMgrBase {
 			Server.getInstance().handleException(e);
 			logger.error("查询数据时发生异常", e);
 		} finally {
-			session.getTransaction().commit();
+			session.close();
 		}
 		return 0;
 	}
@@ -177,7 +177,7 @@ public abstract class BaseObjMgr implements IMgrBase {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IBaseObj> executeQuery(String hql, Object[] params) {
-		Session session = Server.getInstance().getCurentSession();
+		Session session = Server.getInstance().openSession();
 		try {
 			Query query = session.createQuery(hql);
 			if (params != null) {
@@ -190,7 +190,7 @@ public abstract class BaseObjMgr implements IMgrBase {
 			Server.getInstance().handleException(e);
 			logger.error("查询数据时发生异常", e);
 		} finally {
-			session.getTransaction().commit();
+			session.close();
 		}
 		return Collections.emptyList();
 	}
