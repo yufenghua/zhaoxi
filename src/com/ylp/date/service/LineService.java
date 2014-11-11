@@ -28,6 +28,7 @@ import com.ylp.date.login.Login;
 import com.ylp.date.mgr.IBaseObj;
 import com.ylp.date.mgr.ObjListener;
 import com.ylp.date.mgr.relation.IRelation;
+import com.ylp.date.mgr.relation.impl.RelationMgr;
 import com.ylp.date.mgr.user.IUser;
 import com.ylp.date.mgr.user.impl.User;
 import com.ylp.date.mgr.user.impl.UserMgr;
@@ -44,7 +45,7 @@ import com.ylp.date.server.SpringNames;
 @Component(SpringNames.LineService)
 @DependsOn({ SpringNames.Server, SpringNames.ServerConfigRation })
 @Lazy(false)
-public class LineService implements ObjListener, Runnable {
+public class LineService implements Runnable {
 	private static final Logger logger = LoggerFactory
 			.getLogger(LineService.class);
 	private static final int ONE_DAY = 1000 * 60 * 60 * 24;
@@ -66,6 +67,8 @@ public class LineService implements ObjListener, Runnable {
 	private ServerConfigRation configration;
 	@Autowired
 	private UserMgr userMgr;
+	@Autowired
+	private RelationMgr relationMgr;
 
 	public void init() {
 		write.lock();
@@ -75,6 +78,8 @@ public class LineService implements ObjListener, Runnable {
 			userPool = new HashMap<String, LineUsersObj>(max);
 			userDisplay = new TreeMap<String, Integer>();
 			lineUsers = new ArrayList<LineUsersObj>();
+			userMgr.regListener(new UserListenerForLine());
+			relationMgr.regListener(new RelationListenerForLine());
 			run();
 		} finally {
 			write.unlock();
@@ -142,14 +147,13 @@ public class LineService implements ObjListener, Runnable {
 		return null;
 	}
 
-	@Override
-	public void fileAdd(IBaseObj obj) {
+	public void whenUserAdd(IUser obj) {
 		write.lock();
 		try {
-			if (!(obj instanceof IUser)) {
+			IUser user = (IUser) obj;
+			if(user.getGender()==0){
 				return;
 			}
-			IUser user = (IUser) obj;
 			String id = obj.getId();
 			for (Map.Entry<String, LineUsersObj> entry : userPool.entrySet()) {
 				LineUsersObj value = entry.getValue();
@@ -159,6 +163,7 @@ public class LineService implements ObjListener, Runnable {
 				int gender = user.getGender();
 				int femaleSize = value.getFemale().size();
 				int maleSize = value.getMale().size();
+				//保证男女对称
 				if ((!value.isFemaleFulled() && gender == IUser.FEMALE)
 						&& maleSize - femaleSize == 1) {
 					value.addUser(user);
@@ -182,8 +187,7 @@ public class LineService implements ObjListener, Runnable {
 		}
 	}
 
-	@Override
-	public void fireRemove(String id) {
+	public void whenUserRemove(String id) {
 		write.lock();
 		try {
 			List<String> keys = new ArrayList<String>();
@@ -486,29 +490,5 @@ public class LineService implements ObjListener, Runnable {
 		list.add(IRelation.RECOG_LINE);
 		logger.debug("params" + IRelation.RECOG_LINE);
 		return userMgr.executeQuery(hql, list.toArray());
-	}
-
-	@Override
-	public void fireUpdate(String id, IBaseObj old, IBaseObj newObj) {
-		write.lock();
-		try {
-			if (!(old instanceof IUser)) {
-				return;
-			}
-			if (!(newObj instanceof IUser)) {
-				return;
-			}
-			IUser newUser = (IUser) newObj;
-			Date lastLine = newUser.getLastLine();
-			if (lastLine == null) {
-				return;
-			}
-			if (lastLine.after(today)) {
-				this.fireRemove(id);
-			}
-		} finally {
-			write.unlock();
-		}
-
 	}
 }

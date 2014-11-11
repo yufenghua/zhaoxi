@@ -87,7 +87,7 @@
 				$forms.toggle();
 				this.innerHTML = lock ? '注册' : '登录';
 				$forms.filter(':visible').find('input:first').focus();
-				login = !lock;
+				lock = !lock;
 			});
 			//注册按钮提交逻辑
 			$('#submit_reg').on('click', function(e) {

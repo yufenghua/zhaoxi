@@ -50,6 +50,9 @@ public abstract class BaseObjMgr implements IMgrBase {
 	 */
 	protected abstract Class getBean();
 
+	/**
+	 * 注册监听器
+	 */
 	public void regListener(ObjListener lis) {
 		lists.add(lis);
 	}
