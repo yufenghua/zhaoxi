@@ -331,7 +331,19 @@ MatchUser.prototype.init = function() {
 		this.flower = $('<a>');
 		this.flower.addClass('send-flower');
 		this.flower.attr('title','送花');
-		this.flower.attr('href','flower.do');
+		this.flower.bind('click',function(){
+			$.ajax({
+				    type: "POST",
+				    url: "../match.do?action=flower",
+				    data: { target: self.userObj.id,},
+				    success: function(data) {
+				    	alert('花已经送出去了，祝你好运');
+				    },
+				    error: function (xhr, textStatus, errorThrown) {
+				    	alert('出现错误' + textStatus);
+				    }
+				});
+		})
 		this.flowerDiv.append(this.flower);
 		this.liDom.append(this.flowerDiv);
 		this.mgr.opsiteUl.append(this.liDom);

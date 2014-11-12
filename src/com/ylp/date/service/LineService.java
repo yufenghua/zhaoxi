@@ -165,12 +165,12 @@ public class LineService implements Runnable {
 				int maleSize = value.getMale().size();
 				//保证男女对称
 				if ((!value.isFemaleFulled() && gender == IUser.FEMALE)
-						&& maleSize - femaleSize == 1) {
+						&& (maleSize - femaleSize == 1||maleSize==femaleSize)) {
 					value.addUser(user);
 					return;
 				}
 				if ((!value.isMaleFulled() && gender == IUser.MALE)
-						&& femaleSize - maleSize == 1) {
+						&& (femaleSize - maleSize == 1||maleSize==femaleSize)) {
 					value.addUser(user);
 					return;
 				}

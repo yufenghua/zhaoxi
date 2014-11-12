@@ -2,6 +2,7 @@ package com.ylp.date.controller.match;
 
 import java.util.List;
 
+import javax.print.attribute.standard.Severity;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -41,19 +42,46 @@ public class MatchController extends BaseController {
 			res.getWriter().print(obj.toString());
 			return null;
 		}
-		if(StringUtils.equals(action, "MatchUser")){
+		if (StringUtils.equals(action, "MatchUser")) {
 			res.setContentType("application/json; charset=utf-8");
-			matchUsers(req,res);
+			matchUsers(req, res);
+			return null;
+		}
+		if (StringUtils.equals(action, "flower")) {
+			sendFlower(req, res);
 			return null;
 		}
 		return null;
 	}
 
-	private void matchUsers(HttpServletRequest req, HttpServletResponse res) throws Exception {
-		String userid1=req.getParameter("user");
-		String other=req.getParameter("other");
+	/**
+	 * 送花
+	 * 
+	 * @param req
+	 * @param res
+	 */
+	private void sendFlower(HttpServletRequest req, HttpServletResponse res) {
+		String userId = req.getParameter("target");
+		if (!StringUtils.isNotEmpty(userId)) {
+			throw new RuntimeException("目标用户不能为空!");
+		}
 		Login login = ControlUtil.getLogin(req);
-		Server.getInstance().getRelationMgr().buildLine(login.getUser().getId(), userid1, other);
+		IUser sender = login.getUser();
+		IUser receiver = Server.getInstance().userMgr().getObj(userId);
+		if (receiver == null) {
+			throw new RuntimeException("用户" + userId + "不存在!");
+		}
+		Server.getInstance().getRelationMgr()
+				.sendFlower(sender.getId(), userId);
+	}
+
+	private void matchUsers(HttpServletRequest req, HttpServletResponse res)
+			throws Exception {
+		String userid1 = req.getParameter("user");
+		String other = req.getParameter("other");
+		Login login = ControlUtil.getLogin(req);
+		Server.getInstance().getRelationMgr()
+				.buildLine(login.getUser().getId(), userid1, other);
 	}
 
 	private void handleLineUser(LineUsersObj lineUser, JSONObject obj,

@@ -26,7 +26,7 @@
           <div class="collapse navbar-collapse" id="navbar-collapse-01">
             <ul class="nav navbar-nav">           
               <li class="active"><a href="">首页</a></li>
-              <li><a href="">我的匹配</a></li>
+              <li><a href="usermatch.do">我的匹配</a></li>
               <li><a href="">我的花</a></li>
               <li><a href="">我的牵线</a></li>
               <li><a href="">设置</a></li>

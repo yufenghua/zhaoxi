@@ -86,7 +86,7 @@ public class User implements IUser {
 	}
 
 	@Column(name = "FLOWER_")
-	private int flower;
+	private int flower=3;
 
 	public byte[] getCardImgBytes() {
 		return cardImgBytes;
