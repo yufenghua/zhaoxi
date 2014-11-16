@@ -28,7 +28,7 @@
 			<ul class="nav navbar-nav">
 				<li><a href="">首页</a></li>
 				<li class="active"><a href="">我的匹配</a></li>
-				<li><a href="">我的花</a></li>
+			   <li><a href="userflower.do">我的花</a></li>
 				<li><a href="">我的牵线</a></li>
 				<li><a href="">设置</a></li>
 				<li><a href="" class="logout-btn">退出</a></li>
@@ -37,38 +37,8 @@
 
 	</div>
 	</nav> </header>
-	<div class="container">
-		<ul class="link-list">
-			<li><span class="time">2014年5月3日</span>
-				<div class="link">
-					<img src="../static/img/photo/photo.png"> <span>某某某</span>
-				</div>
-				<div class="gap">
-					<img src="../static/img/done.jpg">
-				</div>
-				<div class="chat">
-					<button type="submit" class="btn btn-primary btn-wide">聊天</button>
-				</div></li>
-			<li><span class="time">2014年5月3日</span>
-				<div class="link">
-					<img src="../static/img/photo/photo.png"> <span>某某某</span>
-				</div>
-				<div class="gap">
-					<img src="../static/img/done.jpg">
-				</div>
-				<div class="chat">
-					<button type="submit" class="btn btn-primary btn-wide">聊天</button>
-				</div></li>
-			<li><span class="time">2014年5月3日</span>
-				<div class="link">
-					<img src="../static/img/photo/photo.png"> <span>某某某</span>
-				</div>
-				<div class="gap">
-					<img src="../static/img/done.jpg">
-				</div>
-				<div class="chat">
-					<button type="submit" class="btn btn-primary btn-wide">聊天</button>
-				</div></li>
+	<div class="container" >
+		<ul class="link-list" id="mainContainer">
 		</ul>
 	</div>
 
@@ -85,8 +55,10 @@
 	<script src="../static/thirdparty/flat-ui/js/jquery.tagsinput.js"></script>
 	<script src="../static/thirdparty/flat-ui/js/jquery.placeholder.js"></script>
     <script src="../pages/js/util.js"></script>
+     <script src="../pages/js/mymatch.js"></script>
 	<script>
 		$(function() {
+			initDatas('usermatch.do');
 			$('#refresh-btn').on('click', function(e) {
 				e.preventDefault();
 				window.location.reload();

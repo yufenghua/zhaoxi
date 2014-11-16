@@ -1,5 +1,7 @@
 package com.ylp.date.mgr.relation;
 
+import java.util.Date;
+
 import com.ylp.date.mgr.IBaseObj;
 
 /**
@@ -27,6 +29,7 @@ public interface IRelation extends IBaseObj {
 	 * @return
 	 */
 	String getOtherOne();
+	String getOther(String userId);
 
 	/**
 	 * relation type 。
@@ -41,4 +44,5 @@ public interface IRelation extends IBaseObj {
 	 * @return
 	 */
 	int getRecognition();
+	Date getOkTime();
 }

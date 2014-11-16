@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.ylp.date.mgr.relation.IRelation;
@@ -56,6 +57,7 @@ public class UserRelation implements IRelation {
 		this.otherOneReg = otherOneReg;
 	}
 
+	@Override
 	public Date getOkTime() {
 		return okTime;
 	}
@@ -103,6 +105,17 @@ public class UserRelation implements IRelation {
 
 	public void setRecognition(int recognition) {
 		this.recognition = recognition;
+	}
+
+	@Override
+	public String getOther(String userId) {
+		if (StringUtils.equals(one, userId)) {
+			return otherOne;
+		}
+		if (StringUtils.equals(otherOne, userId)) {
+			return one;
+		}
+		return null;
 	}
 
 }

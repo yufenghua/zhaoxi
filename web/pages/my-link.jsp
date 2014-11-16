@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
     <meta charset="utf-8">
@@ -14,7 +14,7 @@
       <script src="../static/thirdparty/flat-ui/js/respond.min.js"></script>
     <![endif]-->
     <link rel="stylesheet" href="../static/css/nav.css">
-    <link rel="stylesheet" href="../static/css/match.css">
+    <link rel="stylesheet" href="../static/css/my-link.css">
   </head>
   <body>
     <header>
@@ -25,27 +25,62 @@
           </div>
           <div class="collapse navbar-collapse" id="navbar-collapse-01">
             <ul class="nav navbar-nav">           
-              <li class="active"><a href="">首页</a></li>
-              <li><a href="usermatch.do">我的匹配</a></li>
-              <li><a href="userflower.do">我的花</a></li>
-              <li><a href="">我的牵线</a></li>
+              <li><a href="">首页</a></li>
+              <li><a href="">我的匹配</a></li>
+              <li><a href="">我的花</a></li>
+              <li class="active"><a href="">我的牵线</a></li>
               <li><a href="">设置</a></li>
               <li><a href="" class="logout-btn">退出</a></li>
-            </ul> 
+            </ul>
           </div>
           
         </div>
       </nav>
     </header>
-    <div class="container" id="matchlistContainer">
-         
+    <div class="container" id="mainContainer">
+        <p class="cupid" >我的丘比特值<em id="cupid">85</em></p>
+        <ul class="link-list">
+          <li>
+            <span class="time">2014年5月3日</span>
+            <div class="link">
+              <img src="../static/img/photo/photo.png">
+              <span>某某某</span>
+            </div>
+            <div><img src="../static/img/done.jpg"></div>
+            <div class="link">
+              <img src="../static/img/photo/photo2.png">
+              <span>某某某2</span>
+            </div>
+          </li>
+          <li>
+            <span class="time">2014年5月3日</span>
+            <div class="link">
+              <img src="../static/img/photo/photo.png">
+              <span>某某某</span>
+            </div>
+            <div><img src="../static/img/done.jpg"></div>
+            <div class="link">
+              <img src="../static/img/photo/photo2.png">
+              <span>某某某2</span>
+            </div>
+          </li>
+          <li>
+            <span class="time">2014年5月3日</span>
+            <div class="link">
+              <img src="../static/img/photo/photo.png">
+              <span>某某某</span>
+            </div>
+            <div><img src="../static/img/done.jpg"></div>
+            <div class="link">
+              <img src="../static/img/photo/photo2.png">
+              <span>某某某2</span>
+            </div>
+          </li>
+        </ul>
     </div>
-  </body>
-</html>
- <script src="../static/thirdparty/flat-ui/js/jquery-1.8.3.min.js"></script>
+
+    <script src="../static/thirdparty/flat-ui/js/jquery-1.8.3.min.js"></script>
     <script src="../static/thirdparty/flat-ui/js/jquery-ui-1.10.3.custom.min.js"></script>
-    <script src="../static/thirdparty/flat-ui/js/jquery-ui-1.10.4.custom.min.js"></script>
-    <script src="code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
     <script src="../static/thirdparty/flat-ui/js/jquery.ui.touch-punch.min.js"></script>
     <script src="../static/thirdparty/flat-ui/js/bootstrap.min.js"></script>
     <script src="../static/thirdparty/flat-ui/js/bootstrap-select.js"></script>
@@ -54,17 +89,13 @@
     <script src="../static/thirdparty/flat-ui/js/flatui-radio.js"></script>
     <script src="../static/thirdparty/flat-ui/js/jquery.tagsinput.js"></script>
     <script src="../static/thirdparty/flat-ui/js/jquery.placeholder.js"></script>
-     <script src="../pages/js/match.js"></script>
-         <script src="../pages/js/util.js"></script>
- <script>
-    var userId='<%=request.getAttribute("userid")%>';
+    <script>
         $(function () {
-        	var matchMgr=new MatchInfoMgr(window,$('#matchlistContainer'));
-        	matchMgr.setUserId(userId);
-        	matchMgr.refresh();
             $('#refresh-btn').on('click', function (e) {
               e.preventDefault();
               window.location.reload();
             });
         });
     </script>
+  </body>
+</html>

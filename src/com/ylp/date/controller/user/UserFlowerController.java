@@ -2,13 +2,11 @@ package com.ylp.date.controller.user;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,26 +18,21 @@ import com.ylp.date.controller.BaseController;
 import com.ylp.date.controller.ControlUtil;
 import com.ylp.date.login.Login;
 import com.ylp.date.mgr.relation.IRelation;
+import com.ylp.date.mgr.relation.IRelationBuilder;
 import com.ylp.date.server.Server;
 import com.ylp.date.util.CollectionTool;
 
-/**
- * 用户连接信息
- * 
- * @author Qiaolin Pan
- * 
- */
 @Controller
-@RequestMapping("/user/usermatch")
-public class UserMatchController extends BaseController {
-	private static SimpleDateFormat format=new SimpleDateFormat("yyyy年mm月dd日");
+@RequestMapping("/user/userflower")
+public class UserFlowerController extends BaseController {
+	private static SimpleDateFormat format = new SimpleDateFormat("yyyy年mm月dd日");
 
 	@Override
 	protected String hanldleReq(HttpServletRequest req, HttpServletResponse res)
 			throws Exception {
 		String action = req.getParameter("action");
 		if (!StringUtils.isNotEmpty(action)) {
-			return "pages/my-match";
+			return "pages/my-flower";
 		}
 		if (StringUtils.equals(action, "list")) {
 			res.setContentType("application/json; charset=utf-8");
@@ -54,7 +47,7 @@ public class UserMatchController extends BaseController {
 		Login login = ControlUtil.getLogin(req);
 		String userId = login.getUser().getId();
 		List<IRelation> list = Server.getInstance().getRelationMgr()
-				.listLine(userId);
+				.listFlower(userId);
 		if (CollectionTool.checkNull(list)) {
 			return;
 		}
@@ -67,14 +60,23 @@ public class UserMatchController extends BaseController {
 		res.getWriter().print(jso.toString());
 	}
 
-	private JSONObject handleWithItem(String userId, IRelation iRelation) throws JSONException {
+	private JSONObject handleWithItem(String userId, IRelation iRelation)
+			throws JSONException {
 		JSONObject obj = new JSONObject();
 		obj.put("time", format.format(iRelation.getOkTime()));
 		String other = iRelation.getOther(userId);
 		obj.put("img", "userinfo.do?action=img&userid=" + other);
-		obj.put("userCaption", Server.getInstance().userMgr().getObj(other).getCaption());
+		obj.put("userCaption", Server.getInstance().userMgr().getObj(other)
+				.getCaption());
 		obj.put("otherid", other);
+		obj.put("success", iRelation.getRecognition() == IRelation.RECOG_FLOWER);
+		List<IRelationBuilder> list = Server.getInstance()
+				.getRelationBuilderMgr().getAllBuilders(iRelation.getId());
+		if (!CollectionTool.checkNull(list)) {
+			// 理论上来说 这个地方是不能为空的
+			IRelationBuilder builder = list.get(0);
+			obj.put("isSend", StringUtils.equals(userId, builder.getUserId()));
+		}
 		return obj;
 	}
-
 }
