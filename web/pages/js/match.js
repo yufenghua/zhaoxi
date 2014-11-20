@@ -145,7 +145,7 @@ MatchInfoMgr.prototype.refresh = function() {
 	var self = this;
 	$.ajax({
 	    type: "POST",
-	    url: "../match.do?action=getMatchInfo",
+	    url: "/zhaoxi/match.do?action=getMatchInfo",
 	    contentType: "application/json; charset=utf-8",
 	    dataType: "json",
 	    success: function(data) {

@@ -8,6 +8,9 @@ function initDatas(url){
 	    contentType: "application/json; charset=utf-8",
 	    dataType: "json",
 	    success: function(data) {
+	    	if(!matchs){
+	    		return;
+	    	}
 	    	var matchs = data.matchs;
 	    	if (!matchs) {
 	    		return;
@@ -51,7 +54,7 @@ function handleWithItem(container,item){
 
 	 var fromSpan=$('<span>');
 	 fromSpan.addClass('from');
-	 fromSpan.text(item.isSend?'送给':'来自')；
+	 fromSpan.text(item.isSend?'送给':'来自');
 
 	 var linkDiv=$('<div>');
 	 linkDiv.addClass('link');
