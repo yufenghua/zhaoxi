@@ -2,6 +2,7 @@ package com.ylp.date.controller.user;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -63,7 +64,8 @@ public class UserFlowerController extends BaseController {
 	private JSONObject handleWithItem(String userId, IRelation iRelation, HttpServletRequest req)
 			throws JSONException {
 		JSONObject obj = new JSONObject();
-		obj.put("time", format.format(iRelation.getOkTime()));
+		Date okTime = iRelation.getOkTime();
+		obj.put("time", okTime==null?"未知时间":format.format(okTime));
 		String other = iRelation.getOther(userId);
 		obj.put("img", ControlUtil.getImgUrl(req, other));
 		obj.put("userCaption", Server.getInstance().userMgr().getObj(other)

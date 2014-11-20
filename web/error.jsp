@@ -4,9 +4,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>错误提示页面</title>
 </head>
 <body>
-发生错误
+发生错误，错误信息如下：
+<% if(request.getAttribute("date_server_exception")!=null){
+	Exception e=(Exception)request.getAttribute("date_server_exception");
+	e.printStackTrace(response.getWriter());
+}%>
 </body>
 </html>
