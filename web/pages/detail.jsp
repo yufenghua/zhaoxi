@@ -18,6 +18,7 @@
       <script src="../static/thirdparty/flat-ui/js/html5shiv.js"></script>
       <script src="../static/thirdparty/flat-ui/js/respond.min.js"></script>
     <![endif]-->
+    <link rel="stylesheet" href="../static/css/nav.css">
     <link rel="stylesheet" href="../static/css/detail.css">
   </head>
   <body>
@@ -37,7 +38,26 @@
   }
   %>
     <div class="container">
-        <h4>注册成功，给自己贴几个标签吧</h4>
+      <%if(((Boolean)request.getAttribute("fromLogin"))){ %>  <h4>注册成功，给自己贴几个标签吧</h4><%} else{%>
+      <header> <nav class="navbar navbar-default" role="navigation">
+	<div class="container">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">朝夕</a>
+		</div>
+		<div class="collapse navbar-collapse" id="navbar-collapse-01">
+			<ul class="nav navbar-nav">
+				<li><a href="../match.do">首页</a></li>
+				<li ><a href="usermatch.do">我的匹配</a></li>
+			   <li><a href="userflower.do">我的花</a></li>
+				<li><a href="userline.do">我的牵线</a></li>
+				<li class="active"><a href="">设置</a></li>
+				<li><a href="" class="logout-btn">退出</a></li>
+			</ul>
+		</div>
+
+	</div>
+	</nav> </header>
+      <%} %>
         <div class="form-wrapper">
             <form class="form-horizontal" role="form" action="userinfo.do" method="post" enctype="multipart/form-data">
             <input type="hidden" name="userid" value="<%=request.getAttribute("userid")%>"/>

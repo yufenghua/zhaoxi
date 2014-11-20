@@ -25,11 +25,11 @@
           </div>
           <div class="collapse navbar-collapse" id="navbar-collapse-01">
             <ul class="nav navbar-nav">           
-              <li><a href="">首页</a></li>
-              <li><a href="">我的匹配</a></li>
-              <li><a href="">我的花</a></li>
+              <li><a href="../match.do">首页</a></li>
+              <li><a href="usermatch.do">我的匹配</a></li>
+              <li><a href="userflower.do">我的花</a></li>
               <li class="active"><a href="">我的牵线</a></li>
-              <li><a href="">设置</a></li>
+              <li><a href="userinfo.do?action=setting">设置</a></li>
               <li><a href="" class="logout-btn">退出</a></li>
             </ul>
           </div>
@@ -38,44 +38,9 @@
       </nav>
     </header>
     <div class="container" id="mainContainer">
-        <p class="cupid" >我的丘比特值<em id="cupid">85</em></p>
+        <p class="cupid" >我的丘比特值<em id="cupid"></em></p>
         <ul class="link-list">
-          <li>
-            <span class="time">2014年5月3日</span>
-            <div class="link">
-              <img src="../static/img/photo/photo.png">
-              <span>某某某</span>
-            </div>
-            <div><img src="../static/img/done.jpg"></div>
-            <div class="link">
-              <img src="../static/img/photo/photo2.png">
-              <span>某某某2</span>
-            </div>
-          </li>
-          <li>
-            <span class="time">2014年5月3日</span>
-            <div class="link">
-              <img src="../static/img/photo/photo.png">
-              <span>某某某</span>
-            </div>
-            <div><img src="../static/img/done.jpg"></div>
-            <div class="link">
-              <img src="../static/img/photo/photo2.png">
-              <span>某某某2</span>
-            </div>
-          </li>
-          <li>
-            <span class="time">2014年5月3日</span>
-            <div class="link">
-              <img src="../static/img/photo/photo.png">
-              <span>某某某</span>
-            </div>
-            <div><img src="../static/img/done.jpg"></div>
-            <div class="link">
-              <img src="../static/img/photo/photo2.png">
-              <span>某某某2</span>
-            </div>
-          </li>
+         
         </ul>
     </div>
 
@@ -89,8 +54,11 @@
     <script src="../static/thirdparty/flat-ui/js/flatui-radio.js"></script>
     <script src="../static/thirdparty/flat-ui/js/jquery.tagsinput.js"></script>
     <script src="../static/thirdparty/flat-ui/js/jquery.placeholder.js"></script>
+        <script src="../pages/js/util.js"></script>
+     <script src="../pages/js/mylink.js"></script>
     <script>
         $(function () {
+        	initDatas('userline.do');
             $('#refresh-btn').on('click', function (e) {
               e.preventDefault();
               window.location.reload();

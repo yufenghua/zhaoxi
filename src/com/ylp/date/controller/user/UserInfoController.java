@@ -40,15 +40,20 @@ public class UserInfoController extends BaseController {
 		boolean isMultipart = ServletFileUpload.isMultipartContent(req);
 		String action = req.getParameter("action");
 		String userId = req.getParameter("userid");
+		if(!StringUtils.isNotEmpty(userId)){
+			userId=ControlUtil.getLogin(req).getUser().getId();
+		}
 		if (StringUtils.isNotEmpty(userId) && !isMultipart) {
 			req.setAttribute("userid", userId);
 			req.setAttribute("user",
 					Server.getInstance().userMgr().getObj(userId));
+			String fromLogin= req.getParameter("fromLogin");
+			req.setAttribute("fromLogin",StringUtils.isNotEmpty(fromLogin)?true:false);
 			List<IBaseObj> list = Server.getInstance().getUserTagSugMgr()
 					.list();
 			handleTag(list, req, userId);
 			req.setAttribute("sugList", list);
-			if (!StringUtils.isNotEmpty(action)) {
+			if (!StringUtils.isNotEmpty(action)||StringUtils.equals(action, "setting")) {
 				return "pages/detail";
 			}
 		}
