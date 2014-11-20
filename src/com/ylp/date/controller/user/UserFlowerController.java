@@ -54,18 +54,18 @@ public class UserFlowerController extends BaseController {
 		JSONObject jso = new JSONObject();
 		JSONArray arr = new JSONArray();
 		for (IRelation iRelation : list) {
-			arr.put(handleWithItem(userId, iRelation));
+			arr.put(handleWithItem(userId, iRelation, req));
 		}
 		jso.put("matchs", arr);
 		res.getWriter().print(jso.toString());
 	}
 
-	private JSONObject handleWithItem(String userId, IRelation iRelation)
+	private JSONObject handleWithItem(String userId, IRelation iRelation, HttpServletRequest req)
 			throws JSONException {
 		JSONObject obj = new JSONObject();
 		obj.put("time", format.format(iRelation.getOkTime()));
 		String other = iRelation.getOther(userId);
-		obj.put("img", "userinfo.do?action=img&userid=" + other);
+		obj.put("img", ControlUtil.getImgUrl(req, other));
 		obj.put("userCaption", Server.getInstance().userMgr().getObj(other)
 				.getCaption());
 		obj.put("otherid", other);

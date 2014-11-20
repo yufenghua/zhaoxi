@@ -65,12 +65,12 @@ public class UserLineController extends BaseController {
 				if (StringUtils.isNotEmpty(one)) {
 					IUser oneUser = userMgr.getObj(one);
 					obj.put("one", oneUser.getCaption());
-					obj.put("oneImg", "userinfo.do?action=img&userid=" + one);
+					obj.put("oneImg", ControlUtil.getImgUrl(req, one));
 				}
 				String other = iRelation.getOtherOne();
 				if (StringUtils.isNotEmpty(other)) {
 					obj.put("other", userMgr.getObj(other).getCaption());
-					obj.put("otherImg", "userinfo.do?action=img&userid=" + other);
+					obj.put("otherImg", ControlUtil.getImgUrl(req, other));
 				}
 				arr.put(json);
 			}

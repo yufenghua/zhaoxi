@@ -38,7 +38,7 @@ public class MatchController extends BaseController {
 			LineService service = Server.getInstance().getLineService();
 			Login login = ControlUtil.getLogin(req);
 			LineUsersObj lineUser = service.getLineUser(login);
-			handleLineUser(lineUser, obj, login);
+			handleLineUser(lineUser, obj, login,req);
 			res.getWriter().print(obj.toString());
 			return null;
 		}
@@ -85,7 +85,7 @@ public class MatchController extends BaseController {
 	}
 
 	private void handleLineUser(LineUsersObj lineUser, JSONObject obj,
-			Login login) throws Exception {
+			Login login, HttpServletRequest req) throws Exception {
 		if (lineUser == null) {
 			return;
 		}
@@ -102,26 +102,26 @@ public class MatchController extends BaseController {
 			same = lineUser.getFemale();
 			opsite = lineUser.getMale();
 		}
-		obj.put("opposite", handleWithList(opsite));
-		obj.put("same", handleWithList(same));
+		obj.put("opposite", handleWithList(opsite, req));
+		obj.put("same", handleWithList(same,req));
 	}
 
-	private JSONArray handleWithList(List<IUser> opsite) throws Exception {
+	private JSONArray handleWithList(List<IUser> opsite, HttpServletRequest req) throws Exception {
 		JSONArray arr = new JSONArray();
 		if (opsite != null && !opsite.isEmpty()) {
 			for (IUser iUser : opsite) {
-				arr.put(handleWithSingleUser(iUser));
+				arr.put(handleWithSingleUser(iUser, req));
 			}
 		}
 		return arr;
 	}
 
-	private JSONObject handleWithSingleUser(IUser iUser) throws Exception {
+	private JSONObject handleWithSingleUser(IUser iUser, HttpServletRequest req) throws Exception {
 		JSONObject obj = new JSONObject();
 		String id = iUser.getId();
 		obj.put("id", id);
 		obj.put("name", iUser.getCaption());
-		obj.put("img", "userinfo.do?action=img&userid=" + id);
+		obj.put("img", ControlUtil.getImgUrl(req, id));
 		List<ITag> tags = Server.getInstance().getUserTagMgr()
 				.getTagsByUser(id);
 		JSONArray arr = new JSONArray();
