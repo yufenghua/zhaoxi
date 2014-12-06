@@ -25,6 +25,8 @@ public class LoginController extends BaseController {
 			if (!login.login(username, password)) {
 				throw new RuntimeException("用户名或密码错误！");
 			}
+			//登陆成功之后写入cookie
+			ControlUtil.addCookieForLogin(login, response);
 		}
 		return "pages/match";
 	}

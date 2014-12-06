@@ -68,6 +68,19 @@ public class Login implements Serializable {
 		}
 		return false;
 	}
+	/**
+	 * 免密码登陆，主要用于cookie 验证
+	 * @param userId
+	 * @return
+	 */
+	public boolean loginWithoutPwd(String userId){
+		IUser user = Server.getInstance().userMgr().getObj(userId);
+		if (user == null) {
+			return false;
+		}
+		this.user = user;
+		return true;
+	}
 
 	/**
 	 * log out

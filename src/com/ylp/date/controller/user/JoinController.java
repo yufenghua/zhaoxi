@@ -80,6 +80,7 @@ public class JoinController extends BaseController {
 					if (!login.isLogined()) {
 						login.login(username, password);
 					}
+					
 					response.sendRedirect(ControlUtil.getImgUrl(req, username));
 					return null;
 

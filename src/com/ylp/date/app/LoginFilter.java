@@ -40,12 +40,14 @@ public class LoginFilter implements Filter {
 			return;
 		}
 		Login login = ControlUtil.getLogin(req);
+		//尝试使用cookie登陆
+		ControlUtil.checkCookie(req);
 		if (login.isLogined()) {
 			arg2.doFilter(arg0, arg1);
 			return;
 		}
 		HttpServletResponse res = (HttpServletResponse) arg1;
-		res.sendRedirect(req.getContextPath()+"/user/join.do");
+		res.sendRedirect(req.getContextPath() + "/user/join.do");
 	}
 
 	@Override
