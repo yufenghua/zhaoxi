@@ -18,6 +18,16 @@
 		<property name="hibernate.connection.pool_size">5</property>
 		<!-- Defines the SQL dialect used in Hiberante's application -->
 		<property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+		<!-- tell hibernate to use C3P0 -->
+		<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
+		<!-- If this is a number greater than 0, C3P0 will test all idle, pooled
+		but unchecked-out connections, every this number of seconds // Set
+		this to something below your MySQL wait_timeout -->
+		<property name="c3p0.idle_test_period">14400</property>
+		<!-- a query used to test connections -->
+		<property name="c3p0.preferredTestQuery">select 1;</property>
+		<!-- See more at:
+		http://www.jvmhost.com/articles/hibernate-famous-communications-link-failure-last-packet-sent-successfuly-issue-solved-c3p0#sthash.hTCnJQvZ.dpuf -->
 		<!-- Enable Hibernate's automatic session context management -->
 		<property name="hibernate.current_session_context_class">thread</property>
 		<!-- Disable the second-level cache -->
