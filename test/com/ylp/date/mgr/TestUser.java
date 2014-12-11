@@ -1,5 +1,7 @@
 package com.ylp.date.mgr;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -13,28 +15,43 @@ import com.ylp.date.mgr.user.IUser;
 import com.ylp.date.mgr.user.IUserMgr;
 import com.ylp.date.mgr.user.impl.User;
 import com.ylp.date.server.Server;
+import com.ylp.date.util.StringTools;
 
 import junit.framework.TestCase;
 
 public class TestUser extends TestBase {
 	@Test
-	public void testAdd() {
+	public void testAdd() throws Exception {
 		TestContextInitor.init();
-		User user = getUser();
-
-		Server.getInstance().userMgr().add(user);
-		assertNotNull(Server.getInstance().userMgr().getObj(user.getId()));
+		IUserMgr userMgr = Server.getInstance().userMgr();
+		for (int i = 0; i < 100; i++) {
+			User user = getUser();
+			user.setId("a"+i);
+			user.setCaption("潘巧林"+i);
+			user.setGender(i % 2 == 0 ? IUser.MALE : IUser.FEMALE);
+			userMgr.add(user);
+		}
+		// assertNotNull(userMgr.getObj(user.getId()));
 	}
 
-	private User getUser() {
+	private User getUser() throws Exception {
 		User user = new User();
 		String string = UUID.randomUUID().toString();
 		user.setId(string);
 		user.setBirth(new Date());
-		user.setCaption("潘巧林");
+		user.setPwd(StringTools.encryptPassword("111"));
 		user.setCreateDate(new Date());
 		user.setEmail("yufenghuapan@163.com");
 		user.setFlower(5);
+		InputStream resourceAsStream = this.getClass().getResourceAsStream(
+				"/default.jpg");
+		try {
+			byte[] img = new byte[resourceAsStream.available()];
+			resourceAsStream.read(img);
+			user.setImg(img);
+		} finally {
+			resourceAsStream.close();
+		}
 		return user;
 	}
 
@@ -58,7 +75,7 @@ public class TestUser extends TestBase {
 	}
 
 	@Test
-	public void testRemove() {
+	public void testRemove() throws Exception {
 		TestContextInitor.init();
 		IUserMgr userMgr = Server.getInstance().userMgr();
 		List<IBaseObj> list = userMgr.list();
@@ -74,7 +91,7 @@ public class TestUser extends TestBase {
 	}
 
 	@Test
-	public void testList() {
+	public void testList() throws Exception {
 		TestContextInitor.init();
 		IUserMgr userMgr = Server.getInstance().userMgr();
 		List<IBaseObj> list = userMgr.list();

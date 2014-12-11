@@ -151,7 +151,7 @@ public class LineService implements Runnable {
 		write.lock();
 		try {
 			IUser user = (IUser) obj;
-			if(user.getGender()==0){
+			if (user.getGender() == 0) {
 				return;
 			}
 			String id = obj.getId();
@@ -163,14 +163,14 @@ public class LineService implements Runnable {
 				int gender = user.getGender();
 				int femaleSize = value.getFemale().size();
 				int maleSize = value.getMale().size();
-				//保证男女对称
+				// 保证男女对称
 				if ((!value.isFemaleFulled() && gender == IUser.FEMALE)
-						&& (maleSize - femaleSize == 1||maleSize==femaleSize)) {
+						&& (maleSize - femaleSize == 1 || maleSize == femaleSize)) {
 					value.addUser(user);
 					return;
 				}
 				if ((!value.isMaleFulled() && gender == IUser.MALE)
-						&& (femaleSize - maleSize == 1||maleSize==femaleSize)) {
+						&& (femaleSize - maleSize == 1 || maleSize == femaleSize)) {
 					value.addUser(user);
 					return;
 				}
@@ -424,7 +424,6 @@ public class LineService implements Runnable {
 			}
 			if (count < firstMale.size()) {
 				// TODO
-
 			}
 		}
 	}
@@ -450,6 +449,9 @@ public class LineService implements Runnable {
 						key = obj.getKey();
 						logger.debug("创建对象{}", key);
 					}
+				}
+				if (userPool.size() == defaultLength) {
+					break;
 				}
 			}
 		}
@@ -490,5 +492,26 @@ public class LineService implements Runnable {
 		list.add(IRelation.RECOG_LINE);
 		logger.debug("params" + IRelation.RECOG_LINE);
 		return userMgr.executeQuery(hql, list.toArray());
+	}
+
+	public void remove(String one, String otherOne) {
+		write.lock();
+		try {
+			List<LineUsersObj> obj=new ArrayList<LineUsersObj>();
+			for (LineUsersObj lineUser : this.lineUsers) {
+				if(lineUser.contains(one)&&lineUser.contains(otherOne)){
+					obj.add(lineUser);
+					break;
+				}
+			}
+			for (LineUsersObj lineUsersObj : obj) {
+				this.lineUsers.remove(obj);
+				this.userPool.remove(lineUsersObj.getKey());
+			}
+			//FIXME 随机性是个问题
+			run();
+		} finally {
+			write.unlock();
+		}
 	}
 }

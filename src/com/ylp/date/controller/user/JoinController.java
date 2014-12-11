@@ -80,8 +80,14 @@ public class JoinController extends BaseController {
 					if (!login.isLogined()) {
 						login.login(username, password);
 					}
-					
-					response.sendRedirect(ControlUtil.getImgUrl(req, username));
+					String contextPath = req.getContextPath();
+					if(!StringUtils.isNotEmpty(contextPath)){
+						contextPath="/";
+					}
+					if(!StringUtils.endsWith(contextPath, "/")){
+						contextPath=contextPath+"/";
+					}
+					response.sendRedirect(contextPath+"user/userinfo.do?userid="+username);
 					return null;
 
 				} finally {
