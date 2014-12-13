@@ -2,7 +2,6 @@ package com.ylp.date.controller.match;
 
 import java.util.List;
 
-import javax.print.attribute.standard.Severity;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -38,7 +37,7 @@ public class MatchController extends BaseController {
 			LineService service = Server.getInstance().getLineService();
 			Login login = ControlUtil.getLogin(req);
 			LineUsersObj lineUser = service.getLineUser(login);
-			handleLineUser(lineUser, obj, login,req);
+			handleLineUser(lineUser, obj, login, req);
 			res.getWriter().print(obj.toString());
 			return null;
 		}
@@ -80,8 +79,19 @@ public class MatchController extends BaseController {
 		String userid1 = req.getParameter("user");
 		String other = req.getParameter("other");
 		Login login = ControlUtil.getLogin(req);
-		Server.getInstance().getRelationMgr()
-				.buildLine(login.getUser().getId(), userid1, other);
+		String id = login.getUser().getId();
+		JSONObject obj = new JSONObject();
+		try {
+			Server.getInstance().getRelationMgr().buildLine(id, userid1, other);
+			// 建立关系之后，相关组将不会再当前用户获得展示
+			Server.getInstance().getLineService().markBuild(userid1, other, id);
+			obj.put("suc", true);
+			res.getWriter().print(obj.toString());
+		} catch (Exception e) {
+			obj.put("suc", false);
+			obj.put("msg", e.getMessage());
+			res.getWriter().print(obj.toString());
+		}
 	}
 
 	private void handleLineUser(LineUsersObj lineUser, JSONObject obj,
@@ -103,10 +113,11 @@ public class MatchController extends BaseController {
 			opsite = lineUser.getMale();
 		}
 		obj.put("opposite", handleWithList(opsite, req));
-		obj.put("same", handleWithList(same,req));
+		obj.put("same", handleWithList(same, req));
 	}
 
-	private JSONArray handleWithList(List<IUser> opsite, HttpServletRequest req) throws Exception {
+	private JSONArray handleWithList(List<IUser> opsite, HttpServletRequest req)
+			throws Exception {
 		JSONArray arr = new JSONArray();
 		if (opsite != null && !opsite.isEmpty()) {
 			for (IUser iUser : opsite) {
@@ -116,7 +127,8 @@ public class MatchController extends BaseController {
 		return arr;
 	}
 
-	private JSONObject handleWithSingleUser(IUser iUser, HttpServletRequest req) throws Exception {
+	private JSONObject handleWithSingleUser(IUser iUser, HttpServletRequest req)
+			throws Exception {
 		JSONObject obj = new JSONObject();
 		String id = iUser.getId();
 		obj.put("id", id);

@@ -78,4 +78,9 @@ public class ControlUtil {
 		}
 		return false;
 	}
+	public static void removeLoginCookie(HttpServletResponse res) {
+		Cookie cookie=new Cookie(DATE_LOGIN_USER, null);
+		cookie.setMaxAge(0);
+		res.addCookie(cookie);
+	}
 }

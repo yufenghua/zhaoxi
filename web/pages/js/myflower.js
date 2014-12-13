@@ -8,14 +8,14 @@ function initDatas(url){
 	    contentType: "application/json; charset=utf-8",
 	    dataType: "json",
 	    success: function(data) {
-	    	if(!matchs){
+	    	if(!data){
 	    		return;
 	    	}
 	    	var matchs = data.matchs;
 	    	if (!matchs) {
 	    		return;
 	    	};
-	    	var container=$(mainContainer);
+	    	var container=$("#mainContainer");
 	    	for (var i = 0; i < matchs.length; i++) {
 	    		var item=matchs[i];
 	    		handleWithItem(container,item);
@@ -76,7 +76,7 @@ function handleWithItem(container,item){
 	 chatButton.attr('class','btn btn-primary btn-wide');
 	 chatButton.text((!item.isSend&&!item.success)?'同意聊天':'聊天');
 	 if(item.isSend&&!item.success){
-	 	chatButton.CSS('display','none');
+	 	chatButton.css('display','none');
 	 }
 	 chatDiv.append(chatButton);
 	 li.append(chatDiv);

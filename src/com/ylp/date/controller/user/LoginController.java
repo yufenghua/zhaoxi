@@ -46,5 +46,6 @@ public class LoginController extends BaseController {
 
 	private void logout(HttpServletRequest req, HttpServletResponse res) {
 		ControlUtil.getLogin(req).logout();
+		ControlUtil.removeLoginCookie(res);
 	}
 }

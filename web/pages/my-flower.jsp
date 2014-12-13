@@ -38,7 +38,7 @@
       </nav>
     </header>
     <div class="container">
-        <ul class="link-list">
+        <ul class="link-list"  id="mainContainer">
         </ul>
     </div>
 

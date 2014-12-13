@@ -11,6 +11,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -28,6 +30,7 @@ import com.ylp.date.login.Login;
 import com.ylp.date.mgr.IBaseObj;
 import com.ylp.date.mgr.ObjListener;
 import com.ylp.date.mgr.relation.IRelation;
+import com.ylp.date.mgr.relation.impl.RelationBldMgr;
 import com.ylp.date.mgr.relation.impl.RelationMgr;
 import com.ylp.date.mgr.user.IUser;
 import com.ylp.date.mgr.user.impl.User;
@@ -35,6 +38,7 @@ import com.ylp.date.mgr.user.impl.UserMgr;
 import com.ylp.date.server.Server;
 import com.ylp.date.server.ServerConfigRation;
 import com.ylp.date.server.SpringNames;
+import com.ylp.date.util.CollectionTool;
 
 /**
  * 用于连线的相关服务入口
@@ -52,6 +56,7 @@ public class LineService implements Runnable {
 	private ReadWriteLock lock = new ReentrantReadWriteLock();
 	private Lock read = lock.readLock();
 	private Lock write = lock.writeLock();
+	private Map<String, List<String>> lined = new HashMap<String, List<String>>();
 	/**
 	 * 其id 是一个md5值 通过所有的用户id求出的MD5
 	 */
@@ -69,6 +74,8 @@ public class LineService implements Runnable {
 	private UserMgr userMgr;
 	@Autowired
 	private RelationMgr relationMgr;
+	@Autowired
+	private RelationBldMgr relationBuilderMgr;
 
 	public void init() {
 		write.lock();
@@ -81,6 +88,44 @@ public class LineService implements Runnable {
 			userMgr.regListener(new UserListenerForLine());
 			relationMgr.regListener(new RelationListenerForLine());
 			run();
+		} finally {
+			write.unlock();
+		}
+	}
+
+	public void markBuild(String one, String other, String user) {
+		write.lock();
+		try {
+			for (LineUsersObj lineUser : lineUsers) {
+				if (lineUser.contains(one) && lineUser.contains(other)) {
+					markBuild(lineUser.getKey(), user);
+				}
+			}
+		} finally {
+			write.unlock();
+		}
+	}
+
+	/**
+	 * 对某个lineuser进行连线后，标志改组对该user不显示
+	 * 
+	 * @param lineId
+	 * @param user
+	 */
+	public void markBuild(String lineId, String user) {
+		write.lock();
+		try {
+			List<String> lineBuiled = lined.get(lineId);
+			if (lineBuiled == null) {
+				lineBuiled = new ArrayList<String>();
+				lineBuiled.add(user);
+				lined.put(lineId, lineBuiled);
+				return;
+			}
+			if (!lineBuiled.contains(user)) {
+				lineBuiled.add(user);
+				lined.put(lineId, lineBuiled);
+			}
 		} finally {
 			write.unlock();
 		}
@@ -110,6 +155,12 @@ public class LineService implements Runnable {
 					if (entry.getValue().contains(id)) {
 						continue;
 					}
+					// 如果其中有一对已经被连线 用于防止重复展示
+					// FIXME 此处逻辑有待优化
+					List<String> list = lined.get(key2);
+					if (list != null && list.contains(id)) {
+						continue;
+					}
 					key = key2;
 
 				}
@@ -126,6 +177,12 @@ public class LineService implements Runnable {
 					if (value.contains(id)) {
 						continue;
 					}
+					// 如果其中有一对已经被连线 用于防止重复展示
+					// FIXME 此处逻辑有待优化
+					List<String> list = lined.get(entry.getKey());
+					if (list != null && list.contains(id)) {
+						continue;
+					}
 					userDisplay.put(entry.getKey(), 1);
 					return value;
 				}
@@ -135,6 +192,12 @@ public class LineService implements Runnable {
 					String key2 = entry.getKey();
 					LineUsersObj lineUsersObj = userPool.get(key2);
 					if (lineUsersObj.contains(id)) {
+						continue;
+					}
+					// 如果其中有一对已经被连线 用于防止重复展示
+					// FIXME 此处逻辑有待优化
+					List<String> list = lined.get(key2);
+					if (list != null && list.contains(id)) {
 						continue;
 					}
 					userDisplay.put(key2, entry.getValue() + 1);
@@ -225,6 +288,7 @@ public class LineService implements Runnable {
 	 * /她）。这样也能保证用户每次打开网站，最多只有一个匹配对象。
 	 */
 	public void run() {
+		// FIXME 现在有一个问题 这个在琢磨一下
 		write.lock();
 		try {
 			Calendar cal = Calendar.getInstance();
@@ -235,27 +299,58 @@ public class LineService implements Runnable {
 			today = cal.getTime();
 			// 设计的随机算法原则如下：
 			// 1.根据shownum降序
-			List<IBaseObj> firstMale = getFirst(true);
-			List<IBaseObj> firstFemale = getFirst(false);
-			adjustMale(firstMale);
-			adjustFamale(firstFemale);
-			// 如果上述完成 返回
-			if (isMaleFulled && isFemaleFulled) {
+			doRun();
+			if (CollectionTool.checkNull(lineUsers)) {
 				return;
 			}
-			// 否则 往池中插入男或者女
-			if (isMaleFulled) {
-				handleWithFemale();
-				return;
-			} else {
-				handWithMale();
-				if (!isFemaleFulled) {
-					handleWithFemale();
-				}
-				return;
-			}
+			Map<Future<List<String>>, LineUsersObj> map = new HashMap<Future<List<String>>, LineUsersObj>(
+					lineUsers.size());
+			buildFutureMap(map);
+			buildLineMap(map);
 		} finally {
 			write.unlock();
+		}
+	}
+
+	private void buildLineMap(Map<Future<List<String>>, LineUsersObj> map) {
+		for (Future<List<String>> future : map.keySet()) {
+			try {
+				List<String> list = future.get();
+				lined.put(map.get(future).getKey(), list);
+			} catch (Exception e) {
+				logger.error("LinedUserChecker error", e);
+			}
+		}
+	}
+
+	private void buildFutureMap(Map<Future<List<String>>, LineUsersObj> map) {
+		for (LineUsersObj lineUser : lineUsers) {
+			LinedUserChecker checker = new LinedUserChecker(lineUser,relationMgr,relationBuilderMgr);
+			Future<List<String>> future = Server.getInstance()
+					.getThreadPoolService().submit(checker);
+			map.put(future, lineUser);
+		}
+	}
+
+	private void doRun() {
+		List<IBaseObj> firstMale = getFirst(true);
+		List<IBaseObj> firstFemale = getFirst(false);
+		adjustMale(firstMale);
+		adjustFamale(firstFemale);
+		// 如果上述完成 返回
+		if (isMaleFulled && isFemaleFulled) {
+			return;
+		}
+		// 否则 往池中插入男或者女
+		if (isMaleFulled) {
+			handleWithFemale();
+			return;
+		} else {
+			handWithMale();
+			if (!isFemaleFulled) {
+				handleWithFemale();
+			}
+			return;
 		}
 	}
 
@@ -497,9 +592,9 @@ public class LineService implements Runnable {
 	public void remove(String one, String otherOne) {
 		write.lock();
 		try {
-			List<LineUsersObj> obj=new ArrayList<LineUsersObj>();
+			List<LineUsersObj> obj = new ArrayList<LineUsersObj>();
 			for (LineUsersObj lineUser : this.lineUsers) {
-				if(lineUser.contains(one)&&lineUser.contains(otherOne)){
+				if (lineUser.contains(one) && lineUser.contains(otherOne)) {
 					obj.add(lineUser);
 					break;
 				}
@@ -508,7 +603,7 @@ public class LineService implements Runnable {
 				this.lineUsers.remove(obj);
 				this.userPool.remove(lineUsersObj.getKey());
 			}
-			//FIXME 随机性是个问题
+			// FIXME 随机性是个问题
 			run();
 		} finally {
 			write.unlock();

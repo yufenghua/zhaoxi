@@ -26,7 +26,7 @@ import com.ylp.date.util.CollectionTool;
 @Controller
 @RequestMapping("/user/userflower")
 public class UserFlowerController extends BaseController {
-	private static SimpleDateFormat format = new SimpleDateFormat("yyyy年mm月dd日");
+	private static SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
 
 	@Override
 	protected String hanldleReq(HttpServletRequest req, HttpServletResponse res)
@@ -64,7 +64,8 @@ public class UserFlowerController extends BaseController {
 	private JSONObject handleWithItem(String userId, IRelation iRelation, HttpServletRequest req)
 			throws JSONException {
 		JSONObject obj = new JSONObject();
-		Date okTime = iRelation.getOkTime();
+		List<IRelationBuilder> builders = Server.getInstance().getRelationBuilderMgr().getAllBuilders(iRelation.getId());
+		Date okTime = CollectionTool.checkNull(builders)?null:builders.get(0).getCreateTime();
 		obj.put("time", okTime==null?"未知时间":format.format(okTime));
 		String other = iRelation.getOther(userId);
 		obj.put("img", ControlUtil.getImgUrl(req, other));

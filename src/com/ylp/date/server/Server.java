@@ -1,5 +1,8 @@
 package com.ylp.date.server;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -33,6 +36,9 @@ import com.ylp.date.service.LineService;
 public class Server {
 	private static final Logger logger = LoggerFactory.getLogger(Server.class);
 	private static Server ins;
+	private ExecutorService service;
+
+	private SessionFactory fct;
 
 	public Server() {
 
@@ -44,10 +50,33 @@ public class Server {
 		AnnotationConfiguration conf = (new AnnotationConfiguration())
 				.configure();
 		fct = conf.buildSessionFactory();
-		// new SchemaExport(conf).create(true, false);
+		service = Executors.newCachedThreadPool();
 	}
 
-	private SessionFactory fct;
+	/**
+	 * 销毁方法
+	 */
+	public void destroy() {
+		try {
+			fct.close();
+		} catch (Exception e) {
+			logger.error("关闭hibernate工厂出现错误", e);
+		}
+		try {
+			service.shutdown();
+		} catch (Exception e) {
+			logger.error("关闭线程池出现错误", e);
+		}
+		ins = null;
+	}
+
+	/**
+	 * 获取线程池对象
+	 * @return
+	 */
+	public ExecutorService getThreadPoolService() {
+		return service;
+	}
 
 	/**
 	 * get hibernate sessionfactory

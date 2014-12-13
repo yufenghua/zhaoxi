@@ -43,6 +43,7 @@ public class BusinessException extends RuntimeException {
 	private String objId;
 
 	public BusinessException(int code) {
+		super(getErrorMsg(code));
 		this.code = code;
 	}
 

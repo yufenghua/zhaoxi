@@ -244,8 +244,12 @@ MatchInfoMgr.prototype.match = function(id1, id2) {
 	    url: "../match.do?action=MatchUser",
 	    data: { user: id1, other: id2},
 	    success: function(data) {
-	    	alert('连线成功！');
-	    	self.refresh();
+	    	if(data.suc){
+				alert('连线成功！');
+		    	self.refresh();
+	    	}else{
+	    		alert('ops,连线失败了，换个人再试一次吧。'+data.msg);
+	    	}
 	    },
 	    error: function (xhr, textStatus, errorThrown) {
 	    	alert('出现错误' + textStatus);

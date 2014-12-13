@@ -33,16 +33,31 @@ public class LoginFilter implements Filter {
 		HttpServletRequest req = (HttpServletRequest) arg0;
 		StringBuffer url = req.getRequestURL();
 		String string = url.toString();
-		if (StringUtils.endsWithAny(string, SEARCH_STRINGS)
-				|| StringUtils.contains(string, "login.do")
-				|| StringUtils.contains(string, "join.do")) {
+		if (StringUtils.endsWithAny(string, SEARCH_STRINGS)) {
 			arg2.doFilter(arg0, arg1);
 			return;
 		}
 		Login login = ControlUtil.getLogin(req);
-		//尝试使用cookie登陆
+		// 尝试使用cookie登陆
 		ControlUtil.checkCookie(req);
 		if (login.isLogined()) {
+			if (StringUtils.contains(string, "login.do")
+					|| StringUtils.contains(string, "join.do")) {
+				String action = req.getParameter("action");
+				//登出时，不能做拦截
+				if (StringUtils.equals(action, "logout")) {
+					arg2.doFilter(arg0, arg1);
+					return;
+				}
+				HttpServletResponse res = (HttpServletResponse) arg1;
+				res.sendRedirect(req.getContextPath() + "/match.do");
+				return;
+			}
+			arg2.doFilter(arg0, arg1);
+			return;
+		}
+		if (StringUtils.contains(string, "login.do")
+				|| StringUtils.contains(string, "join.do")) {
 			arg2.doFilter(arg0, arg1);
 			return;
 		}

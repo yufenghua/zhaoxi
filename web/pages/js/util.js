@@ -5,8 +5,9 @@ function initLogOut(){
 			$.ajax({
 			    type: "POST",
 			    url: "/zhaoxi/user/login.do?action=logout",
+			    async: false,
 			    success: function(data) {
-			    	window.location.href='/zhaoxi/index.do';
+			    	window.location.href='/zhaoxi/index.jsp';
 			    },
 			    error: function (xhr, textStatus, errorThrown) {
 			    	alert('出现错误' + textStatus);

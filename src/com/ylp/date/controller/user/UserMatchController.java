@@ -32,7 +32,7 @@ import com.ylp.date.util.CollectionTool;
 @Controller
 @RequestMapping("/user/usermatch")
 public class UserMatchController extends BaseController {
-	private static SimpleDateFormat format=new SimpleDateFormat("yyyy年mm月dd日");
+	private static SimpleDateFormat format=new SimpleDateFormat("yyyy年MM月dd日");
 
 	@Override
 	protected String hanldleReq(HttpServletRequest req, HttpServletResponse res)
@@ -76,5 +76,4 @@ public class UserMatchController extends BaseController {
 		obj.put("otherid", other);
 		return obj;
 	}
-
 }
