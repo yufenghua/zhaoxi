@@ -41,7 +41,7 @@ public class LoginController extends BaseController {
 		if(StringUtils.equals(action, "logout")){
 			logout(req,res);
 		}
-		return null;
+		return "pages/join";
 	}
 
 	private void logout(HttpServletRequest req, HttpServletResponse res) {

@@ -14,6 +14,6 @@
 if(!ControlUtil.getLogin(request).isLogined()){
 	response.sendRedirect("user/join.do");
 }else{
-	response.sendRedirect("match.do");
+	response.sendRedirect(request.getContextPath() + "/match.do");
 }
 %>
