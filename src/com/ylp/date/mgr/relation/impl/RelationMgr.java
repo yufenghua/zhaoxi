@@ -200,7 +200,11 @@ public class RelationMgr extends BaseObjMgr implements IRelMgr {
 							BusinessException.CODE_LINE_FULL);
 				}
 				if (checkBuilder(relation.getId(), userId)) {
-					relation.setRecognition(relation.getRecognition() + 1);
+					int recognition = relation.getRecognition() + 1;
+					relation.setRecognition(recognition);
+					if(recognition==IRelation.RECOG_LINE){
+						relation.setOkTime(new Date());
+					}
 					update(relation.getId(), relation);
 					handleBuilder(relation.getId(), userId);
 				} else {

@@ -47,7 +47,7 @@ public class User implements IUser {
 	@Column(name = "CARDTYPE_")
 	private int cardType;
 	@Column(name = "CUPIDVALUE_")
-	private int cupidvalue;
+	private int cupidvalue=Server.getInstance().getConfigRation().getDefaultUserCupidValue();
 	@Column(name = "GENDER_")
 	private int gender;
 	@Column(name = "STATUS_")

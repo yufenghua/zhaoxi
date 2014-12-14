@@ -13,7 +13,7 @@ import com.ylp.date.mgr.IBaseObj;
 public interface IRelation extends IBaseObj {
 	int TYPE_LINE = 0;
 	int TYPE_FLOWER = 1;
-	int RECOG_LINE = 5;
+	int RECOG_LINE = 3;
 	int RECOG_FLOWER = 2;
 
 	/**

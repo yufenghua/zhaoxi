@@ -48,7 +48,7 @@ import com.ylp.date.util.CollectionTool;
  */
 @Component(SpringNames.LineService)
 @DependsOn({ SpringNames.Server, SpringNames.ServerConfigRation })
-@Lazy(false)
+@Lazy(true)
 public class LineService implements Runnable {
 	private static final Logger logger = LoggerFactory
 			.getLogger(LineService.class);
@@ -132,6 +132,24 @@ public class LineService implements Runnable {
 	}
 
 	/**
+	 * 能否连线
+	 * 
+	 * @param lineObjId
+	 * @param userId
+	 * @return
+	 */
+	public boolean canBuild(String lineObjId, String userId) {
+		read.lock();
+		try {
+			List<String> list = lined.get(lineObjId);
+			return CollectionTool.checkNull(list) ? true : (!list
+					.contains(userId));
+		} finally {
+			read.unlock();
+		}
+	}
+
+	/**
 	 * 
 	 * @param login
 	 * @return
@@ -145,67 +163,79 @@ public class LineService implements Runnable {
 			String id = login.getUser().getId();
 			// 有一次都还没有展示的 那么 展示此组
 			if (userDisplay.size() != userPool.size()) {
-				String key = null;
-				for (Map.Entry<String, LineUsersObj> entry : userPool
-						.entrySet()) {
-					String key2 = entry.getKey();
-					if (userDisplay.containsKey(key2)) {
-						continue;
-					}
-					if (entry.getValue().contains(id)) {
-						continue;
-					}
-					// 如果其中有一对已经被连线 用于防止重复展示
-					// FIXME 此处逻辑有待优化
-					List<String> list = lined.get(key2);
-					if (list != null && list.contains(id)) {
-						continue;
-					}
-					key = key2;
-
-				}
-				if (StringUtils.isNotEmpty(key)) {
-					userDisplay.put(key, 1);
-					return userPool.get(key);
+				LineUsersObj handleHasNoDisplay = handleHasNoDisplay(id);
+				if (handleHasNoDisplay != null) {
+					return handleHasNoDisplay;
 				}
 			}
 			// 否则 随机选取一组 有两种情况 ：1.所有的组都未被展示 2.所有的组都已被展示
 			if (userDisplay.isEmpty()) {
-				for (Map.Entry<String, LineUsersObj> entry : userPool
-						.entrySet()) {
-					LineUsersObj value = entry.getValue();
-					if (value.contains(id)) {
-						continue;
-					}
-					// 如果其中有一对已经被连线 用于防止重复展示
-					// FIXME 此处逻辑有待优化
-					List<String> list = lined.get(entry.getKey());
-					if (list != null && list.contains(id)) {
-						continue;
-					}
-					userDisplay.put(entry.getKey(), 1);
-					return value;
-				}
-				return null;
+				return handleAllNoDisplay(id);
 			} else {
-				for (Map.Entry<String, Integer> entry : userDisplay.entrySet()) {
-					String key2 = entry.getKey();
-					LineUsersObj lineUsersObj = userPool.get(key2);
-					if (lineUsersObj.contains(id)) {
-						continue;
-					}
-					// 如果其中有一对已经被连线 用于防止重复展示
-					// FIXME 此处逻辑有待优化
-					List<String> list = lined.get(key2);
-					if (list != null && list.contains(id)) {
-						continue;
-					}
-					userDisplay.put(key2, entry.getValue() + 1);
-					return lineUsersObj;
-				}
+				return handleAllDisplay(id);
 			}
 		} finally {
 			read.unlock();
+		}
+	}
+
+	private LineUsersObj handleAllDisplay(String id) {
+		String key = null;
+		for (Map.Entry<String, Integer> entry : userDisplay.entrySet()) {
+			String key2 = entry.getKey();
+			if (StringUtils.isNotEmpty(key)) {
+				if (userPool.get(key).contains(id)) {
+					continue;
+				}
+				if (userDisplay.get(key) > entry.getValue()) {
+					key = key2;
+				}
+			} else {
+				if (userPool.get(key2).contains(id)) {
+					continue;
+				}
+				key =key2 ;
+			}
+		}
+		if (StringUtils.isNotEmpty(key)) {
+			userDisplay.put(key, userDisplay.get(key) + 1);
+			return userPool.get(key);
+		}
+		return null;
+	}
+
+	private LineUsersObj handleAllNoDisplay(String id) {
+		for (Map.Entry<String, LineUsersObj> entry : userPool.entrySet()) {
+			LineUsersObj value = entry.getValue();
+			if (value.contains(id)) {
+				continue;
+			}
+			userDisplay.put(entry.getKey(), 1);
+			return value;
+		}
+		return null;
+	}
+/**
+ * 
+ * @param id
+ * @return
+ */
+	private LineUsersObj handleHasNoDisplay(String id) {
+		String key = null;
+		for (Map.Entry<String, LineUsersObj> entry : userPool.entrySet()) {
+			String key2 = entry.getKey();
+			if (userDisplay.containsKey(key2)) {
+				continue;
+			}
+			if (entry.getValue().contains(id)) {
+				continue;
+			}
+			key = key2;
+
+		}
+		if (StringUtils.isNotEmpty(key)) {
+			userDisplay.put(key, 1);
+			return userPool.get(key);
 		}
 		return null;
 	}
@@ -325,7 +355,8 @@ public class LineService implements Runnable {
 
 	private void buildFutureMap(Map<Future<List<String>>, LineUsersObj> map) {
 		for (LineUsersObj lineUser : lineUsers) {
-			LinedUserChecker checker = new LinedUserChecker(lineUser,relationMgr,relationBuilderMgr);
+			LinedUserChecker checker = new LinedUserChecker(lineUser,
+					relationMgr, relationBuilderMgr);
 			Future<List<String>> future = Server.getInstance()
 					.getThreadPoolService().submit(checker);
 			map.put(future, lineUser);
@@ -596,7 +627,6 @@ public class LineService implements Runnable {
 			for (LineUsersObj lineUser : this.lineUsers) {
 				if (lineUser.contains(one) && lineUser.contains(otherOne)) {
 					obj.add(lineUser);
-					break;
 				}
 			}
 			for (LineUsersObj lineUsersObj : obj) {

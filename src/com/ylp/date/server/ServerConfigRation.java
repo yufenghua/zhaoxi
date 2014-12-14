@@ -1,5 +1,8 @@
 package com.ylp.date.server;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Lazy;
@@ -14,12 +17,36 @@ import org.springframework.stereotype.Component;
 @Component(SpringNames.ServerConfigRation)
 @Lazy(false)
 public class ServerConfigRation {
-	private static final Logger logger=LoggerFactory.getLogger(ServerConfigRation.class);
+	private static final Logger logger = LoggerFactory
+			.getLogger(ServerConfigRation.class);
+	private Map<String, Object> props = new ConcurrentHashMap<String, Object>();
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getLineLength() {
 		return 5;
 	}
-	public void init(){
+
+	/**
+	 * 
+	 * @return
+	 */
+	public int getDefaultUserCupidValue() {
+		return 5;
+	}
+
+	/**
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public Object getValue(String key) {
+		return props.get(key);
+	}
+
+	public void init() {
 		logger.info("ServerConfigRation init");
 	}
 

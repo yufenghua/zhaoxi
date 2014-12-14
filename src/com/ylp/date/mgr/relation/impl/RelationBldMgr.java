@@ -54,8 +54,8 @@ public class RelationBldMgr extends BaseObjMgr implements IRelationBuilderMgr {
 		}
 		List<IRelation> result = new ArrayList<IRelation>();
 		for (IBaseObj iBaseObj : list) {
-			IRelation obj = Server.getInstance().getRelationMgr()
-					.getObj(iBaseObj.getId());
+			IRelationBuilder builder=(IRelationBuilder)iBaseObj;
+			IRelation obj = builder.getRelation();
 			if(obj==null){
 				continue;
 			}

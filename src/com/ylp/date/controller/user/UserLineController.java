@@ -47,7 +47,8 @@ public class UserLineController extends BaseController {
 		JSONObject obj = new JSONObject();
 		// 1.丘比特值
 		IUser user = ControlUtil.getLogin(req).getUser();
-		obj.put("cupidValue", user.getCupidvalue());
+		String userId=user.getId();
+		obj.put("cupidValue", Server.getInstance().userMgr().getObj(userId).getCupidvalue());
 		List<IRelation> list = Server.getInstance().getRelationBuilderMgr()
 				.getRelation(user.getId(), IRelation.TYPE_LINE);
 		JSONArray arr = new JSONArray();
@@ -64,13 +65,13 @@ public class UserLineController extends BaseController {
 				IUserMgr userMgr = Server.getInstance().userMgr();
 				if (StringUtils.isNotEmpty(one)) {
 					IUser oneUser = userMgr.getObj(one);
-					obj.put("one", oneUser.getCaption());
-					obj.put("oneImg", ControlUtil.getImgUrl(req, one));
+					json.put("one", oneUser.getCaption());
+					json.put("oneImg", ControlUtil.getImgUrl(req, one));
 				}
 				String other = iRelation.getOtherOne();
 				if (StringUtils.isNotEmpty(other)) {
-					obj.put("other", userMgr.getObj(other).getCaption());
-					obj.put("otherImg", ControlUtil.getImgUrl(req, other));
+					json.put("other", userMgr.getObj(other).getCaption());
+					json.put("otherImg", ControlUtil.getImgUrl(req, other));
 				}
 				arr.put(json);
 			}

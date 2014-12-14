@@ -99,10 +99,13 @@ public class MatchController extends BaseController {
 		if (lineUser == null) {
 			return;
 		}
-		obj.put("id", lineUser.getKey());
+		String key = lineUser.getKey();
+		obj.put("id", key);
 		IUser user = login.getUser();
 		JSONObject userInfo = new JSONObject();
-		userInfo.put("userid", user.getId());
+		String id = user.getId();
+		obj.put("canMatch", Server.getInstance().getLineService().canBuild(key, id));
+		userInfo.put("userid", id);
 		obj.put("user", userInfo);
 		List<IUser> same, opsite;
 		if (user.getGender() == IUser.MALE) {

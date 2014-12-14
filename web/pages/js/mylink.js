@@ -51,7 +51,6 @@ function handleWithItem(container,item){
 
 	 var linkDiv=$('<div>');
 	 linkDiv.addClass('link');
-
 	 var linkImg=$('<img>');
 	 linkImg.attr('src',item.oneImg)
 	 linkDiv.append(linkImg);

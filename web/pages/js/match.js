@@ -151,6 +151,7 @@ MatchInfoMgr.prototype.refresh = function() {
 	    success: function(data) {
 	    	self.userInfo = data.user;
 			self.infoId = data.id;
+			self._canMatch=data.canMatch;
 			var sameUsers = data.same;
 			if (sameUsers) {
 				for (var i = 0; i < sameUsers.length; i++) {
@@ -241,7 +242,7 @@ MatchInfoMgr.prototype.match = function(id1, id2) {
 	var self = this;
 	$.ajax({
 	    type: "POST",
-	    url: "../match.do?action=MatchUser",
+	    url: "/zhaoxi/match.do?action=MatchUser",
 	    data: { user: id1, other: id2},
 	    success: function(data) {
 	    	if(data.suc){
@@ -266,6 +267,12 @@ MatchInfoMgr.prototype.clear=function(){
 	this.opsiteUsers={};
 	this.users={};
 };
+/**
+ *是否能够连接
+ */
+MatchInfoMgr.prototype.canMatch=function(){
+	return this._canMatch;
+}
 /**
  * 
  */
@@ -294,6 +301,9 @@ MatchUser.prototype.init = function() {
 	//拖动执行函数
 	$(this.liDom).draggable({
 		stop:function(event,ui){
+			if(!self.mgr.canMatch()){
+				return false;
+			}
 			var position=ui.offset;
 			var opsiteSex=self.isSame?self.mgr.getOppositeSex():self.mgr.getSameSex();
 			if (!opsiteSex) {
