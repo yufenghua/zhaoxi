@@ -36,9 +36,11 @@
 	  //设置用户信息
 	  isGender=user.getGender()==IUser.MALE;
   }
+ Boolean bool= ((Boolean)request.getAttribute("fromLogin"));
+ boolean fromLogin=bool==null?false:bool.booleanValue();
   %>
     <div class="container">
-      <%if(((Boolean)request.getAttribute("fromLogin"))){ %>  <h4>注册成功，给自己贴几个标签吧</h4><%} else{%>
+      <%if(fromLogin){ %>  <h4>注册成功，给自己贴几个标签吧</h4><%} else{%>
       <header> <nav class="navbar navbar-default" role="navigation">
 	<div class="container">
 		<div class="navbar-header">
@@ -62,6 +64,9 @@
             <form class="form-horizontal" role="form" action="userinfo.do" method="post" enctype="multipart/form-data">
             <input type="hidden" name="userid" value="<%=request.getAttribute("userid")%>"/>
               <input type="hidden" name="action" value="update"/>
+             <%if(!fromLogin){ %> 
+             	<input type="hidden" name="from" value="setting"/>
+             <%}%>
               <div class="form-group">
                 <label for="" class="col-sm-2 control-label">性别</label>
                 <div class="col-sm-10">

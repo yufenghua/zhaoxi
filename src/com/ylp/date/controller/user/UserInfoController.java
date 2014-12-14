@@ -14,6 +14,7 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.sql.Update;
+import org.omg.CORBA.Request;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -114,6 +115,7 @@ public class UserInfoController extends BaseController {
 	private String update(HttpServletReqEx ex, HttpServletResponse res)
 			throws Exception {
 		String userid = ex.getParameter("userid");
+		String from=ex.getParameter("from");
 		if (!StringUtils.isNotEmpty(userid)) {
 			throw new RuntimeException("用户账号不能为空！");
 		}
@@ -167,7 +169,11 @@ public class UserInfoController extends BaseController {
 			}
 			// 允许没有图片的情况下 更新用户数据
 			userMgr.update(userid, user);
-			return "pages/my-match";
+			if(!StringUtils.isNotEmpty(from)){
+				res.sendRedirect(ex.getContextPath()+"/match.do");
+			}else{
+				res.sendRedirect(ex.getContextPath()+"/user/userinfo.do?action=setting");
+			}
 		}
 		return null;
 	}
