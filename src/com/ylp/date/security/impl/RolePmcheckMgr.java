@@ -2,6 +2,11 @@ package com.ylp.date.security.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
@@ -13,10 +18,10 @@ import com.ylp.date.server.SpringNames;
 @DependsOn(SpringNames.Server)
 @Lazy(false)
 public class RolePmcheckMgr {
-	private Map<String, RolePmChecker> checkerMap;
+	private ConcurrentMap<String, RolePmChecker> checkerMap;
 
 	public void init() {
-		checkerMap = new HashMap<String, RolePmChecker>();
+		checkerMap = new ConcurrentHashMap<String, RolePmChecker>();
 	}
 
 	public void destroy() {
@@ -24,12 +29,8 @@ public class RolePmcheckMgr {
 		checkerMap = null;
 	}
 
-	public synchronized RolePmChecker getChecker(String role) {
-		if (checkerMap.containsKey(role)) {
-			return checkerMap.get(role);
-		}
-		RolePmChecker checker = new RolePmChecker(role);
-		checkerMap.put(role, checker);
-		return checker;
+	public RolePmChecker getChecker(String role) {
+		checkerMap.putIfAbsent(role, new RolePmChecker(role));
+		return checkerMap.get(role);
 	}
 }

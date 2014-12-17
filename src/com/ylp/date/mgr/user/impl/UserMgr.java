@@ -18,6 +18,8 @@ import com.ylp.date.mgr.BusinessException;
 import com.ylp.date.mgr.IBaseObj;
 import com.ylp.date.mgr.PageCondition;
 import com.ylp.date.mgr.condtion.ConditionPair;
+import com.ylp.date.mgr.condtion.impl.Condition;
+import com.ylp.date.mgr.condtion.impl.SimglePair;
 import com.ylp.date.mgr.user.IUser;
 import com.ylp.date.mgr.user.IUserMgr;
 import com.ylp.date.server.SpringNames;
@@ -95,4 +97,14 @@ public class UserMgr extends BaseObjMgr implements IUserMgr {
 		return 1;
 	}
 
+	@Override
+	public List<IUser> listUnAuditUsers(PageCondition condition) {
+		SimglePair pair = new SimglePair();
+		Condition first = new Condition();
+		first.eq("status", 0);
+		pair.setFirst(first);
+		// 擦除泛型
+		List list = list(condition, pair);
+		return list;
+	}
 }

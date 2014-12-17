@@ -8,6 +8,8 @@ import com.ylp.date.mgr.IBaseObj;
 public interface IUser extends IBaseObj {
 	int MALE = 10;
 	int FEMALE = 11;
+	int STATE_UNAUDIT = 0;
+	int STATE_AUDITED = 1;
 
 	/**
 	 * get password the password is encrypted

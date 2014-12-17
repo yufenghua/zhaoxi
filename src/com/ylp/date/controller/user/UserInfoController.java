@@ -28,6 +28,7 @@ import com.ylp.date.mgr.tag.impl.UserTagMgr;
 import com.ylp.date.mgr.user.IUser;
 import com.ylp.date.mgr.user.IUserMgr;
 import com.ylp.date.mgr.user.impl.User;
+import com.ylp.date.security.UserOper;
 import com.ylp.date.server.Server;
 import com.ylp.date.util.HttpServletReqEx;
 import com.ylp.date.util.StringTools;
@@ -41,20 +42,22 @@ public class UserInfoController extends BaseController {
 		boolean isMultipart = ServletFileUpload.isMultipartContent(req);
 		String action = req.getParameter("action");
 		String userId = req.getParameter("userid");
-		if(!StringUtils.isNotEmpty(userId)){
-			userId=ControlUtil.getLogin(req).getUser().getId();
+		if (!StringUtils.isNotEmpty(userId)) {
+			userId = ControlUtil.getLogin(req).getUser().getId();
 		}
 		if (StringUtils.isNotEmpty(userId) && !isMultipart) {
 			req.setAttribute("userid", userId);
 			req.setAttribute("user",
 					Server.getInstance().userMgr().getObj(userId));
-			String fromLogin= req.getParameter("fromLogin");
-			req.setAttribute("fromLogin",StringUtils.isNotEmpty(fromLogin)?true:false);
+			String fromLogin = req.getParameter("fromLogin");
+			req.setAttribute("fromLogin",
+					StringUtils.isNotEmpty(fromLogin) ? true : false);
 			List<IBaseObj> list = Server.getInstance().getUserTagSugMgr()
 					.list();
 			handleTag(list, req, userId);
 			req.setAttribute("sugList", list);
-			if (!StringUtils.isNotEmpty(action)||StringUtils.equals(action, "setting")) {
+			if (!StringUtils.isNotEmpty(action)
+					|| StringUtils.equals(action, "setting")) {
 				return "pages/detail";
 			}
 		}
@@ -69,7 +72,34 @@ public class UserInfoController extends BaseController {
 			handleImg(req, res);
 			return null;
 		}
+		if (StringUtils.equals(action, "cardImg")) {
+			handleCardImg(req, res);
+		}
 		return null;
+	}
+
+	/**
+	 * 证件照
+	 * 
+	 * @param req
+	 * @param res
+	 * @throws IOException
+	 */
+	private void handleCardImg(HttpServletRequest req, HttpServletResponse res)
+			throws IOException {
+		String userId = req.getParameter("userid");
+		Login login = ControlUtil.getLogin(req);
+		if (!StringUtils.equals(login.getUser().getId(), userId)) {
+			// 如果不是本人，需要确认权限
+			login.getPmckecker().check(UserOper.OP_AUDIT_USER, true);
+		}
+		User user = (User) Server.getInstance().userMgr().getObj(userId);
+		byte[] img = user.getCardImgBytes();
+		if (img == null || img.length == 0) {
+			return;
+		}
+		res.setContentType("image/jpg");
+		res.getOutputStream().write(img, 0, img.length);
 	}
 
 	private void handleImg(HttpServletRequest req, HttpServletResponse res)
@@ -77,10 +107,10 @@ public class UserInfoController extends BaseController {
 		String userId = req.getParameter("userid");
 		User user = (User) Server.getInstance().userMgr().getObj(userId);
 		byte[] img = user.getImg();
-		if (img == null||img.length == 0 ) {
+		if (img == null || img.length == 0) {
 			img = user.getCardImgBytes();
 		}
-		if (img == null||img.length == 0) {
+		if (img == null || img.length == 0) {
 			InputStream resourceAsStream = this.getClass().getResourceAsStream(
 					"/default.jpg");
 			try {
@@ -115,7 +145,7 @@ public class UserInfoController extends BaseController {
 	private String update(HttpServletReqEx ex, HttpServletResponse res)
 			throws Exception {
 		String userid = ex.getParameter("userid");
-		String from=ex.getParameter("from");
+		String from = ex.getParameter("from");
 		if (!StringUtils.isNotEmpty(userid)) {
 			throw new RuntimeException("用户账号不能为空！");
 		}
@@ -169,10 +199,11 @@ public class UserInfoController extends BaseController {
 			}
 			// 允许没有图片的情况下 更新用户数据
 			userMgr.update(userid, user);
-			if(!StringUtils.isNotEmpty(from)){
-				res.sendRedirect(ex.getContextPath()+"/match.do");
-			}else{
-				res.sendRedirect(ex.getContextPath()+"/user/userinfo.do?action=setting");
+			if (!StringUtils.isNotEmpty(from)) {
+				res.sendRedirect(ex.getContextPath() + "/match.do");
+			} else {
+				res.sendRedirect(ex.getContextPath()
+						+ "/user/userinfo.do?action=setting");
 			}
 		}
 		return null;
