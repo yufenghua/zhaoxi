@@ -1,12 +1,7 @@
 package com.ylp.date.security.impl;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;

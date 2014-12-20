@@ -15,6 +15,7 @@ import com.ylp.date.controller.BaseController;
 import com.ylp.date.controller.ControlUtil;
 import com.ylp.date.login.Login;
 import com.ylp.date.mgr.tag.ITag;
+import com.ylp.date.mgr.tag.impl.UserTagSugMgr;
 import com.ylp.date.mgr.user.IUser;
 import com.ylp.date.server.Server;
 import com.ylp.date.service.LineService;
@@ -137,11 +138,16 @@ public class MatchController extends BaseController {
 		obj.put("id", id);
 		obj.put("name", iUser.getCaption());
 		obj.put("img", ControlUtil.getImgUrl(req, id));
+		obj.put("age", iUser.getAgeRange());
 		List<ITag> tags = Server.getInstance().getUserTagMgr()
 				.getTagsByUser(id);
 		JSONArray arr = new JSONArray();
 		for (ITag iTag : tags) {
-			arr.put(iTag.getCaption());
+			JSONObject json=new JSONObject();
+			UserTagSugMgr userTagSugMgr = Server.getInstance().getUserTagSugMgr();
+			json.put("tagsug", userTagSugMgr.getObj(iTag.getTagSug()).getCaption());
+			json.put("tagInfo", iTag.getCaption());
+			arr.put(json);
 		}
 		obj.put("tags", arr);
 		return obj;

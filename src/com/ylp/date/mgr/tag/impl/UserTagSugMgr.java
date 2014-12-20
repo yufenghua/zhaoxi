@@ -14,18 +14,19 @@ import com.ylp.date.server.SpringNames;
 public class UserTagSugMgr extends BaseObjMgr implements ITagSugMgr {
 	public void init() {
 		if (count(null) == 0) {
-			UserTagSug liketodo = new UserTagSug();
-			liketodo.setCaption("喜欢做的事");
-			liketodo.setCreateDate(new Date());
-			add(liketodo);
 			UserTagSug likeWho = new UserTagSug();
-			likeWho.setCaption("喜欢的人");
+			likeWho.setCaption("偶像");
 			likeWho.setCreateDate(new Date());
 			add(likeWho);
-			UserTagSug other = new UserTagSug();
-			other.setCaption("还有呢");
-			other.setCreateDate(new Date());
-			add(other);
+			UserTagSug liketodo = new UserTagSug();
+			liketodo.setCaption("爱好");
+			liketodo.setCreateDate(new Date());
+			add(liketodo);
+//去除还有呢 这个选项
+//			UserTagSug other = new UserTagSug();
+//			other.setCaption("还有呢");
+//			other.setCreateDate(new Date());
+//			add(other);
 		}
 	}
 
