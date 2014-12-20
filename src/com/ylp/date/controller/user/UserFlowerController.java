@@ -20,6 +20,9 @@ import com.ylp.date.controller.ControlUtil;
 import com.ylp.date.login.Login;
 import com.ylp.date.mgr.relation.IRelation;
 import com.ylp.date.mgr.relation.IRelationBuilder;
+import com.ylp.date.mgr.tag.ITag;
+import com.ylp.date.mgr.tag.impl.UserTagSugMgr;
+import com.ylp.date.mgr.user.IUser;
 import com.ylp.date.server.Server;
 import com.ylp.date.util.CollectionTool;
 
@@ -61,16 +64,34 @@ public class UserFlowerController extends BaseController {
 		res.getWriter().print(jso.toString());
 	}
 
-	private JSONObject handleWithItem(String userId, IRelation iRelation, HttpServletRequest req)
-			throws JSONException {
+	private JSONObject handleWithItem(String userId, IRelation iRelation,
+			HttpServletRequest req) throws JSONException {
 		JSONObject obj = new JSONObject();
-		List<IRelationBuilder> builders = Server.getInstance().getRelationBuilderMgr().getAllBuilders(iRelation.getId());
-		Date okTime = CollectionTool.checkNull(builders)?null:builders.get(0).getCreateTime();
-		obj.put("time", okTime==null?"未知时间":format.format(okTime));
+		List<IRelationBuilder> builders = Server.getInstance()
+				.getRelationBuilderMgr().getAllBuilders(iRelation.getId());
+		Date okTime = CollectionTool.checkNull(builders) ? null : builders.get(
+				0).getCreateTime();
+		obj.put("time", okTime == null ? "未知时间" : format.format(okTime));
+		//用户信息
 		String other = iRelation.getOther(userId);
 		obj.put("img", ControlUtil.getImgUrl(req, other));
-		obj.put("userCaption", Server.getInstance().userMgr().getObj(other)
-				.getCaption());
+		IUser iUser = Server.getInstance().userMgr().getObj(other);
+		obj.put("userCaption", iUser.getCaption());
+		obj.put("age", iUser.getAgeRange());
+		List<ITag> tags = Server.getInstance().getUserTagMgr()
+				.getTagsByUser(other);
+		JSONArray arr = new JSONArray();
+		for (ITag iTag : tags) {
+			JSONObject json = new JSONObject();
+			UserTagSugMgr userTagSugMgr = Server.getInstance()
+					.getUserTagSugMgr();
+			json.put("tagsug", userTagSugMgr.getObj(iTag.getTagSug())
+					.getCaption());
+			json.put("tagInfo", iTag.getCaption());
+			arr.put(json);
+		}
+		obj.put("tags", arr);
+		
 		obj.put("otherid", other);
 		obj.put("success", iRelation.getRecognition() == IRelation.RECOG_FLOWER);
 		List<IRelationBuilder> list = Server.getInstance()

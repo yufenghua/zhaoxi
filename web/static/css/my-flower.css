@@ -19,8 +19,8 @@ li span.from{
     text-align: center;
 }
 li > div.link{
-    height: 165px;
-    width: 125px;
+    height: 205px;
+    width: 135px;
     margin: 0 40px;
     border: 1px solid #eee;
     overflow: hidden;
@@ -32,4 +32,13 @@ li > div.link img{
 }
 .chat{
     padding-top: 60px;
+}
+
+ul.link-list li p{
+    margin-bottom: 0px;
+    font-size: 13px;
+    padding-left: 2em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow:ellipsis;
 }

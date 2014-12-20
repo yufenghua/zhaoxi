@@ -63,8 +63,8 @@ function handleWithItem(container,item){
 	 linkImg.attr('src',item.img)
 	 linkDiv.append(linkImg);
 
-	 var linkSpan=$('<span>');
-	 linkSpan.text(item.userCaption);
+	 var linkSpan=$('<div>');
+	 handleWithUserInfo(linkSpan,item);
 	 linkDiv.append(linkSpan);
 	 li.append(linkDiv);
 
@@ -82,4 +82,43 @@ function handleWithItem(container,item){
 	 li.append(chatDiv);
 
 	 container.append(li);
+}
+function handleWithUserInfo(container,userObj){
+	//用户名
+	var userCapTag = $('<p>');
+	var userCaption=userObj.userCaption;
+	var userAgeRange='未知年龄段';
+	switch(userObj.age){
+		case(1):{
+			userAgeRange='18-20';
+			break;
+		}
+		case(2):{
+			userAgeRange='23-26';
+			break;
+		}
+		case(3):{
+			userAgeRange='20-23';
+			break;
+		}
+		case(4):{
+			userAgeRange='26-30';
+			break;
+		}
+		case(5):{
+			userAgeRange='30+';
+			break;
+		}
+	}
+
+	userCapTag.html(userCaption+'&nbsp&nbsp&nbsp&nbsp'+userAgeRange+'<br/>');
+	container.append(userCapTag);
+
+	var tags = userObj.tags;
+	var tag;
+	for (var i = 0; i < tags.length; i++) {
+		tag = $('<p>');
+		tag.html(tags[i].tagsug+":&nbsp&nbsp&nbsp&nbsp"+tags[i].tagInfo+'<br/>');
+		container.append(tag);
+	}
 }

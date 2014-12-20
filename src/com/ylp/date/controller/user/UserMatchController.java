@@ -20,6 +20,9 @@ import com.ylp.date.controller.BaseController;
 import com.ylp.date.controller.ControlUtil;
 import com.ylp.date.login.Login;
 import com.ylp.date.mgr.relation.IRelation;
+import com.ylp.date.mgr.tag.ITag;
+import com.ylp.date.mgr.tag.impl.UserTagSugMgr;
+import com.ylp.date.mgr.user.IUser;
 import com.ylp.date.server.Server;
 import com.ylp.date.util.CollectionTool;
 
@@ -72,7 +75,24 @@ public class UserMatchController extends BaseController {
 		obj.put("time", format.format(iRelation.getOkTime()));
 		String other = iRelation.getOther(userId);
 		obj.put("img", ControlUtil.getImgUrl(req, other));
-		obj.put("userCaption", Server.getInstance().userMgr().getObj(other).getCaption());
+		
+		//用户信息
+		IUser iUser = Server.getInstance().userMgr().getObj(other);
+		obj.put("userCaption", iUser.getCaption());
+		obj.put("age", iUser.getAgeRange());
+		List<ITag> tags = Server.getInstance().getUserTagMgr()
+				.getTagsByUser(other);
+		JSONArray arr = new JSONArray();
+		for (ITag iTag : tags) {
+			JSONObject json = new JSONObject();
+			UserTagSugMgr userTagSugMgr = Server.getInstance()
+					.getUserTagSugMgr();
+			json.put("tagsug", userTagSugMgr.getObj(iTag.getTagSug())
+					.getCaption());
+			json.put("tagInfo", iTag.getCaption());
+			arr.put(json);
+		}
+		obj.put("tags", arr);
 		obj.put("otherid", other);
 		return obj;
 	}
