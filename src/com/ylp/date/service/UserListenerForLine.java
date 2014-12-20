@@ -32,7 +32,7 @@ public class UserListenerForLine implements ObjListener {
 		}
 		IUser oldUser=(IUser) old,newUser=(IUser) newObj;
 		//用户信息初始化
-		if(oldUser.getGender()==0&&newUser.getGender()!=0){
+		if(oldUser.getGender()!=newUser.getGender()){
 			 Server.getInstance().getLineService().whenUserAdd(newUser);
 			 return;
 		}

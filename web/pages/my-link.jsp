@@ -37,9 +37,9 @@
         </div>
       </nav>
     </header>
-    <div class="container" id="mainContainer">
+    <div class="container" >
         <p class="cupid" >我的丘比特值<em id="cupid"></em></p>
-        <ul class="link-list">
+        <ul class="link-list" id="mainContainer">
          
         </ul>
     </div>

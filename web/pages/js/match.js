@@ -218,7 +218,7 @@ function MatchUser(userObj, mgr, isSame) {
 	this.mgr = mgr;
 	this.isSame = isSame;
 }
-MatchUser.LINE_SIDE=40;
+MatchUser.LINE_SIDE=100;
 /**
  * <li> <div class="photo"> <img src="../static/img/photo/photo.png"> </div>
  * <div class="info">
@@ -249,7 +249,7 @@ MatchUser.prototype.init = function() {
 			};
 			$.each(opsiteSex,function(userObjId,value){
 				var tagetPosition=value.getPosition();
-				//是否重合的算法 逻辑是 二者的定位误差不超过40像素
+				//是否重合的算法 逻辑是 二者的定位误差不超过100像素
 				if(Math.abs(position.left-tagetPosition.left)<=MatchUser.LINE_SIDE&&Math.abs(position.top-tagetPosition.top)<=MatchUser.LINE_SIDE){
 					if(confirm('确认连线'+self.userObj.name+'和'+value.userObj.name+'吗？')){
 						self.mgr.match(self.userObj.id,userObjId);
@@ -316,7 +316,7 @@ MatchUser.prototype.init = function() {
 		this.flower.bind('click',function(){
 			$.ajax({
 				    type: "POST",
-				    url: "../match.do?action=flower",
+				    url: "/zhaoxi/match.do?action=flower",
 				    data: { target: self.userObj.id,},
 				    success: function(data) {
 				    	alert('花已经送出去了，祝你好运');

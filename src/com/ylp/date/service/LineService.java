@@ -155,27 +155,33 @@ public class LineService implements Runnable {
 	 * @return
 	 */
 	public LineUsersObj getLineUser(Login login) {
-		read.lock();
+		write.lock();
 		try {
 			if (!login.isLogined()) {
 				return null;
 			}
 			String id = login.getUser().getId();
+			LineUsersObj results = null;
 			// 有一次都还没有展示的 那么 展示此组
 			if (userDisplay.size() != userPool.size()) {
-				LineUsersObj handleHasNoDisplay = handleHasNoDisplay(id);
-				if (handleHasNoDisplay != null) {
-					return handleHasNoDisplay;
+				results = handleHasNoDisplay(id);
+				if (results != null) {
+					logger.info("输出值" + results.getKey());
+					return results;
 				}
 			}
 			// 否则 随机选取一组 有两种情况 ：1.所有的组都未被展示 2.所有的组都已被展示
 			if (userDisplay.isEmpty()) {
-				return handleAllNoDisplay(id);
+				results = handleAllNoDisplay(id);
+				logger.info("输出值" + (results == null ? "木有" : results.getKey()));
+				return results;
 			} else {
-				return handleAllDisplay(id);
+				results = handleAllDisplay(id);
+				logger.info("输出值" + (results == null ? "木有" : results.getKey()));
+				return results;
 			}
 		} finally {
-			read.unlock();
+			write.unlock();
 		}
 	}
 
@@ -184,17 +190,17 @@ public class LineService implements Runnable {
 		for (Map.Entry<String, Integer> entry : userDisplay.entrySet()) {
 			String key2 = entry.getKey();
 			if (StringUtils.isNotEmpty(key)) {
-				if (userPool.get(key).contains(id)) {
+				if (userPool.get(key2)==null||userPool.get(key).contains(id)) {
 					continue;
 				}
 				if (userDisplay.get(key) > entry.getValue()) {
 					key = key2;
 				}
 			} else {
-				if (userPool.get(key2).contains(id)) {
+				if (userPool.get(key2)==null||userPool.get(key2).contains(id)) {
 					continue;
 				}
-				key =key2 ;
+				key = key2;
 			}
 		}
 		if (StringUtils.isNotEmpty(key)) {
@@ -215,11 +221,12 @@ public class LineService implements Runnable {
 		}
 		return null;
 	}
-/**
- * 
- * @param id
- * @return
- */
+
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 */
 	private LineUsersObj handleHasNoDisplay(String id) {
 		String key = null;
 		for (Map.Entry<String, LineUsersObj> entry : userPool.entrySet()) {

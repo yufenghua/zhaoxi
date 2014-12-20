@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -24,7 +26,7 @@ import com.ylp.date.service.LineUsersObj;
 @Controller
 @RequestMapping("/match")
 public class MatchController extends BaseController {
-
+private static final Logger logger=LoggerFactory.getLogger(MatchController.class);
 	@Override
 	protected String hanldleReq(HttpServletRequest req, HttpServletResponse res)
 			throws Exception {
@@ -33,13 +35,18 @@ public class MatchController extends BaseController {
 			return "pages/match";
 		}
 		if (StringUtils.equals(action, "getMatchInfo")) {
+			long start=System.currentTimeMillis();
 			res.setContentType("application/json; charset=utf-8");
 			JSONObject obj = new JSONObject();
 			LineService service = Server.getInstance().getLineService();
 			Login login = ControlUtil.getLogin(req);
+			logger.debug("获取用户耗费时间！"+(System.currentTimeMillis()-start));
 			LineUsersObj lineUser = service.getLineUser(login);
 			handleLineUser(lineUser, obj, login, req);
+			logger.debug("处理用户耗费时间！"+(System.currentTimeMillis()-start));
 			res.getWriter().print(obj.toString());
+			long end=System.currentTimeMillis();
+			logger.debug("耗费时间"+(end-start));
 			return null;
 		}
 		if (StringUtils.equals(action, "MatchUser")) {

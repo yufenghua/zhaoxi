@@ -12,7 +12,7 @@ import java.util.Date;
  * 
  */
 public class StringTools {
-	private static SimpleDateFormat format = new SimpleDateFormat("yyyy年mm月dd日");
+	private static SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
 
 	/**
 	 * 对密码进行加密

@@ -12,7 +12,7 @@ function initDatas(url){
 	    	if (!matchs) {
 	    		return;
 	    	};
-	    	var container=$(mainContainer);
+	    	var container=$('#mainContainer');
 	    	for (var i = 0; i < matchs.length; i++) {
 	    		var item=matchs[i];
 	    		handleWithItem(container,item);
