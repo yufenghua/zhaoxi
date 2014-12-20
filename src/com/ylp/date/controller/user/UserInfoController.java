@@ -152,10 +152,21 @@ public class UserInfoController extends BaseController {
 		IUserMgr userMgr = Server.getInstance().userMgr();
 		User user = (User) userMgr.getObj(userid);
 		String genderStr = ex.getParameter("gender");
-		int gender = Integer.valueOf(genderStr);
+		int gender = IUser.MALE;
+		//处理年龄和性别的默认值
+		try {
+			gender = Integer.valueOf(genderStr);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		user.setGender(gender);
 		String ageRange = ex.getParameter("age");
-		int agerange = Integer.valueOf(ageRange);
+		int agerange = IUser.AGE_20_23;
+		try {
+			agerange = Integer.valueOf(ageRange);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		user.setAgeRange(agerange);
 		Map<String, String> params = ex.getParams();
 		UserTagMgr userTagMgr = Server.getInstance().getUserTagMgr();
