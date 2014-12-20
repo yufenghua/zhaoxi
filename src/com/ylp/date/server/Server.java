@@ -2,6 +2,7 @@ package com.ylp.date.server;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -39,9 +40,19 @@ public class Server {
 	private ExecutorService service;
 
 	private SessionFactory fct;
+	private ScheduledExecutorService scheduledService;
 
 	public Server() {
 
+	}
+
+	/**
+	 * 获取定时执行线程池
+	 * 
+	 * @return
+	 */
+	public ScheduledExecutorService getScheduledService() {
+		return scheduledService;
 	}
 
 	public void init() {
@@ -51,6 +62,7 @@ public class Server {
 				.configure();
 		fct = conf.buildSessionFactory();
 		service = Executors.newCachedThreadPool();
+		scheduledService = Executors.newScheduledThreadPool(5);
 	}
 
 	/**
@@ -72,6 +84,7 @@ public class Server {
 
 	/**
 	 * 获取线程池对象
+	 * 
 	 * @return
 	 */
 	public ExecutorService getThreadPoolService() {

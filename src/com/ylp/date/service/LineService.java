@@ -2,23 +2,20 @@ package com.ylp.date.service;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.apache.commons.lang.StringUtils;
-import org.hibernate.annotations.SortType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,17 +25,16 @@ import org.springframework.stereotype.Component;
 
 import com.ylp.date.login.Login;
 import com.ylp.date.mgr.IBaseObj;
-import com.ylp.date.mgr.ObjListener;
 import com.ylp.date.mgr.relation.IRelation;
 import com.ylp.date.mgr.relation.impl.RelationBldMgr;
 import com.ylp.date.mgr.relation.impl.RelationMgr;
 import com.ylp.date.mgr.user.IUser;
-import com.ylp.date.mgr.user.impl.User;
 import com.ylp.date.mgr.user.impl.UserMgr;
 import com.ylp.date.server.Server;
 import com.ylp.date.server.ServerConfigRation;
 import com.ylp.date.server.SpringNames;
 import com.ylp.date.util.CollectionTool;
+import com.ylp.date.util.StringTools;
 
 /**
  * 用于连线的相关服务入口
@@ -88,9 +84,16 @@ public class LineService implements Runnable {
 			userMgr.regListener(new UserListenerForLine());
 			relationMgr.regListener(new RelationListenerForLine());
 			run();
+			Server.getInstance().getScheduledService().scheduleWithFixedDelay(this, getTodayCost(), ONE_DAY, TimeUnit.MILLISECONDS);
 		} finally {
 			write.unlock();
 		}
+	}
+
+	private long getTodayCost() {
+		Calendar cal=Calendar.getInstance();
+		//延迟20分钟
+		return ONE_DAY-(cal.getTime().getTime()-today.getTime())+1000*60*20;
 	}
 
 	public void markBuild(String one, String other, String user) {
@@ -328,6 +331,7 @@ public class LineService implements Runnable {
 		// FIXME 现在有一个问题 这个在琢磨一下
 		write.lock();
 		try {
+			logger.info("运行时间"+StringTools.formateDate(new Date()));
 			Calendar cal = Calendar.getInstance();
 			cal.set(Calendar.HOUR_OF_DAY, 0);
 			cal.set(Calendar.MINUTE, 0);

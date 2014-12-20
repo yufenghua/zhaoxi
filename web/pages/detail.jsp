@@ -34,10 +34,11 @@
   boolean age5=!userNull&&user.getAgeRange()==User.AGE_30_OLD;
   String userCaption="";
   if(!userNull){
-	  //设置用户信息
+	  //设置用户信息 
 	  isGender=user.getGender()==IUser.MALE;
 	  userCaption=user.getCaption(); 
   }
+  age2=(!age1&&!age2&&!age3&&!age4&&!age5);
  Boolean bool= ((Boolean)request.getAttribute("fromLogin"));
  boolean fromLogin=bool==null?false:bool.booleanValue();
   %>
@@ -72,7 +73,7 @@
               <div class="form-group">
                 <label for="" class="col-sm-2 control-label">昵称</label>
                 <div class="col-sm-10">
-                   <input type="text" class="form-control" id="usercaption" name="usercaption" placeholder="输入一个拉风的昵称吧" value="<%=userCaption%>">
+                   <input type="text" class="form-control" id="usercaption" name="usercaption" placeholder="输入一个拉风的昵称吧" value="<%=userCaption==null?"":userCaption%>">
                 </div>
               </div>
               <div class="form-group">
