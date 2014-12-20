@@ -28,11 +28,6 @@ import com.ylp.date.server.Server;
 @Entity
 @Table(name = "DATE_USER")
 public class User implements IUser {
-	public static final int AGE_18_20 = 1;
-	public static final int AGE_20_23 = 2;
-	public static final int AGE_23_26 = 3;
-	public static final int AGE_26_30 = 4;
-	public static final int AGE_30_OLD = 5;
 	@Id
 	@Column(name = "ID_", nullable = false, unique = true)
 	private String id;
@@ -47,7 +42,8 @@ public class User implements IUser {
 	@Column(name = "CARDTYPE_")
 	private int cardType;
 	@Column(name = "CUPIDVALUE_")
-	private int cupidvalue=Server.getInstance().getConfigRation().getDefaultUserCupidValue();
+	private int cupidvalue = Server.getInstance().getConfigRation()
+			.getDefaultUserCupidValue();
 	@Column(name = "GENDER_")
 	private int gender;
 	@Column(name = "STATUS_")
@@ -73,6 +69,9 @@ public class User implements IUser {
 	@Column(name = "AGETRANGE_")
 	private int ageRange;
 
+	/**
+ * 
+ */
 	public int getAgeRange() {
 		return ageRange;
 	}
@@ -86,7 +85,7 @@ public class User implements IUser {
 	}
 
 	@Column(name = "FLOWER_")
-	private int flower=3;
+	private int flower = 3;
 
 	public byte[] getCardImgBytes() {
 		return cardImgBytes;

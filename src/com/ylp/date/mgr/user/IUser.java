@@ -1,6 +1,7 @@
 package com.ylp.date.mgr.user;
 
 import java.io.File;
+import java.util.Collection;
 import java.util.Date;
 
 import com.ylp.date.mgr.IBaseObj;
@@ -10,7 +11,12 @@ public interface IUser extends IBaseObj {
 	int FEMALE = 11;
 	int STATE_UNAUDIT = 0;
 	int STATE_AUDITED = 1;
-
+	// 相关常量和方法暴露在父类中
+	public static final int AGE_18_20 = 1;
+	public static final int AGE_20_23 = 2;
+	public static final int AGE_23_26 = 3;
+	public static final int AGE_26_30 = 4;
+	public static final int AGE_30_OLD = 5;
 	/**
 	 * get password the password is encrypted
 	 * 
@@ -73,5 +79,7 @@ public interface IUser extends IBaseObj {
 	 * @return
 	 */
 	Date getLastLine();
+
+	int getAgeRange();
 
 }
