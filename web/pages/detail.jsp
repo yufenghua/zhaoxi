@@ -32,9 +32,11 @@
   boolean age3=!userNull&&user.getAgeRange()==User.AGE_23_26;
   boolean age4=!userNull&&user.getAgeRange()==User.AGE_26_30;
   boolean age5=!userNull&&user.getAgeRange()==User.AGE_30_OLD;
+  String userCaption="";
   if(!userNull){
 	  //设置用户信息
 	  isGender=user.getGender()==IUser.MALE;
+	  userCaption=user.getCaption(); 
   }
  Boolean bool= ((Boolean)request.getAttribute("fromLogin"));
  boolean fromLogin=bool==null?false:bool.booleanValue();
@@ -61,12 +63,18 @@
 	</nav> </header>
       <%} %>
         <div class="form-wrapper">
-            <form class="form-horizontal" role="form" action="userinfo.do" method="post" enctype="multipart/form-data">
+            <form class="form-horizontal" role="form" action="userinfo.do" method="post" enctype="multipart/form-data" id="submitform">
             <input type="hidden" name="userid" value="<%=request.getAttribute("userid")%>"/>
               <input type="hidden" name="action" value="update"/>
              <%if(!fromLogin){ %> 
              	<input type="hidden" name="from" value="setting"/>
              <%}%>
+              <div class="form-group">
+                <label for="" class="col-sm-2 control-label">昵称</label>
+                <div class="col-sm-10">
+                   <input type="text" class="form-control" id="usercaption" name="usercaption" placeholder="输入一个拉风的昵称吧" value="<%=userCaption%>">
+                </div>
+              </div>
               <div class="form-group">
                 <label for="" class="col-sm-2 control-label">性别</label>
                 <div class="col-sm-10">
@@ -106,12 +114,12 @@
                   <span id="avatar" class="avatar"></span>
                 </div>
               </div>
+          </form> 
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                  <button type="submit" class="btn btn-primary btn-wide">提交</button>
+                  <button id="form_submitbutton" class="btn btn-primary btn-wide">提交</button>
                 </div>
               </div>
-            </form>
         </div>
     </div>
 
@@ -125,12 +133,22 @@
     <script src="../static/thirdparty/flat-ui/js/flatui-radio.js"></script>
     <script src="../static/thirdparty/flat-ui/js/jquery.tagsinput.js"></script>
     <script src="../static/thirdparty/flat-ui/js/jquery.placeholder.js"></script>
-         <script src="../pages/js/util.js"></script>
+    <script src="../pages/js/util.js"></script>
     <script>
         $(function () {
             var input = document.getElementById('avatarInput');
             var cont = document.getElementById('avatar');
             var uploadBtn = document.getElementById('uploadBtn');
+            var summitBtn=$('#form_submitbutton');
+            summitBtn.click(function(evt){
+            	var userCaption=$("#usercaption").val();
+            	if(validate(userCaption)){
+            		alert('昵称必须输入哦');
+            		return false;
+            	}else{
+            		$('#submitform').submit();
+            	}
+            });
             function getFile(event) {
                 var file = this.files[0];
                 var img = document.createElement("img");

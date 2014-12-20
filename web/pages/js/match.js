@@ -292,12 +292,12 @@ MatchUser.prototype.init = function() {
 			break;
 		}
 		case(5):{
-			userAgeRange='30';
+			userAgeRange='30+';
 			break;
 		}
 	}
 
-	userCapTag.text(userCaption+' '+userAgeRange);
+	userCapTag.html(userCaption+'&nbsp&nbsp&nbsp&nbsp'+userAgeRange);
 	this.tagsDiv.append(userCapTag);
 
 	var tags = this.userObj.tags;

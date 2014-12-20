@@ -168,6 +168,8 @@ public class UserInfoController extends BaseController {
 			e.printStackTrace();
 		}
 		user.setAgeRange(agerange);
+		String userCaption=ex.getParameter("usercaption");
+		user.setCaption(userCaption);
 		Map<String, String> params = ex.getParams();
 		UserTagMgr userTagMgr = Server.getInstance().getUserTagMgr();
 		List<ITag> tags = userTagMgr.getTagsByUser(userid);
