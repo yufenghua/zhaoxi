@@ -1,6 +1,7 @@
 package com.ylp.date.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -28,18 +29,18 @@ public class LineUsersObj {
 		return key;
 	}
 
-	private List<IUser> males = new ArrayList<IUser>(4);
-	private List<IUser> females = new ArrayList<IUser>(4);
+	private List<String> males = new ArrayList<String>(4);
+	private List<String> females = new ArrayList<String>(4);
 
 	/**
 	 * 获取男性成员 list的最大长度为4 可能为空的list
 	 * 
 	 * @return
 	 */
-	public List<IUser> getMale() {
+	public List<String> getMale() {
 		read.lock();
 		try {
-			return new ArrayList<IUser>(males);
+			return Collections.unmodifiableList(males);
 		} finally {
 			read.unlock();
 		}
@@ -50,10 +51,10 @@ public class LineUsersObj {
 	 * 
 	 * @return
 	 */
-	public List<IUser> getFemale() {
+	public List<String> getFemale() {
 		read.lock();
 		try {
-			return new ArrayList<IUser>(females);
+			return Collections.unmodifiableList(females);
 		} finally {
 			read.unlock();
 		}
@@ -69,16 +70,7 @@ public class LineUsersObj {
 		read.lock();
 		try {
 			if (StringUtils.isNotEmpty(id)) {
-				for (IUser user : males) {
-					if (StringUtils.equals(id, user.getId())) {
-						return true;
-					}
-				}
-				for (IUser user : females) {
-					if (StringUtils.equals(id, user.getId())) {
-						return true;
-					}
-				}
+				return males.contains(id)||females.contains(id);
 			}
 			return false;
 		} finally {
@@ -94,9 +86,9 @@ public class LineUsersObj {
 		try {
 			int gender = user.getGender();
 			if (gender == IUser.MALE && males.size() < MAX_MALE) {
-				males.add(user);
+				males.add(user.getId());
 			} else {
-				females.add(user);
+				females.add(user.getId());
 			}
 		} finally {
 			write.unlock();
@@ -106,12 +98,16 @@ public class LineUsersObj {
 	public void addUserList(List<IUser> users, boolean isMale) {
 		write.lock();
 		try {
+			List<String> lists=null;
 			if (isMale) {
 				males.clear();
-				males.addAll(users);
+				lists=males;
 			} else {
 				females.clear();
-				females.addAll(users);
+				lists=females;
+			}
+			for (IUser user : users) {
+				lists.add(user.getId());
 			}
 		} finally {
 			write.unlock();
