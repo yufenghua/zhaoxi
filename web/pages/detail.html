@@ -81,7 +81,7 @@
             var cont = document.getElementById('avatar');
             var uploadBtn = document.getElementById('uploadBtn');
             function getFile(event) {
-                var file = this.files[0];
+                var file = this.value;
                 var img = document.createElement("img");
 
                 cont.innerHTML = '';

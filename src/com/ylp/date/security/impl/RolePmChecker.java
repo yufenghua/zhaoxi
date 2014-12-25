@@ -1,9 +1,12 @@
 package com.ylp.date.security.impl;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.ylp.date.security.Pmchecker;
 
 public class RolePmChecker implements Pmchecker {
 
+	private static final String ROLE_AUDITOR = "auditor";
 	private String role;
 
 	public RolePmChecker(String role) {
@@ -11,19 +14,19 @@ public class RolePmChecker implements Pmchecker {
 	}
 
 	public boolean check(String oper, Object obj) {
-		return true;
+		return StringUtils.equals(role, ROLE_AUDITOR);
 	}
 
 	public boolean check(String oper, Object obj, boolean throwex) {
-		return true;
+		return StringUtils.equals(role, ROLE_AUDITOR);
 	}
 
 	public boolean check(String oper) {
-		return true;
+		return StringUtils.equals(role, ROLE_AUDITOR);
 	}
 
 	public boolean check(String oper, boolean throwex) {
-		return true;
+		return StringUtils.equals(role, ROLE_AUDITOR);
 	}
 
 }

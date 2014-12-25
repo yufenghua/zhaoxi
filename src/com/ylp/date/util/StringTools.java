@@ -2,6 +2,8 @@ package com.ylp.date.util;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * 字符串工具类
@@ -10,8 +12,11 @@ import java.security.spec.InvalidKeySpecException;
  * 
  */
 public class StringTools {
+	private static SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
+
 	/**
 	 * 对密码进行加密
+	 * 
 	 * @param passworld
 	 * @return
 	 */
@@ -26,5 +31,23 @@ public class StringTools {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	/**
+	 * 
+	 * @param password
+	 * @param hash
+	 * @return
+	 */
+	public static final boolean validatePwd(String password, String hash) {
+		try {
+			return PasswordHash.validatePassword(password, hash);
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	public static final String formateDate(Date date) {
+		return format.format(date);
 	}
 }

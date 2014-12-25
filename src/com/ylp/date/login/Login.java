@@ -26,7 +26,6 @@ import com.ylp.date.util.StringTools;
 public class Login implements Serializable {
 	private Map<String, Object> props = Collections
 			.synchronizedMap(new HashMap<String, Object>());
-
 	private IUser user;
 
 	public IUser getUser() {
@@ -38,7 +37,7 @@ public class Login implements Serializable {
 	 * @return
 	 */
 	public boolean isLogined() {
-		return getUser() == null;
+		return getUser() != null;
 	}
 
 	/**
@@ -62,12 +61,26 @@ public class Login implements Serializable {
 		if (user == null) {
 			return false;
 		}
-		if (StringUtils.equals(StringTools.encryptPassword(passWord),
-				user.getPwd())) {
+		if (StringTools.validatePwd(passWord, user.getPwd())) {
 			this.user = user;
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * 免密码登陆，主要用于cookie 验证
+	 * 
+	 * @param userId
+	 * @return
+	 */
+	public boolean loginWithoutPwd(String userId) {
+		IUser user = Server.getInstance().userMgr().getObj(userId);
+		if (user == null) {
+			return false;
+		}
+		this.user = user;
+		return true;
 	}
 
 	/**

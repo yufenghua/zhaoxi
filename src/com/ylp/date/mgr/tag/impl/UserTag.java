@@ -7,6 +7,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.ylp.date.mgr.tag.ITag;
 
 @Entity
@@ -14,7 +16,8 @@ import com.ylp.date.mgr.tag.ITag;
 public class UserTag implements ITag {
 	@Column(name = "TAGID_", nullable = false)
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(generator = "uuidger")
+	@GenericGenerator(name = "uuidger", strategy = "uuid")
 	private String id;
 	@Column(name = "TAGSUGID_", nullable = true)
 	private String sugId;

@@ -72,7 +72,6 @@ public class UserTagMgr extends BaseObjMgr implements ITagMgr {
 		List<ITag> tags = new ArrayList<ITag>();
 		for (IBaseObj iTag : list) {
 			tags.add((ITag) iTag);
-
 		}
 		return tags;
 	}

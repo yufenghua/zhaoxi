@@ -31,7 +31,7 @@ public class User implements IUser {
 	@Id
 	@Column(name = "ID_", nullable = false, unique = true)
 	private String id;
-	@Column(name = "CAPTION_", nullable = false)
+	@Column(name = "CAPTION_")
 	private String caption;
 	@Column(name = "PASSWORD_")
 	private String pwd;
@@ -42,7 +42,8 @@ public class User implements IUser {
 	@Column(name = "CARDTYPE_")
 	private int cardType;
 	@Column(name = "CUPIDVALUE_")
-	private int cupidvalue;
+	private int cupidvalue = Server.getInstance().getConfigRation()
+			.getDefaultUserCupidValue();
 	@Column(name = "GENDER_")
 	private int gender;
 	@Column(name = "STATUS_")
@@ -65,6 +66,26 @@ public class User implements IUser {
 	@Lob
 	@Column(name = "IMAGE_")
 	private byte[] img;
+	@Column(name = "AGETRANGE_")
+	private int ageRange;
+
+	/**
+ * 
+ */
+	public int getAgeRange() {
+		return ageRange;
+	}
+
+	public void setAgeRange(int ageRange) {
+		this.ageRange = ageRange;
+	}
+
+	public void setFlower(int flower) {
+		this.flower = flower;
+	}
+
+	@Column(name = "FLOWER_")
+	private int flower = 3;
 
 	public byte[] getCardImgBytes() {
 		return cardImgBytes;
@@ -72,6 +93,12 @@ public class User implements IUser {
 
 	private transient File cardImage;
 	private transient File image;
+	@Column(name = "LASTLINE_")
+	private Date lastLine;
+
+	public void setLastLine(Date lastLine) {
+		this.lastLine = lastLine;
+	}
 
 	public void setCardImgBytes(byte[] cardImgBytes) {
 		this.cardImgBytes = cardImgBytes;
@@ -250,6 +277,16 @@ public class User implements IUser {
 
 	public void setImg(byte[] img) {
 		this.img = img;
+	}
+
+	public int getFlower() {
+		// TODO Auto-generated method stub
+		return flower;
+	}
+
+	@Override
+	public Date getLastLine() {
+		return lastLine;
 	}
 
 }

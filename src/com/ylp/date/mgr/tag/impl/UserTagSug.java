@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import com.ylp.date.mgr.tag.ITagSug;
 import com.ylp.date.mgr.user.IUser;
 import com.ylp.date.server.Server;
@@ -18,7 +20,8 @@ import com.ylp.date.server.Server;
 public class UserTagSug implements ITagSug {
 	@Column(name = "TAGSUGID_", nullable = false)
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(generator = "uuidger")  
+	@GenericGenerator(name = "uuidger", strategy = "uuid")  
 	private String id;
 	@Column(name = "TAGSUGINFO_", nullable = false)
 	private String caption;
