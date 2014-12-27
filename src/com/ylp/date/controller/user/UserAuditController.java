@@ -1,6 +1,7 @@
 package com.ylp.date.controller.user;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.ylp.date.controller.BaseController;
 import com.ylp.date.controller.ControlUtil;
 import com.ylp.date.login.Login;
+import com.ylp.date.mgr.tag.ITag;
+import com.ylp.date.mgr.tag.impl.UserTagSugMgr;
 import com.ylp.date.mgr.user.IUser;
 import com.ylp.date.mgr.user.IUserMgr;
 import com.ylp.date.mgr.user.impl.User;
@@ -34,7 +37,7 @@ public class UserAuditController extends BaseController {
 		login.getPmckecker().check(UserOper.OP_AUDIT_USER, true);
 		String action = req.getParameter("action");
 		if (!StringUtils.isNotEmpty(action)) {
-			return "pages/hehe";
+			return "pages/userlist";
 		}
 		if (StringUtils.equals(action, "listunaudit")) {
 			listUnAudit(req, res);
@@ -90,10 +93,29 @@ public class UserAuditController extends BaseController {
 			obj.put("id", iUser.getId());
 			obj.put("caption", iUser.getCaption());
 			obj.put("img", ControlUtil.getCardImgUrl(req, iUser.getId()));
+			obj.put("agerender", iUser.getAgeRange());
+			obj.put("tags", getSugs(iUser));
 			arr.put(obj);
 		}
 		json.put("users", arr);
 		res.getWriter().print(json.toString());
+	}
+
+	private JSONArray getSugs(IUser iUser) throws Exception {
+		String userId=iUser.getId();
+		List<ITag> sugs = Server.getInstance().getUserTagMgr().getTagsByUser(userId);
+		JSONArray arr=new JSONArray();
+		if(CollectionTool.checkNull(sugs)){
+			return arr;
+		}
+		UserTagSugMgr userTagSugMgr = Server.getInstance().getUserTagSugMgr();
+		for (ITag iTag : sugs) {
+			JSONObject obj=new JSONObject();
+			obj.put("tag", iTag.getCaption());
+			obj.put("sug", userTagSugMgr.getObj(iTag.getTagSug()).getCaption());
+			arr.put(obj);
+		}
+		return arr;
 	}
 
 }

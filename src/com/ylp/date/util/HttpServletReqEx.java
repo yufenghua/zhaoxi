@@ -2,7 +2,6 @@ package com.ylp.date.util;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.Principal;
 import java.util.Collection;
@@ -34,9 +33,6 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
-import com.ylp.date.controller.ControlUtil;
-import com.ylp.date.login.Login;
-import com.ylp.date.mgr.user.impl.User;
 import com.ylp.date.server.Server;
 
 public class HttpServletReqEx implements HttpServletRequest {

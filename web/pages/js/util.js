@@ -38,4 +38,33 @@ function validate(value, validator) {
 function isEmpty(str) {
 	return str == undefined || str == null || str == '';
 };
+/**
+ *@param 获取年龄对应的字符串
+ */
+function getAgeRangeText(age){
+	var userAgeRange='未知年龄段';
+	switch(age){
+		case(1):{
+			userAgeRange='18-20';
+			break;
+		}
+		case(2):{
+			userAgeRange='23-26';
+			break;
+		}
+		case(3):{
+			userAgeRange='20-23';
+			break;
+		}
+		case(4):{
+			userAgeRange='26-30';
+			break;
+		}
+		case(5):{
+			userAgeRange='30+';
+			break;
+		}
+	}
+	return userAgeRange;
+};
 

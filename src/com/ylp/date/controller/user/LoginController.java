@@ -28,7 +28,7 @@ public class LoginController extends BaseController {
 			//登陆成功之后写入cookie
 			ControlUtil.addCookieForLogin(login, response);
 		}
-		return "pages/match";
+		return null;
 	}
 
 	@Override
