@@ -10,12 +10,15 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.ylp.date.mgr.relation.IRelation;
 
 @Entity
 @Table(name = "DATE_RELATION")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class UserRelation implements IRelation {
 	@Column(name = "ID_", nullable = false)
 	@Id
