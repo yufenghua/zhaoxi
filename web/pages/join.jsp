@@ -6,6 +6,7 @@
 <meta charset="utf-8">
 <title>朝夕</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link href="../static/thirdparty/flat-ui/css/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
 <link href="../static/thirdparty/flat-ui/bootstrap/css/bootstrap.css"
 	rel="stylesheet">
 <link href="../static/thirdparty/flat-ui/css/flat-ui.css"
@@ -70,7 +71,7 @@
 
 	<script src="../static/thirdparty/flat-ui/js/jquery-1.8.3.min.js"></script>
 	<script
-		src="../static/thirdparty/flat-ui/js/jquery-ui-1.10.3.custom.min.js"></script>
+		src="../static/thirdparty/flat-ui/js/jquery-ui-1.10.4.custom.min.js"></script>
 	<script
 		src="../static/thirdparty/flat-ui/js/jquery.ui.touch-punch.min.js"></script>
 	<script src="../static/thirdparty/flat-ui/js/bootstrap.min.js"></script>
@@ -96,17 +97,17 @@
 			$('#submit_reg').on('click', function(e) {
 				var username = $('#username_reg').val();
 				if (isEmpty(username)) {
-					alert('用户名不能为空！');
+					showMessage('用户名不能为空！');
 					return false;
 				}
 				var password = $('#password_reg').val();
 				if (isEmpty(password)) {
-					alert('密码不能为空！');
+					showMessage('密码不能为空！');
 					return false;
 				}
 				var email = $('#email_reg').val();
 				if (isEmpty(email)) {
-					alert('邮箱不能为空！');
+					showMessage('邮箱不能为空！');
 					return false;
 				}
 				$('#register').submit();
@@ -116,12 +117,12 @@
 			$('#submit_login').on('click', function(e) {
 				var username = $('#username_login').val();
 				if (isEmpty(username)) {
-					alert('用户名不能为空！');
+					showMessage('用户名不能为空！');
 					return false;
 				}
 				var password = $('#password_login').val();
 				if (isEmpty(password)) {
-					alert('密码不能为空！');
+					showMessage('密码不能为空！');
 					return false;
 				}
 				$.ajax({
@@ -137,7 +138,6 @@
 				    	window.location.href='/zhaoxi/match.do';
 				    },
 				    error: function (xhr, textStatus, errorThrown) {
-				    	debugger;
 				    	$('#loginmsg').css('display','block');
 				    	$("#errormsg").text('用户名或密码错误，请重试');
 				    	$('#submit_login').prop('disabled', false);

@@ -156,7 +156,7 @@ UserAuditMgr.prototype.list=function(){
 			};
 		},
 		error: function (xhr, textStatus, errorThrown) {
-			alert('出现错误' + textStatus);
+			showMessage('出现错误' + textStatus);
 		}
 	});
 

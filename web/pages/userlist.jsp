@@ -5,6 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link href="../static/thirdparty/flat-ui/css/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
 <link
 	href="/zhaoxi/static/thirdparty/flat-ui/bootstrap/css/bootstrap.css"
 	rel="stylesheet">
@@ -62,6 +63,7 @@ table.all {
 </body>
 </html>
  <script src="/zhaoxi/static/thirdparty/flat-ui/js/jquery-1.8.3.min.js"></script>
+ <script src="../static/thirdparty/flat-ui/js/jquery-ui-1.10.4.custom.min.js"></script>
 <script src="/zhaoxi/pages/js/util.js" type="text/javascript"></script>
 <script src="/zhaoxi/pages/js/useraudit.js" type="text/javascript"></script>
 <script type="text/javascript">
