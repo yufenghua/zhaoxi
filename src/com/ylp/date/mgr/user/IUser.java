@@ -11,6 +11,7 @@ public interface IUser extends IBaseObj {
 	int FEMALE = 11;
 	int STATE_UNAUDIT = 0;
 	int STATE_AUDITED = 1;
+	int STATE_AUDITBACK=-1;
 	// 相关常量和方法暴露在父类中
 	public static final int AGE_18_20 = 1;
 	public static final int AGE_20_23 = 2;

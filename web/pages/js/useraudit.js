@@ -4,7 +4,38 @@ function UserAuditMgr(parent){
 UserAuditMgr.prototype._init = function() {
 };
 UserAuditMgr.prototype.audit=function(id){
-
+	this._audit(id,"false");
+};
+/**
+ *审核通过
+ */
+UserAuditMgr.prototype._audit=function(id,isback){
+	var self=this;
+	$.ajax({
+			type: "POST",
+			url: "/zhaoxi/user/audit.do",
+			data: { action: 'audit',
+					userid:id,
+					isback:isback},
+			success: function(data) {
+				if (data&&data.suc) {
+					alert('操作成功');
+					self.list();
+				}else{
+					alert('操作失败：'+data.msg);
+					self.list();
+				}
+			},
+			error: function (xhr, textStatus, errorThrown) {
+				alert('出现错误' + textStatus);
+			}
+		});
+};
+/**
+ *退回
+ */
+UserAuditMgr.prototype.auditBack=function(id){
+	this._audit(id,"true");
 };
 /**
  *<table class="all">
@@ -84,12 +115,19 @@ UserAuditMgr.prototype._addUser=function(user){
 		auditBtn.attr('type','button');
 		auditBtn.attr('value','审核');
 		auditBtn.addClass('btn');
+		var self=this;
+		auditBtn.click(function(){
+			self.audit(user.id);
+		});
 		btnTd.append(auditBtn);
 
 		var rejectBtn=$('<input>');
 		rejectBtn.attr('type','button');
 		rejectBtn.attr('value','退回');
 		rejectBtn.addClass('btn');
+		rejectBtn.click(function(){
+			self.auditBack(user.id);
+		});
 		btnTd.append(rejectBtn);
 		
 		btnTr.append(btnTd);
@@ -100,6 +138,7 @@ UserAuditMgr.prototype._addUser=function(user){
 	this._addUser(user);
 };
 UserAuditMgr.prototype.list=function(){
+	this.parent.empty();
 	var self=this;
 	$.ajax({
 		type: "POST",

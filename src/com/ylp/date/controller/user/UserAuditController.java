@@ -54,6 +54,7 @@ public class UserAuditController extends BaseController {
 			throws JSONException, IOException {
 		res.setContentType("application/json; charset=utf-8");
 		String userId = req.getParameter("userid");
+		boolean isback=Boolean.valueOf(req.getParameter("isback"));
 		IUserMgr userMgr = Server.getInstance().userMgr();
 		IUser user = userMgr.getObj(userId);
 		JSONObject obj = new JSONObject();
@@ -65,7 +66,7 @@ public class UserAuditController extends BaseController {
 			obj.put("msg", "该用户已通过认证！");
 		} else {
 			User user2 = (User) user;
-			user2.setStatus(IUser.STATE_AUDITED);
+			user2.setStatus(isback?IUser.STATE_AUDITBACK:IUser.STATE_AUDITED);
 			user2.setModeratorId(ControlUtil.getLogin(req).getUser().getId());
 			try {
 				userMgr.update(userId, user2);
