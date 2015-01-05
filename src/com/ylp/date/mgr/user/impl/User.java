@@ -6,27 +6,22 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Date;
 
-import javassist.compiler.ast.Stmnt;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.ylp.date.mgr.user.IUser;
 import com.ylp.date.server.Server;
 
 @Entity
 @Table(name = "DATE_USER")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class User implements IUser {
 	@Id
 	@Column(name = "ID_", nullable = false, unique = true)

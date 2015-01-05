@@ -7,12 +7,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.ylp.date.mgr.tag.ITag;
 
 @Entity
 @Table(name = "DATE_USER_TAG")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class UserTag implements ITag {
 	@Column(name = "TAGID_", nullable = false)
 	@Id

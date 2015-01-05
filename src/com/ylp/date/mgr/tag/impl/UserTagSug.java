@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.ylp.date.mgr.tag.ITagSug;
@@ -17,6 +19,7 @@ import com.ylp.date.server.Server;
 
 @Entity
 @Table(name = "DATE_TAG_SUG")
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
 public class UserTagSug implements ITagSug {
 	@Column(name = "TAGSUGID_", nullable = false)
 	@Id

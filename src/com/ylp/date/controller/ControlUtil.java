@@ -101,7 +101,13 @@ public class ControlUtil {
 	 * @return
 	 */
 	public static String getCardImgUrl(HttpServletRequest req, String id) {
-		// TODO Auto-generated method stub
-		return null;
+		String contextPath = req.getContextPath();
+		if (!StringUtils.isNotEmpty(contextPath)) {
+			contextPath = "/";
+		}
+		if (!StringUtils.endsWith(contextPath, "/")) {
+			contextPath = contextPath + "/";
+		}
+		return contextPath + "user/userinfo.do?action=cardImg&userid=" + id;
 	}
 }

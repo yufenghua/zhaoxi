@@ -115,7 +115,8 @@ private static final Logger logger=LoggerFactory.getLogger(MatchController.class
 		obj.put("canMatch", Server.getInstance().getLineService().canBuild(key, id));
 		userInfo.put("userid", id);
 		obj.put("user", userInfo);
-		List<IUser> same, opsite;
+		List<String> same;
+		List<String> opsite;
 		if (user.getGender() == IUser.MALE) {
 			same = lineUser.getMale();
 			opsite = lineUser.getFemale();
@@ -127,12 +128,12 @@ private static final Logger logger=LoggerFactory.getLogger(MatchController.class
 		obj.put("same", handleWithList(same, req));
 	}
 
-	private JSONArray handleWithList(List<IUser> opsite, HttpServletRequest req)
+	private JSONArray handleWithList(List<String> opsite, HttpServletRequest req)
 			throws Exception {
 		JSONArray arr = new JSONArray();
 		if (opsite != null && !opsite.isEmpty()) {
-			for (IUser iUser : opsite) {
-				arr.put(handleWithSingleUser(iUser, req));
+			for (String iUser : opsite) {
+				arr.put(handleWithSingleUser(Server.getInstance().userMgr().getObj(iUser), req));
 			}
 		}
 		return arr;

@@ -9,6 +9,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.GenericGenerator;
 
 import com.ylp.date.mgr.relation.IRelation;
@@ -17,6 +19,7 @@ import com.ylp.date.server.Server;
 
 @Entity
 @Table(name = "DATE_RELBUILDER")
+@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
 public class RelationBuilder implements IRelationBuilder {
 	@Column(name = "ID_", nullable = false)
 	@Id

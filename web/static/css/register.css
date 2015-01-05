@@ -1,33 +1,55 @@
-body{
-    background: transparent url(../img/bg.jpg) no-repeat 0 0 scroll;
-    background-size: 100% auto;
-    color: #333;
+body {
+	background: transparent url(../img/bg.jpg) no-repeat 0 0 scroll;
+	background-size: 100% auto;
+	color: #333;
 }
-.container{
-    width: 835px;
+
+.container {
+	width: 835px;
 }
-.form-wrapper{
-    width: 260px;
-    margin: 320px auto 0;
+
+.form-wrapper {
+	width: 260px;
+	margin: 320px auto 0;
 }
-.form-wrapper .form-group{
-    margin-bottom: 5px;
+
+.form-wrapper .form-group {
+	margin-bottom: 5px;
 }
-#login{
-    float: left;
-    width: 260px;
-    margin-top: 94px;
-    display: none;
+
+#login {
+	float: left;
+	width: 260px;
+	margin-top: 94px;
+	display: none;
 }
-#login input[type=submit]{
-    margin-top: 30px;
+
+#login input[type=submit] {
+	margin-top: 30px;
 }
 /*span.tip{
     position:relative;
     top:-33px;
     left:266px;
 }*/
-.toggle-btn{
-    position: absolute;
-    top: 538px;
+.toggle-btn {
+	position: absolute;
+	top: 538px;
+}
+
+.msg {
+	margin-bottom: 10px
+}
+
+.msg p {
+	border: 1px solid #CCC;
+	white-space: normal;
+	word-wrap: break-word
+}
+
+.msg p.error {
+	background: #FFF2F2;
+	border-color: #FF8080;
+	line-height: 18px;
+	padding: 2px 10px 2px 23px
 }

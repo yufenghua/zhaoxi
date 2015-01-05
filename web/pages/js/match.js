@@ -103,7 +103,7 @@ MatchInfoMgr.prototype.refresh = function() {
 			}
 	    },
 	    error: function (xhr, textStatus, errorThrown) {
-	    	alert('出现错误' + textStatus);
+	    	showMessage('出现错误' + textStatus);
 	    }
 	});
 };
@@ -183,14 +183,14 @@ MatchInfoMgr.prototype.match = function(id1, id2) {
 	    data: { user: id1, other: id2},
 	    success: function(data) {
 	    	if(data.suc){
-				alert('连线成功！');
+	    		showMessage('连线成功！');
 		    	self.refresh();
 	    	}else{
-	    		alert('ops,连线失败了，换个人再试一次吧。'+data.msg);
+	    		showMessage('ops,连线失败了，换个人再试一次吧。'+data.msg);
 	    	}
 	    },
 	    error: function (xhr, textStatus, errorThrown) {
-	    	alert('出现错误' + textStatus);
+	    	showMessage('出现错误' + textStatus);
 	    }
 	});
 };
@@ -251,9 +251,9 @@ MatchUser.prototype.init = function() {
 				var tagetPosition=value.getPosition();
 				//是否重合的算法 逻辑是 二者的定位误差不超过100像素
 				if(Math.abs(position.left-tagetPosition.left)<=MatchUser.LINE_SIDE&&Math.abs(position.top-tagetPosition.top)<=MatchUser.LINE_SIDE){
-					if(confirm('确认连线'+self.userObj.name+'和'+value.userObj.name+'吗？')){
+					showConfirm('确认连线'+self.userObj.name+'和'+value.userObj.name+'吗？',"",function(){
 						self.mgr.match(self.userObj.id,userObjId);
-					}
+					});
 				};
 			});
 		}
@@ -319,10 +319,10 @@ MatchUser.prototype.init = function() {
 				    url: "/zhaoxi/match.do?action=flower",
 				    data: { target: self.userObj.id,},
 				    success: function(data) {
-				    	alert('花已经送出去了，祝你好运');
+				    	showMessage('花已经送出去了，祝你好运');
 				    },
 				    error: function (xhr, textStatus, errorThrown) {
-				    	alert('出现错误' + textStatus);
+				    	showMessage('出现错误' + textStatus);
 				    }
 				});
 		})
