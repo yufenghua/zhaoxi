@@ -5,6 +5,7 @@
     var me;
     var toPeerId;
     var watching = [];
+    var container = $('#msgcontainer');
 
     (function () {
         var to = location.search.match(/(\?|\&)to=([^\?\&]+)/i);
@@ -12,6 +13,7 @@
         toPeerId = to && to.length ? to[to.length - 1] : 'testuser-' + Math.random();
         name = name && name.length ? name[name.length - 1] : toPeerId;
         document.title = '与【' + decodeURIComponent(name) + '】对话';
+        $('#title').html(decodeURIComponent(name));
         watching.push(toPeerId);
     }());
 
@@ -33,13 +35,26 @@
 
     chat.on('message', function (data) {
         var msg = data.msg;
+        var cont = container[0];
         console.log('message receive----------');
         console.log(data);
-        $('#msgcontainer').append('<div class="msg-receive">' + msg + '</div>');
+        container.append('<div class="msg-receive">' + msg + '</div>');
+        cont.scrollTop = (cont.scrollHeight - cont.clientHeight);
     });
 
     chat.on('online', function (peers) {
-        console.log(peers);
+        for (var i = 0, len = peers.length; i < len; i++) {
+            if (peers[i] === toPeerId) {
+                $('#status').html(' [在线]');
+            }
+        }
+    });
+    chat.on('offline', function (peers) {
+        for (var i = 0, len = peers.length; i < len; i++) {
+            if (peers[i] === toPeerId) {
+                $('#status').html(' [离线]');
+            }
+        }
     });
 
     chat.open().then(function () {
@@ -52,8 +67,10 @@
         var msg = $('#msginput').val();
         if (msg) {
             chat.send(msg, toPeerId).then(function () {
-                $('#msgcontainer').append('<div class="msg-send">' + msg + '</div>');
-                $('#msginput').val('');
+                var cont = container[0];
+                container.append('<div class="msg-send">' + msg + '</div>');
+                $('#msginput').val('').focus();
+                cont.scrollTop = (cont.scrollHeight - cont.clientHeight);
             }, function (err) {
                 console.log('send fail');
             });
@@ -63,6 +80,7 @@
     $('#sendbtn').on('click', send);
     $('#msginput').on('keyup', function (e) {
         if (e.keyCode === 13) {
+            e.preventDefault();
             send();
         }
     });
