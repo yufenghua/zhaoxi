@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="chat.css">
+	</head>
+	<body>
+		<div class="msg-wrapper">
+			<div class="msg-container" id="msgcontainer"></div>
+			<div class="msg-input">
+				<textarea class="msg-text" id="msginput"></textarea>
+				<button class="msg-btn" id="sendbtn">发送</button>
+			</div>
+		</div>
+		<script src="jquery.js"></script>
+		
+		<script src="promise-1.0.0.min.js"></script>
+
+		<script src="../lib/av-0.4.1.min.js"></script>
+		<!--
+		<script>
+		    // WEB_SOCKET_FORCE_FLASH = true;  //为测试flash，可强制设为true。否则自动选择
+		    WEB_SOCKET_SWF_LOCATION = "../lib/flash/WebSocketMain.swf";//用于兼容ie9以及不支持websocket的浏览器
+	    </script>
+
+		<script src="../lib/flash/swfobject.js"></script>
+		<script src="../lib/flash/web_socket.js"></script>
+		
+		<script src="../lib/es5-shim.js"></script>
+		<script src="../lib/json2.js"></script>
+		-->
+		<script src="../lib/av-chat.js"></script>
+
+		<script src="chat.js"></script>
+	</body>
+</html>

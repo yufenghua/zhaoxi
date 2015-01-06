@@ -72,7 +72,9 @@ function handleWithItem(container,item){
 
 	 var chatDiv=$('<div>');
 	 chatDiv.addClass('chat');
-	 var chatButton=$('<button>');
+	 var chatButton=$('<a>');
+	 chatButton.attr('href', '../static/chat/main/index.html?to=' + item.otherid + '&name=' + item.userCaption);
+	 chatButton.attr('target', '_blank');
 	 chatButton.attr('class','btn btn-primary btn-wide');
 	 chatButton.text((!item.isSend&&!item.success)?'同意聊天':'聊天');
 	 if(item.isSend&&!item.success){
