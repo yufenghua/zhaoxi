@@ -3,6 +3,7 @@ package com.ylp.date.controller.user;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,7 @@ import com.ylp.date.controller.BaseController;
 import com.ylp.date.controller.ControlUtil;
 import com.ylp.date.login.Login;
 import com.ylp.date.mgr.relation.IRelation;
+import com.ylp.date.mgr.relation.impl.RelationMgr;
 import com.ylp.date.mgr.tag.ITag;
 import com.ylp.date.mgr.tag.impl.UserTagSugMgr;
 import com.ylp.date.mgr.user.IUser;
@@ -56,7 +58,8 @@ public class UserMatchController extends BaseController {
 			throws JSONException, IOException {
 		Login login = ControlUtil.getLogin(req);
 		String userId = login.getUser().getId();
-		List<IRelation> list = Server.getInstance().getRelationMgr()
+		RelationMgr relationMgr = Server.getInstance().getRelationMgr();
+		List<IRelation> list = relationMgr
 				.listLine(userId);
 		if (CollectionTool.checkNull(list)) {
 			return;
@@ -67,12 +70,16 @@ public class UserMatchController extends BaseController {
 			arr.put(handleWithItem(userId, iRelation, req));
 		}
 		jso.put("matchs", arr);
+		relationMgr.recognize(IRelation.TYPE_LINE, userId);
 		res.getWriter().print(jso.toString());
 	}
 
 	private JSONObject handleWithItem(String userId, IRelation iRelation, HttpServletRequest req) throws JSONException {
 		JSONObject obj = new JSONObject();
-		obj.put("time", format.format(iRelation.getOkTime()));
+		Date okTime = iRelation.getOkTime();
+		if(okTime!=null){
+			obj.put("time", format.format(okTime));
+		}
 		String other = iRelation.getOther(userId);
 		obj.put("img", ControlUtil.getImgUrl(req, other));
 		

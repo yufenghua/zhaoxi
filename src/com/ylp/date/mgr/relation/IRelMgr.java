@@ -68,4 +68,10 @@ public interface IRelMgr extends IMgrBase {
 	 * @param receiver
 	 */
 	void sendFlower(String sender,String receiver);
+	/**
+	 * 
+	 * @param type
+	 * @param userId
+	 */
+	void recognize(int type,String userId);
 }

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang.StringUtils;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.DependsOn;
@@ -25,6 +26,7 @@ import com.ylp.date.mgr.relation.IRelMgr;
 import com.ylp.date.mgr.relation.IRelation;
 import com.ylp.date.mgr.relation.IRelationBuilder;
 import com.ylp.date.mgr.user.IUser;
+import com.ylp.date.mgr.user.IUserMgr;
 import com.ylp.date.mgr.user.impl.User;
 import com.ylp.date.server.Server;
 import com.ylp.date.server.SpringNames;
@@ -173,7 +175,8 @@ public class RelationMgr extends BaseObjMgr implements IRelMgr {
 		condition = new Condition();
 		condition.eq("type", IRelation.TYPE_FLOWER);
 		pair.setFirst(condition);
-		multi.setSecond(pair);;
+		multi.setSecond(pair);
+		;
 		multi.setRelation(ConditionType.PAIR_AND);
 		List<IRelation> list = listRelation(null, multi);
 		if (list.isEmpty()) {
@@ -202,11 +205,22 @@ public class RelationMgr extends BaseObjMgr implements IRelMgr {
 				if (checkBuilder(relation.getId(), userId)) {
 					int recognition = relation.getRecognition() + 1;
 					relation.setRecognition(recognition);
-					if(recognition==IRelation.RECOG_LINE){
-						relation.setOkTime(new Date());
+					if (recognition == IRelation.RECOG_LINE) {
+						Date okTime = new Date();
+						relation.setOkTime(okTime);
+						try {
+							handleLastLine(relation, okTime);
+						} catch (Exception e) {
+							logger.error("修正用户信息是发生错误", e);
+						}
 					}
 					update(relation.getId(), relation);
-					handleBuilder(relation.getId(), userId);
+					try {
+						handleBuilder(relation.getId(), userId);
+					} catch (Exception e) {
+						logger.error("建立创建者数据时发生后错误，创建者id" + userId + ",关系id"
+								+ relation.getId(), e);
+					}
 				} else {
 					throw new BusinessException(BusinessException.BUILD_DONE);
 				}
@@ -215,6 +229,26 @@ public class RelationMgr extends BaseObjMgr implements IRelMgr {
 			throw new BusinessException(BusinessException.CODE_RELATION_EXIST);
 		}
 
+	}
+
+	/**
+	 * 处理lastline的问题 
+	 * @param relation
+	 * @param okTime
+	 * @throws Exception
+	 */
+	private void handleLastLine(UserRelation relation, Date okTime)
+			throws Exception {
+		//FIXME 此处代码应该在关系监听器里面来执行
+		IUserMgr userMgr = Server.getInstance().userMgr();
+		String oneUser = relation.getOne();
+		User one = (User) userMgr.getObj(oneUser);
+		one.setLastLine(okTime);
+		userMgr.update(oneUser, one);
+		String otherId = relation.getOne();
+		User otherOne = (User) userMgr.getObj(otherId);
+		otherOne.setLastLine(okTime);
+		userMgr.update(otherId, otherOne);
 	}
 
 	private boolean checkBuilder(String id, String userId) {
@@ -303,4 +337,33 @@ public class RelationMgr extends BaseObjMgr implements IRelMgr {
 		}
 	}
 
+	@Override
+	public void recognize(int type, String userId) {
+		Session session = Server.getInstance().openSession();
+		try {
+			session.beginTransaction();
+			String hql1 = "update UserRelation set oneReg=? where one=? and type=? and recognition>=?";
+			int one = executeUpdate(session, hql1,
+					new Object[] {
+							new Date(),
+							userId,
+							type,
+							(type == IRelation.TYPE_FLOWER ? 1
+									: IRelation.RECOG_LINE) });
+			String hql2 = "update UserRelation set otherOneReg=? where otherOne=? and type=? and recognition>=?";
+			int otherOne = executeUpdate(session, hql2,
+					new Object[] {
+							new Date(),
+							userId,
+							type,
+							(type == IRelation.TYPE_FLOWER ? 1
+									: IRelation.RECOG_LINE) });
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			session.getTransaction().rollback();
+			Server.getInstance().handleException(e);
+		} finally {
+			session.close();
+		}
+	}
 }

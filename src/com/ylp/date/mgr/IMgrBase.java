@@ -2,6 +2,8 @@ package com.ylp.date.mgr;
 
 import java.util.List;
 
+import org.hibernate.Session;
+
 import com.ylp.date.mgr.condtion.ConditionPair;
 
 /**
@@ -98,4 +100,5 @@ public interface IMgrBase {
 	 */
 	List<IBaseObj> executeQuery(String hql, Object[] params);
 
+	int executeUpdate(Session session, String hql, Object[] params);
 }

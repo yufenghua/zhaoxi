@@ -20,6 +20,7 @@ import com.ylp.date.controller.ControlUtil;
 import com.ylp.date.login.Login;
 import com.ylp.date.mgr.relation.IRelation;
 import com.ylp.date.mgr.relation.IRelationBuilder;
+import com.ylp.date.mgr.relation.impl.RelationMgr;
 import com.ylp.date.mgr.tag.ITag;
 import com.ylp.date.mgr.tag.impl.UserTagSugMgr;
 import com.ylp.date.mgr.user.IUser;
@@ -50,8 +51,8 @@ public class UserFlowerController extends BaseController {
 			throws JSONException, IOException {
 		Login login = ControlUtil.getLogin(req);
 		String userId = login.getUser().getId();
-		List<IRelation> list = Server.getInstance().getRelationMgr()
-				.listFlower(userId);
+		RelationMgr relationMgr = Server.getInstance().getRelationMgr();
+		List<IRelation> list = relationMgr.listFlower(userId);
 		if (CollectionTool.checkNull(list)) {
 			return;
 		}
@@ -61,6 +62,7 @@ public class UserFlowerController extends BaseController {
 			arr.put(handleWithItem(userId, iRelation, req));
 		}
 		jso.put("matchs", arr);
+		relationMgr.recognize(IRelation.TYPE_FLOWER, userId);
 		res.getWriter().print(jso.toString());
 	}
 
@@ -72,7 +74,7 @@ public class UserFlowerController extends BaseController {
 		Date okTime = CollectionTool.checkNull(builders) ? null : builders.get(
 				0).getCreateTime();
 		obj.put("time", okTime == null ? "未知时间" : format.format(okTime));
-		//用户信息
+		// 用户信息
 		String other = iRelation.getOther(userId);
 		obj.put("img", ControlUtil.getImgUrl(req, other));
 		IUser iUser = Server.getInstance().userMgr().getObj(other);
@@ -91,7 +93,7 @@ public class UserFlowerController extends BaseController {
 			arr.put(json);
 		}
 		obj.put("tags", arr);
-		
+
 		obj.put("otherid", other);
 		obj.put("success", iRelation.getRecognition() == IRelation.RECOG_FLOWER);
 		List<IRelationBuilder> list = Server.getInstance()
