@@ -99,7 +99,7 @@ function showMessage(msg,title){
  * @param cancelfunc
  */
 function showConfirm(msg,title,okfunc,cancelfunc){
-	if(!this._msgdialog){
+	if(!this._cfmdialog){
 		var dom = document.createElement("div");
 		this._cfmdialog = $(dom).dialog({
 			autoOpen : false,
@@ -110,7 +110,7 @@ function showConfirm(msg,title,okfunc,cancelfunc){
 		this._cfmdialog.content = dom;
 	}
 	this._cfmdialog.content.innerHTML = msg;
-	this._msgdialog.dialog("option", "title", (title || "提示"));
+	this._cfmdialog.dialog("option", "title", (title || "提示"));
 	this._cfmdialog.dialog("option", "position", { my: "center", at: "center", of: this });
 	this._cfmdialog.dialog( "option", "buttons", 
 	[{
