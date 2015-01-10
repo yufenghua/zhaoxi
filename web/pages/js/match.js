@@ -62,6 +62,8 @@ MatchInfoMgr.prototype._init = function() {
 	this.refreshBtn.addClass('btn-default');
 	this.refreshBtn.addClass('btn-wide');
 	this.refreshBtn.text('换一组');
+	var cssText=";color: rgb(26, 188, 156); border: solid;border-color: rgb(26, 188, 156);border-width: 1px;background-color:#FFFFFF";
+	this.refreshBtn.css('cssText',cssText);
 	this.refreshBtn.owner=this;
 	var self=this;
 	this.refreshBtn.bind('click', function() { 

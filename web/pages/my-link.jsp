@@ -22,7 +22,7 @@
       <nav class="navbar navbar-default" role="navigation">
         <div class="container">
           <div class="navbar-header">
-            <a class="navbar-brand" href="#">朝夕</a>
+            <a class="navbar-brand" href="../match.do">朝夕</a>
           </div>
           <div class="collapse navbar-collapse" id="navbar-collapse-01">
             <ul class="nav navbar-nav">           
@@ -39,7 +39,7 @@
       </nav>
     </header>
     <div class="container" >
-        <p class="cupid" >我的丘比特值<em id="cupid"></em></p>
+        <p class="cupid" >Wow值<em id="cupid"></em></p>
         <ul class="link-list" id="mainContainer">
          
         </ul>

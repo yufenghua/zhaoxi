@@ -39,7 +39,7 @@
 				</div>
 				<div class="form-group">
 					<input type="file" class="form-control" name="file" /> <span
-						class="tip">请上传证件照片</span>
+						class="tip">请上传北京大学学生证/毕业证</span>
 				</div>
 				<div class="form-group">
 					<input id="submit_reg" type="submit"

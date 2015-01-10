@@ -22,7 +22,7 @@
       <nav class="navbar navbar-default" role="navigation">
         <div class="container">
           <div class="navbar-header">
-            <a class="navbar-brand" href="#">朝夕</a>
+            <a class="navbar-brand" href="">朝夕</a>
           </div>
           <div class="collapse navbar-collapse" id="navbar-collapse-01">
             <ul class="nav navbar-nav">           
