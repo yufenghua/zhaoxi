@@ -43,7 +43,7 @@
 				</div>
 				<div class="form-group">
 					<input id="submit_reg" type="submit"
-						class="btn btn-embossed btn-primary btn-wide" value="注册" />
+						class="btn btn-embossed btn-primary btn-wide" value="注&nbsp;&nbsp;&nbsp;&nbsp;册" />
 				</div>
 			</form>
 			<form id="login" action="login.do" method="post">
@@ -61,12 +61,12 @@
 				</div>
 				<div class="form-group">
 					<input type="submit" class="btn btn-embossed btn-primary btn-wide" id="submit_login"
-						value="登录" />
+						value="登&nbsp;&nbsp;&nbsp;&nbsp;录" />
 				</div>
 		</div>
 		</form>
 		<button class="btn btn-embossed btn-default btn-wide toggle-btn"
-			id="toggle">登录</button>
+			id="toggle">登&nbsp;&nbsp;&nbsp;&nbsp;录</button>
 	</div>
 
 	<script src="../static/thirdparty/flat-ui/js/jquery-1.8.3.min.js"></script>
@@ -89,7 +89,7 @@
 			var lock = true;
 			$toggle.on('click', function(e) {
 				$forms.toggle();
-				this.innerHTML = lock ? '注册' : '登录';
+				this.innerHTML = lock ? '注&nbsp;&nbsp;&nbsp;&nbsp;册' : '登&nbsp;&nbsp;&nbsp;&nbsp;录';
 				$forms.filter(':visible').find('input:first').focus();
 				lock = !lock;
 			});

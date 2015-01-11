@@ -62,8 +62,8 @@ MatchInfoMgr.prototype._init = function() {
 	this.refreshBtn.addClass('btn-default');
 	this.refreshBtn.addClass('btn-wide');
 	this.refreshBtn.text('换一组');
-	var cssText=";color: rgb(26, 188, 156); border: solid;border-color: rgb(26, 188, 156);border-width: 1px;background-color:#FFFFFF";
-	this.refreshBtn.css('cssText',cssText);
+	//var cssText=";color: rgb(26, 188, 156); border: solid;border-color: rgb(26, 188, 156);border-width: 1px;background-color:#FFFFFF";
+	//this.refreshBtn.css('cssText',cssText);
 	this.refreshBtn.owner=this;
 	var self=this;
 	this.refreshBtn.bind('click', function() { 
@@ -314,14 +314,14 @@ MatchUser.prototype.init = function() {
 		this.flowerDiv = $('<div>');
 		this.flower = $('<a>');
 		this.flower.addClass('send-flower');
-		this.flower.attr('title','送花');
+		this.flower.attr('title','赞一个吧');
 		this.flower.bind('click',function(){
 			$.ajax({
 				    type: "POST",
 				    url: "/zhaoxi/match.do?action=flower",
 				    data: { target: self.userObj.id,},
 				    success: function(data) {
-				    	showMessage('花已经送出去了，祝你好运');
+				    	showMessage('赞已发出，等待惊喜吧！');
 				    },
 				    error: function (xhr, textStatus, errorThrown) {
 				    	showMessage('出现错误' + textStatus);

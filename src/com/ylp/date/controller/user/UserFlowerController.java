@@ -21,6 +21,7 @@ import com.ylp.date.login.Login;
 import com.ylp.date.mgr.relation.IRelation;
 import com.ylp.date.mgr.relation.IRelationBuilder;
 import com.ylp.date.mgr.relation.impl.RelationMgr;
+import com.ylp.date.mgr.relation.impl.UserRelation;
 import com.ylp.date.mgr.tag.ITag;
 import com.ylp.date.mgr.tag.impl.UserTagSugMgr;
 import com.ylp.date.mgr.user.IUser;
@@ -42,6 +43,10 @@ public class UserFlowerController extends BaseController {
 		if (StringUtils.equals(action, "list")) {
 			res.setContentType("application/json; charset=utf-8");
 			listMatch(req, res);
+			return null;
+		}
+		if (StringUtils.equals(action, "recognize")) {
+			recognizeFlower(req, res);
 			return null;
 		}
 		return null;
@@ -104,5 +109,24 @@ public class UserFlowerController extends BaseController {
 			obj.put("isSend", StringUtils.equals(userId, builder.getUserId()));
 		}
 		return obj;
+	}
+
+	private void recognizeFlower(HttpServletRequest req, HttpServletResponse res) throws Exception {
+		String userId = req.getParameter("user");
+		if (!StringUtils.isNotEmpty(userId)) {
+			throw new RuntimeException("用户id不能为空");
+		}
+		Login login = ControlUtil.getLogin(req);
+		RelationMgr relationMgr = Server.getInstance()
+				.getRelationMgr();
+		UserRelation flower = (UserRelation) relationMgr
+				.getFlowerBetween(userId, login.getUser().getId());
+		if (flower == null) {
+			throw new RuntimeException("没有收到相对应的花");
+		}
+		flower.setRecognition(IRelation.RECOG_FLOWER);
+		flower.setOkTime(new Date());
+		relationMgr.update(flower.getId(), flower);
+		
 	}
 }

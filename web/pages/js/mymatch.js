@@ -70,9 +70,10 @@ function handleWithItem(container,item){
 	 chatButton.attr('href', '../static/chat/main/index.html?' +
 	 	'me=' + me +
 	 	'&to=' + item.otherid +
-	 	'&name=' + item.userCaption;
+	 	'&name=' + item.userCaption);
 	 chatButton.attr('target', '_blank');
 	 chatButton.attr('class','btn btn-primary btn-wide');
+	 chatButton.text('聊天');
 	 chatDiv.append(chatButton);
 	 li.append(chatDiv);
 

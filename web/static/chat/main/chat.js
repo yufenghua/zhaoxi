@@ -8,10 +8,21 @@
     var container = $('#msgcontainer');
 
     if (/success=true/.test(location.search)) {
+        var user = location.search.match(/(\?|\&)to=([^\?\&]+)/i);
+        var relId = user && user.length ? user[user.length - 1] : null;
         $.ajax({
-            url: '',//TODO 同意聊天 
+            url: '/zhaoxi/user/userflower.do',//TODO 同意聊天 
+            data:{
+                action:'recognize',
+                user:relId
+            },
             dataType: 'json',
-            success: function (data) {}
+            success: function (data) {
+                
+            },
+            error:function(){
+                
+            }
         });
     }
 

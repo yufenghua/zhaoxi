@@ -342,7 +342,7 @@ public class RelationMgr extends BaseObjMgr implements IRelMgr {
 		Session session = Server.getInstance().openSession();
 		try {
 			session.beginTransaction();
-			String hql1 = "update UserRelation set oneReg=? where one=? and type=? and recognition>=?";
+			String hql1 = "update UserRelation set oneReg=? where one=? and type=? and recognition>=? and oneReg is null";
 			int one = executeUpdate(session, hql1,
 					new Object[] {
 							new Date(),
@@ -350,7 +350,7 @@ public class RelationMgr extends BaseObjMgr implements IRelMgr {
 							type,
 							(type == IRelation.TYPE_FLOWER ? 1
 									: IRelation.RECOG_LINE) });
-			String hql2 = "update UserRelation set otherOneReg=? where otherOne=? and type=? and recognition>=?";
+			String hql2 = "update UserRelation set otherOneReg=? where otherOne=? and type=? and recognition>=? and otherOneReg is null ";
 			int otherOne = executeUpdate(session, hql2,
 					new Object[] {
 							new Date(),
