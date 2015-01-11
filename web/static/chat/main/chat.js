@@ -7,6 +7,14 @@
     var watching = [];
     var container = $('#msgcontainer');
 
+    if (/success=true/.test(location.search)) {
+        $.ajax({
+            url: '',//TODO 同意聊天 
+            dataType: 'json',
+            success: function (data) {}
+        });
+    }
+
     (function () {
         var to = location.search.match(/(\?|\&)to=([^\?\&]+)/i);
         var name = location.search.match(/(\?|\&)name=([^\?\&]+)/i);
@@ -18,7 +26,7 @@
     }());
 
     (function () {
-        var user = document.cookie.match(/(^|(\s?))DATE_LOGIN_USER=([^;]+)/i);
+        var user = location.search.match(/(\?|\&)me=([^\?\&]+)/i);
         me = user && user.length ? user[user.length - 1] : null;
     }());
     console.log(me, toPeerId);

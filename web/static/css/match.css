@@ -24,7 +24,8 @@ ul.list li a.send-flower{
     bottom: 0;
     width: 25px;
     height: 25px;
-    background: url(../img/flowerx.png) no-repeat;
+    background: url(../img/flowerx.jpg) no-repeat;
+    background-size: 100%;
 }
 ul.list li:last-child{
     margin-right: 0px;

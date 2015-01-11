@@ -55,7 +55,7 @@ function handleWithItem(container,item){
 	 linkImg.attr('src',item.oneImg)
 	 linkDiv.append(linkImg);
 	 var linkSpan=$('<span>');
-	 linkSpan.text(item.userCaption);
+	 linkSpan.text(item.one);
 	 linkDiv.append(linkSpan);
 	 li.append(linkDiv);
 
@@ -73,7 +73,7 @@ function handleWithItem(container,item){
 	 otherLinkImg.attr('src',item.otherImg)
 	 otherLinkDiv.append(otherLinkImg);
 	 var otherLinkSpan=$('<span>');
-	 otherLinkSpan.text(item.userCaption);
+	 otherLinkSpan.text(item.other);
 	 otherLinkDiv.append(otherLinkSpan);
 	 li.append(otherLinkDiv);
 
