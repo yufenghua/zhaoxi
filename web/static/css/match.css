@@ -6,7 +6,8 @@ form.match-form div.female{
     display: none;
 }
 ul.list{
-    margin-bottom:50px;
+	margin:0;
+	padding:0 0 35px 0;
 }
 ul.list li{
     position: relative;
@@ -20,7 +21,6 @@ ul.list li{
 }
 div.photo{
 	width: 186px;
-	height:208px;
 }
 ul.list li a.send-flower{
     position: absolute;
@@ -57,6 +57,8 @@ ul.list li p{
 .submit-area button:active,
 .submit-area button:focus{
     margin-right: 20px;
+    width:220px;
+    padding:5px 15px;
     color: rgb(26, 188, 156); 
     border: 1px solid rgb(26, 188, 156); 
     background-color: rgb(255, 255, 255); 
