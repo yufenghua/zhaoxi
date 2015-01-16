@@ -7,6 +7,25 @@
     var watching = [];
     var container = $('#msgcontainer');
 
+    if (/success=true/.test(location.search)) {
+        var user = location.search.match(/(\?|\&)to=([^\?\&]+)/i);
+        var relId = user && user.length ? user[user.length - 1] : null;
+        $.ajax({
+            url: '/zhaoxi/user/userflower.do',//TODO 同意聊天 
+            data:{
+                action:'recognize',
+                user:relId
+            },
+            dataType: 'json',
+            success: function (data) {
+                
+            },
+            error:function(){
+                
+            }
+        });
+    }
+
     (function () {
         var to = location.search.match(/(\?|\&)to=([^\?\&]+)/i);
         var name = location.search.match(/(\?|\&)name=([^\?\&]+)/i);
@@ -18,7 +37,7 @@
     }());
 
     (function () {
-        var user = document.cookie.match(/(^|(\s?))DATE_LOGIN_USER=([^;]+)/i);
+        var user = location.search.match(/(\?|\&)me=([^\?\&]+)/i);
         me = user && user.length ? user[user.length - 1] : null;
     }());
     console.log(me, toPeerId);

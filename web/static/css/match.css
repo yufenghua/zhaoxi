@@ -6,7 +6,8 @@ form.match-form div.female{
     display: none;
 }
 ul.list{
-    margin-bottom:50px;
+	margin:0;
+	padding:0 0 35px 0;
 }
 ul.list li{
     position: relative;
@@ -18,13 +19,18 @@ ul.list li{
     border: 1px solid #eee;
     cursor: pointer;
 }
+div.photo{
+	width: 186px;
+}
 ul.list li a.send-flower{
     position: absolute;
-    left: 100%;
+    /*left: 100%;*/
+    right:0;
     bottom: 0;
-    width: 25px;
-    height: 25px;
-    background: url(../img/flowerx.png) no-repeat;
+    width: 30px;
+    height: 32px;
+    background: url(../img/like.png) no-repeat;
+    background-size: 100%;
 }
 ul.list li:last-child{
     margin-right: 0px;
@@ -47,6 +53,17 @@ ul.list li p{
 .submit-area{
     text-align: center;
 }
-.submit-area button{
+.submit-area button,
+.submit-area button:active,
+.submit-area button:focus{
     margin-right: 20px;
+    width:220px;
+    padding:5px 15px;
+    color: rgb(26, 188, 156); 
+    border: 1px solid rgb(26, 188, 156); 
+    background-color: rgb(255, 255, 255); 
+}
+.submit-area button:hover{
+    background-color:#48c9b0;
+    color:#fff;
 }

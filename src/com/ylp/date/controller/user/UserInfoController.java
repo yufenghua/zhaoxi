@@ -215,6 +215,7 @@ public class UserInfoController extends BaseController {
 			if (!StringUtils.isNotEmpty(from)) {
 				res.sendRedirect(ex.getContextPath() + "/match.do");
 			} else {
+				ex.getSession().setAttribute("savemsg", "保存成功！");
 				res.sendRedirect(ex.getContextPath()
 						+ "/user/userinfo.do?action=setting");
 			}

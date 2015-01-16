@@ -41,6 +41,8 @@
   }
   age2=(!age1&&!age2&&!age3&&!age4&&!age5);
  Boolean bool= ((Boolean)request.getAttribute("fromLogin"));
+ String msg=(String)session.getAttribute("savemsg");
+ session.removeAttribute("savemsg");
  boolean fromLogin=bool==null?false:bool.booleanValue();
   %>
     <div class="container">
@@ -48,7 +50,7 @@
       <header> <nav class="navbar navbar-default" role="navigation">
 	<div class="container">
 		<div class="navbar-header">
-			<a class="navbar-brand" href="#">朝夕</a>
+			<a class="navbar-brand" href="../match.do">朝夕</a>
 		</div>
 		<div class="collapse navbar-collapse" id="navbar-collapse-01">
 			<ul class="nav navbar-nav">
@@ -70,7 +72,22 @@
               <input type="hidden" name="action" value="update"/>
              <%if(!fromLogin){ %> 
              	<input type="hidden" name="from" value="setting"/>
-             <%}%>
+             <%}else{%>
+              <div class="form-group" style="padding-left: 50px;">
+                 <img src="../static/img/regsuc.png" style='display:inline-block;width:100px;height:100px;'/>
+                 <div style="display:inline-block;vertical-align:middle;">
+	                  <label style="font-size: 45px;font-weight: bold;display:block;line-height:1">你好，欢迎来到朝夕</label>
+                 </div>
+                   <label style="display:block;font-size:20px;padding-left:10px;margin-top:35px;">介绍下自己吧，别忘了再传张美照哦</label>
+              </div>
+              <%} 
+              		if(msg!=null){
+              %>
+              <div class="form-group">
+               <img src="../static/img/upsuc.png" style='display:inline-block;margin-left:51px;width:60px;'/>
+                <label style="font-size:20px;"><%=msg %></label>
+              </div>
+             <%} %>
               <div class="form-group">
                 <label for="" class="col-sm-2 control-label">昵称</label>
                 <div class="col-sm-10">
@@ -118,7 +135,7 @@
               </div>
           </form> 
               <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
+                <div class="col-sm-offset-2 col-sm-10" style="padding-left:350px;">
                   <button id="form_submitbutton" class="btn btn-primary btn-wide">提交</button>
                 </div>
               </div>

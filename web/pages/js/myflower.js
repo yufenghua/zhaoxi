@@ -68,12 +68,17 @@ function handleWithItem(container,item){
 	 linkDiv.append(linkSpan);
 	 li.append(linkDiv);
 
-	 
+	 var user = document.cookie.match(/(^|(\s?))DATE_LOGIN_USER=([^;]+)/i);
+     var me = user && user.length ? user[user.length - 1] : null;
 
 	 var chatDiv=$('<div>');
 	 chatDiv.addClass('chat');
 	 var chatButton=$('<a>');
-	 chatButton.attr('href', '../static/chat/main/index.html?to=' + item.otherid + '&name=' + item.userCaption);
+	 chatButton.attr('href', '../static/chat/main/index.html?' +
+	 	'me=' + me +
+	 	'&to=' + item.otherid +
+	 	'&name=' + item.userCaption +
+	 	'&success=' + ((!item.isSend&&!item.success)?'true':'false'));
 	 chatButton.attr('target', '_blank');
 	 chatButton.attr('class','btn btn-primary btn-wide');
 	 chatButton.text((!item.isSend&&!item.success)?'同意聊天':'聊天');

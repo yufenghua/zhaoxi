@@ -92,8 +92,8 @@ public class LineService implements Runnable {
 
 	private long getTodayCost() {
 		Calendar cal=Calendar.getInstance();
-		//延迟20分钟
-		return ONE_DAY-(cal.getTime().getTime()-today.getTime())+1000*60*20;
+		//延迟4个小时
+		return ONE_DAY-(cal.getTime().getTime()-today.getTime())+1000*60*60*4;
 	}
 
 	public void markBuild(String one, String other, String user) {
@@ -194,9 +194,10 @@ public class LineService implements Runnable {
 			String key2 = entry.getKey();
 			if (StringUtils.isNotEmpty(key)) {
 				if (userPool.get(key2)==null||userPool.get(key).contains(id)) {
+					key=null;
 					continue;
 				}
-				if (userDisplay.get(key) > entry.getValue()) {
+				if (userDisplay.get(key) > entry.getValue()&&(!userPool.get(key2).contains(id))) {
 					key = key2;
 				}
 			} else {
@@ -348,7 +349,11 @@ public class LineService implements Runnable {
 					lineUsers.size());
 			buildFutureMap(map);
 			buildLineMap(map);
-		} finally {
+		}catch(Exception e){
+			logger.error("生成匹配用户数据出现异常,将于五分钟后重试", e);
+			Server.getInstance().getScheduledService().schedule(this, 1000*60*5, TimeUnit.MILLISECONDS);
+		}
+		finally {
 			write.unlock();
 		}
 	}

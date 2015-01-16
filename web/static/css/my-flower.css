@@ -24,7 +24,6 @@ li > div.link{
     margin: 0 40px;
     border: 1px solid #eee;
     overflow: hidden;
-    text-align: center;
 }
 li > div.link img{
     display: block;

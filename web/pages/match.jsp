@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <title>朝夕</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link href="../static/thirdparty/flat-ui/css/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
+     <link href="/zhaoxi/static/thirdparty/flat-ui/css/jquery-ui-1.10.4.custom.min.css" rel="stylesheet">
     <link href="/zhaoxi/static/thirdparty/flat-ui/bootstrap/css/bootstrap.css" rel="stylesheet">
     <link href="/zhaoxi/static/thirdparty/flat-ui/css/flat-ui.css" rel="stylesheet">
     <link rel="shortcut icon" href="/zhaoxi/static/thirdparty/flat-ui/images/favicon.ico">
@@ -22,7 +22,7 @@
       <nav class="navbar navbar-default" role="navigation">
         <div class="container">
           <div class="navbar-header">
-            <a class="navbar-brand" href="#">朝夕</a>
+            <a class="navbar-brand" href="">朝夕</a>
           </div>
           <div class="collapse navbar-collapse" id="navbar-collapse-01">
             <ul class="nav navbar-nav">           

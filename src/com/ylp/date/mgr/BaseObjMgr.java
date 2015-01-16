@@ -90,6 +90,31 @@ public abstract class BaseObjMgr implements IMgrBase {
 		return Collections.emptyList();
 	}
 
+	@Override
+	public int executeUpdate(Session session, String hql, Object[] params) {
+		boolean needClose=session==null;
+		if(needClose){
+			session = Server.getInstance().openSession();
+		}
+		try {
+			Query query = session.createQuery(hql);
+			if (params != null) {
+				for (int i = 0; i < params.length; i++) {
+					query.setParameter(i, params[i]);
+				}
+			}
+			return query.executeUpdate();
+		} catch (Exception e) {
+			Server.getInstance().handleException(e);
+			logger.error("查询数据时发生异常", e);
+		} finally {
+			if(needClose){
+				session.close();
+			}
+		}
+		return 0;
+	}
+
 	/**
 	 * 
 	 * @param criteria

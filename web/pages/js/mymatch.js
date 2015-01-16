@@ -61,9 +61,17 @@ function handleWithItem(container,item){
 	 gapDiv.append(gapImg);
 	 li.append(gapDiv);
 
+	 var user = document.cookie.match(/(^|(\s?))DATE_LOGIN_USER=([^;]+)/i);
+     var me = user && user.length ? user[user.length - 1] : null;
+
 	 var chatDiv=$('<div>');
 	 chatDiv.addClass('chat');
-	 var chatButton=$('<button>');
+	 var chatButton=$('<a>');
+	 chatButton.attr('href', '../static/chat/main/index.html?' +
+	 	'me=' + me +
+	 	'&to=' + item.otherid +
+	 	'&name=' + item.userCaption);
+	 chatButton.attr('target', '_blank');
 	 chatButton.attr('class','btn btn-primary btn-wide');
 	 chatButton.text('聊天');
 	 chatDiv.append(chatButton);
