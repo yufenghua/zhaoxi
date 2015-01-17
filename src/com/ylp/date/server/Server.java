@@ -16,6 +16,8 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
 import com.ylp.date.app.ApplicationListener;
+import com.ylp.date.mgr.helpinfo.impl.HelpInfoMgr;
+import com.ylp.date.mgr.msg.impl.MessageMgr;
 import com.ylp.date.mgr.relation.impl.RelationBldMgr;
 import com.ylp.date.mgr.relation.impl.RelationMgr;
 import com.ylp.date.mgr.relation.impl.UserRelation;
@@ -41,6 +43,16 @@ public class Server {
 
 	private SessionFactory fct;
 	private ScheduledExecutorService scheduledService;
+	private String version = "1.0";
+
+	/**
+	 * 获取服务器版本号
+	 * 
+	 * @return
+	 */
+	public String getVersion() {
+		return version;
+	}
 
 	public Server() {
 
@@ -175,6 +187,16 @@ public class Server {
 	public LineService getLineService() {
 		return ApplicationListener.getApplicationContext().getBean(
 				SpringNames.LineService, LineService.class);
+	}
+
+	public MessageMgr getMsgMgr() {
+		return ApplicationListener.getApplicationContext().getBean(
+				SpringNames.MessageMgr, MessageMgr.class);
+	}
+
+	public HelpInfoMgr getHelpInfoMgr() {
+		return ApplicationListener.getApplicationContext().getBean(
+				SpringNames.HelpInfoMgr, HelpInfoMgr.class);
 	}
 
 	/**

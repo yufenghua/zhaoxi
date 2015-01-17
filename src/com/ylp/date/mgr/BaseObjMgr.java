@@ -77,10 +77,7 @@ public abstract class BaseObjMgr implements IMgrBase {
 	public List<IBaseObj> list(PageCondition page, ConditionPair cond) {
 		Session session = Server.getInstance().openSession();
 		try {
-			Criteria criteria = session.createCriteria(getBean());
-			setPage(criteria, page);
-			setCondition(criteria, cond);
-			return criteria.list();
+			return list(page, cond, session);
 		} catch (Exception e) {
 			Server.getInstance().handleException(e);
 			logger.error("查询数据时发生异常", e);
@@ -90,10 +87,27 @@ public abstract class BaseObjMgr implements IMgrBase {
 		return Collections.emptyList();
 	}
 
+	/**
+	 * 方便事务控制
+	 * 
+	 * @param page
+	 * @param cond
+	 * @param session
+	 * @return
+	 * @throws Exception
+	 */
+	protected List<IBaseObj> list(PageCondition page, ConditionPair cond,
+			Session session) throws Exception {
+		Criteria criteria = session.createCriteria(getBean());
+		setPage(criteria, page);
+		setCondition(criteria, cond);
+		return criteria.list();
+	}
+
 	@Override
 	public int executeUpdate(Session session, String hql, Object[] params) {
-		boolean needClose=session==null;
-		if(needClose){
+		boolean needClose = session == null;
+		if (needClose) {
 			session = Server.getInstance().openSession();
 		}
 		try {
@@ -108,11 +122,16 @@ public abstract class BaseObjMgr implements IMgrBase {
 			Server.getInstance().handleException(e);
 			logger.error("查询数据时发生异常", e);
 		} finally {
-			if(needClose){
+			if (needClose) {
 				session.close();
 			}
 		}
 		return 0;
+	}
+
+	@Override
+	public int calcCount(ConditionPair pair) {
+		return list(null, pair).size();
 	}
 
 	/**

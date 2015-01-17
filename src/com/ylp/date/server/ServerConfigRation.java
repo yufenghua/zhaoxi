@@ -50,4 +50,9 @@ public class ServerConfigRation {
 		logger.info("ServerConfigRation init");
 	}
 
+	public String getHelpInfoVersion() {
+		// TODO Auto-generated method stub
+		return "1.0";
+	}
+
 }
