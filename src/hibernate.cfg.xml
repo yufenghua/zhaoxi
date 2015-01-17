@@ -46,5 +46,7 @@
 		<mapping class="com.ylp.date.mgr.tag.impl.UserTagSug" />
 		<mapping class="com.ylp.date.mgr.relation.impl.RelationBuilder" />
 		<mapping class="com.ylp.date.mgr.relation.impl.UserRelation" />
+		<mapping class="com.ylp.date.mgr.msg.impl.Message" />
+		<mapping class="com.ylp.date.mgr.helpinfo.impl.HelpInfo" />
 	</session-factory>
 </hibernate-configuration>
