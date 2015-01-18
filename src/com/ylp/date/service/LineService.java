@@ -84,16 +84,20 @@ public class LineService implements Runnable {
 			userMgr.regListener(new UserListenerForLine());
 			relationMgr.regListener(new RelationListenerForLine());
 			run();
-			Server.getInstance().getScheduledService().scheduleWithFixedDelay(this, getTodayCost(), ONE_DAY, TimeUnit.MILLISECONDS);
+			Server.getInstance()
+					.getScheduledService()
+					.scheduleWithFixedDelay(this, getTodayCost(), ONE_DAY,
+							TimeUnit.MILLISECONDS);
 		} finally {
 			write.unlock();
 		}
 	}
 
 	private long getTodayCost() {
-		Calendar cal=Calendar.getInstance();
-		//延迟4个小时
-		return ONE_DAY-(cal.getTime().getTime()-today.getTime())+1000*60*60*4;
+		Calendar cal = Calendar.getInstance();
+		// 延迟4个小时
+		return ONE_DAY - (cal.getTime().getTime() - today.getTime()) + 1000
+				* 60 * 60 * 4;
 	}
 
 	public void markBuild(String one, String other, String user) {
@@ -192,16 +196,20 @@ public class LineService implements Runnable {
 		String key = null;
 		for (Map.Entry<String, Integer> entry : userDisplay.entrySet()) {
 			String key2 = entry.getKey();
+			LineUsersObj lineUsersObj = userPool.get(key2);
 			if (StringUtils.isNotEmpty(key)) {
-				if (userPool.get(key2)==null||userPool.get(key).contains(id)) {
-					key=null;
+				if (lineUsersObj == null
+						|| userPool.get(key).contains(id)) {
+					key = null;
 					continue;
 				}
-				if (userDisplay.get(key) > entry.getValue()&&(!userPool.get(key2).contains(id))) {
+				if (userDisplay.get(key) > entry.getValue()
+						&& (!lineUsersObj.contains(id))) {
 					key = key2;
 				}
 			} else {
-				if (userPool.get(key2)==null||userPool.get(key2).contains(id)) {
+				if (lineUsersObj == null
+						|| lineUsersObj.contains(id)) {
 					continue;
 				}
 				key = key2;
@@ -217,7 +225,10 @@ public class LineService implements Runnable {
 	private LineUsersObj handleAllNoDisplay(String id) {
 		for (Map.Entry<String, LineUsersObj> entry : userPool.entrySet()) {
 			LineUsersObj value = entry.getValue();
-			if (value.contains(id)) {
+
+			if (value.contains(id)
+					|| (CollectionTool.checkNull(value.getFemale()) && CollectionTool
+							.checkNull(value.getMale()))) {
 				continue;
 			}
 			userDisplay.put(entry.getKey(), 1);
@@ -238,7 +249,10 @@ public class LineService implements Runnable {
 			if (userDisplay.containsKey(key2)) {
 				continue;
 			}
-			if (entry.getValue().contains(id)) {
+			LineUsersObj value = entry.getValue();
+			if (value.contains(id)
+					|| (CollectionTool.checkNull(value.getFemale()) && CollectionTool
+							.checkNull(value.getMale()))) {
 				continue;
 			}
 			key = key2;
@@ -332,7 +346,8 @@ public class LineService implements Runnable {
 		// FIXME 现在有一个问题 这个在琢磨一下
 		write.lock();
 		try {
-			logger.info("运行时间"+StringTools.formateDate(new Date()));
+			clearOld();
+			logger.info("运行时间" + StringTools.formateDate(new Date()));
 			Calendar cal = Calendar.getInstance();
 			cal.set(Calendar.HOUR_OF_DAY, 0);
 			cal.set(Calendar.MINUTE, 0);
@@ -349,13 +364,25 @@ public class LineService implements Runnable {
 					lineUsers.size());
 			buildFutureMap(map);
 			buildLineMap(map);
-		}catch(Exception e){
+		} catch (Exception e) {
 			logger.error("生成匹配用户数据出现异常,将于五分钟后重试", e);
-			Server.getInstance().getScheduledService().schedule(this, 1000*60*5, TimeUnit.MILLISECONDS);
-		}
-		finally {
+			Server.getInstance().getScheduledService()
+					.schedule(this, 1000 * 60 * 5, TimeUnit.MILLISECONDS);
+		} finally {
 			write.unlock();
 		}
+	}
+
+	/**
+	 * 每次新建连线时 需要清除原有的连线
+	 */
+	private void clearOld() {
+		userPool.clear();
+		userDisplay.clear();
+		lineUsers.clear();
+		lined.clear();
+		isMaleFulled = false;
+		isFemaleFulled = false;
 	}
 
 	private void buildLineMap(Map<Future<List<String>>, LineUsersObj> map) {
