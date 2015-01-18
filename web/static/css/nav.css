@@ -4,3 +4,21 @@ nav.navbar{
 a.logout-btn{
     float: right;
 }
+.navbar-default .navbar-nav > li > a{
+	position: relative;
+}
+.navbar-default .navbar-nav > li > a span.unread{
+	position: absolute;
+	top: 11px;
+	background: red;
+	font-size: 12px;
+	font-weight: normal;
+	width: 17px;
+	height: 17px;
+	line-height: 17px;
+	text-align: center;
+	overflow: hidden;
+	border-radius: 10px;
+	color: #fff;
+	-webkit-transform: scale(0.6);
+}

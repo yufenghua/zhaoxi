@@ -56,8 +56,8 @@
 			<ul class="nav navbar-nav">
 				<li><a href="../match.do">首页</a></li>
 				<li ><a href="usermatch.do">我的匹配</a></li>
-			   <li><a href="userflower.do">我的花</a></li>
-				<li><a href="userline.do">我的牵线</a></li>
+			   <li><a href="/zhaoxi/user/userflower.do" id="myFlower">我的花</a></li>
+        <li><a href="/zhaoxi/user/userline.do" id="myLine">我的牵线</a></li>
 				<li class="active"><a href="">设置</a></li>
 				<li><a href="" class="logout-btn">退出</a></li>
 			</ul>
@@ -153,6 +153,7 @@
     <script src="../static/thirdparty/flat-ui/js/jquery.tagsinput.js"></script>
     <script src="../static/thirdparty/flat-ui/js/jquery.placeholder.js"></script>
     <script src="../pages/js/util.js"></script>
+    <script src="/zhaoxi/pages/js/unread.js"></script>
     <script>
         $(function () {
             var input = document.getElementById('avatarInput');

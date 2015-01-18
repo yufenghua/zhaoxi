@@ -28,8 +28,8 @@
             <ul class="nav navbar-nav">           
               <li class="active"><a href="">首页</a></li>
               <li><a href="/zhaoxi/user/usermatch.do">我的匹配</a></li>
-              <li><a href="/zhaoxi/user/userflower.do">我的花</a></li>
-              <li><a href="/zhaoxi/user/userline.do">我的牵线</a></li>
+              <li><a href="/zhaoxi/user/userflower.do" id="myFlower">我的花</a></li>
+        <li><a href="/zhaoxi/user/userline.do" id="myLine">我的牵线</a></li>
               <li><a href="/zhaoxi/user/userinfo.do?action=setting">设置</a></li>
               <li><a href="" class="logout-btn">退出</a></li>
             </ul> 
@@ -56,6 +56,7 @@
     <script src="/zhaoxi/static/thirdparty/flat-ui/js/jquery.placeholder.js"></script>
      <script src="/zhaoxi/pages/js/match.js"></script>
          <script src="/zhaoxi/pages/js/util.js"></script>
+         <script src="/zhaoxi/pages/js/unread.js"></script>
  <script>
     var userId='<%=request.getAttribute("userid")%>';
         $(function () {
