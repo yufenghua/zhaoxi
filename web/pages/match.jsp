@@ -16,6 +16,8 @@
     <![endif]-->
     <link rel="stylesheet" href="/zhaoxi/static/css/nav.css">
     <link rel="stylesheet" href="/zhaoxi/static/css/match.css">
+    <link rel="stylesheet" href="introjs.min.css" type="text/css">
+    <link rel="stylesheet" href="introjs-rtl.min.css" type="text/css">
   </head>
   <body>
     <header>
@@ -69,3 +71,5 @@
             });
         });
     </script>
+    <script src="/zhaoxi/static/intro/intro.min.js"></script>
+    <script src="/zhaoxi/pages/js/intro.js"></script>
