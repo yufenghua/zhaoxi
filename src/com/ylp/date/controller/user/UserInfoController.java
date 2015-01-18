@@ -14,6 +14,8 @@ import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
 import org.hibernate.sql.Update;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.omg.CORBA.Request;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +24,13 @@ import com.ylp.date.controller.BaseController;
 import com.ylp.date.controller.ControlUtil;
 import com.ylp.date.login.Login;
 import com.ylp.date.mgr.IBaseObj;
+import com.ylp.date.mgr.condtion.ConditionPair;
+import com.ylp.date.mgr.condtion.ConditionType;
+import com.ylp.date.mgr.condtion.impl.Condition;
+import com.ylp.date.mgr.condtion.impl.MultiPair;
+import com.ylp.date.mgr.condtion.impl.SimglePair;
+import com.ylp.date.mgr.relation.IRelation;
+import com.ylp.date.mgr.relation.impl.RelationMgr;
 import com.ylp.date.mgr.tag.ITag;
 import com.ylp.date.mgr.tag.impl.UserTag;
 import com.ylp.date.mgr.tag.impl.UserTagMgr;
@@ -74,6 +83,11 @@ public class UserInfoController extends BaseController {
 		}
 		if (StringUtils.equals(action, "cardImg")) {
 			handleCardImg(req, res);
+			return null;
+		}
+		if (StringUtils.equals(action, "newinfo")) {
+			getUserWowMatch(req, res);
+			return null;
 		}
 		return null;
 	}
@@ -153,7 +167,7 @@ public class UserInfoController extends BaseController {
 		User user = (User) userMgr.getObj(userid);
 		String genderStr = ex.getParameter("gender");
 		int gender = IUser.MALE;
-		//处理年龄和性别的默认值
+		// 处理年龄和性别的默认值
 		try {
 			gender = Integer.valueOf(genderStr);
 		} catch (Exception e) {
@@ -168,7 +182,7 @@ public class UserInfoController extends BaseController {
 			e.printStackTrace();
 		}
 		user.setAgeRange(agerange);
-		String userCaption=ex.getParameter("usercaption");
+		String userCaption = ex.getParameter("usercaption");
 		user.setCaption(userCaption);
 		Map<String, String> params = ex.getParams();
 		UserTagMgr userTagMgr = Server.getInstance().getUserTagMgr();
@@ -232,5 +246,65 @@ public class UserInfoController extends BaseController {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * 获取 用户的为确认的花和连线
+	 * 
+	 * @param req
+	 * @param res
+	 * @throws Exception
+	 */
+	private void getUserWowMatch(HttpServletRequest req, HttpServletResponse res)
+			throws Exception {
+		res.setContentType("application/json; charset=utf-8");
+		Login login = ControlUtil.getLogin(req);
+		RelationMgr mgr = Server.getInstance().getRelationMgr();
+		JSONObject json = new JSONObject();
+		ConditionPair linePair = getLinePair(login);
+		ConditionPair flowerPair = getFlowerPair(login);
+		json.put("lineCount", mgr.calcCount(linePair));
+		json.put("flowerCount", mgr.calcCount(flowerPair));
+	}
+
+	private ConditionPair getFlowerPair(Login login) {
+		String id = login.getUser().getId();
+		SimglePair pair = new SimglePair();
+		Condition other = new Condition();
+		other.eq("otherOne", id);
+		other.eq("otherOneReg", null);
+		pair.setFirst(other);
+
+		Condition typeCondition = new Condition();
+		typeCondition.eq("type", IRelation.TYPE_FLOWER);
+		typeCondition.eq("recognition", 1);
+		pair.setSecond(typeCondition);
+		return pair;
+	}
+
+	private ConditionPair getLinePair(Login login) {
+		MultiPair pair = new MultiPair();
+
+		SimglePair user = new SimglePair();
+		Condition condition = new Condition();
+		String id = login.getUser().getId();
+		condition.eq("one", id);
+		condition.eq("oneReg", null);
+		user.setFirst(condition);
+		Condition other = new Condition();
+		other.eq("otherOne", id);
+		other.eq("otherOneReg", null);
+		user.setSecond(other);
+		user.setRelation(ConditionType.PAIR_OR);
+		pair.setFirst(user);
+
+		SimglePair type = new SimglePair();
+		Condition typeCondition = new Condition();
+		typeCondition.eq("type", IRelation.TYPE_LINE);
+		typeCondition.eq("recognition", IRelation.RECOG_LINE);
+		type.setFirst(typeCondition);
+
+		pair.setSecond(type);
+		return pair;
 	}
 }

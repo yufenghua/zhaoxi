@@ -101,4 +101,12 @@ public interface IMgrBase {
 	List<IBaseObj> executeQuery(String hql, Object[] params);
 
 	int executeUpdate(Session session, String hql, Object[] params);
+
+	/**
+	 * 获取某个条件的值
+	 * 
+	 * @param pair
+	 * @return
+	 */
+	int calcCount(ConditionPair pair);
 }

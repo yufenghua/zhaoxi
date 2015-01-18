@@ -42,4 +42,10 @@ public class Condition {
 		return new HashMap<String, Object>(eqMap);
 	}
 
+	public void eq(String prop, boolean b) {
+		checkEqMap();
+		eqMap.put(prop, b);
+
+	}
+
 }

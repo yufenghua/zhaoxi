@@ -10,20 +10,23 @@ public interface IMessage extends IBaseObj {
 	 * @return
 	 */
 	String getSender();
+
 	/**
 	 * 
 	 * @return
 	 */
 	String getReceiver();
-	/**
-	 * 
-	 * @return
-	 */
-	String getContent();
+
 	/**
 	 * 
 	 * @return
 	 */
 	Date getDate();
+
+	/**
+	 * 
+	 * @return
+	 */
+	boolean isReaded();
 
 }

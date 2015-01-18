@@ -10,4 +10,6 @@ public class SpringNames {
 	public static final String RelationBuilderMgr = "relationbuildermgr";
 	public static final String ServerConfigRation = "serverconfigration";
 	public static final String LineService = "lineservice";
+	public static final String HelpInfoMgr = "helpinfomgr";
+	public static final String MessageMgr = "messagemgr";
 }
