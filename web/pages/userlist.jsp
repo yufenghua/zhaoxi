@@ -50,8 +50,8 @@ table.all {
 			<ul class="nav navbar-nav">
 				<li class="active"><a href="">首页</a></li>
 				<li><a href="/zhaoxi/user/usermatch.do">我的匹配</a></li>
-				<li><a href="/zhaoxi/user/userflower.do">我的花</a></li>
-				<li><a href="/zhaoxi/user/userline.do">我的牵线</a></li>
+				<li><a href="/zhaoxi/user/userflower.do" id="myFlower">我的花</a></li>
+				<li><a href="/zhaoxi/user/userline.do" id="myLine">我的牵线</a></li>
 				<li><a href="/zhaoxi/user/userinfo.do?action=setting">设置</a></li>
 				<li><a href="" class="logout-btn">退出</a></li>
 			</ul>
@@ -66,6 +66,7 @@ table.all {
  <script src="../static/thirdparty/flat-ui/js/jquery-ui-1.10.4.custom.min.js"></script>
 <script src="/zhaoxi/pages/js/util.js" type="text/javascript"></script>
 <script src="/zhaoxi/pages/js/useraudit.js" type="text/javascript"></script>
+<script src="/zhaoxi/pages/js/unread.js"></script>
 <script type="text/javascript">
 $(function(){
 	var mgr=new UserAuditMgr($('#auditlistContainer'));
