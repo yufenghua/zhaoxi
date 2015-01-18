@@ -18,6 +18,13 @@ function initLogOut(){
 };
 initLogOut();
 /**
+ *封装jquery的ajax的执行，主要是设法将异常打印出来
+ * 对ajax返回json对象的格式有规定
+ */
+function ajax(options,success,error){
+
+}
+/**
  * 验证函数，默认进行非空验证，如果有其他逻辑，请实现验证器的逻辑
  * 
  * @param value

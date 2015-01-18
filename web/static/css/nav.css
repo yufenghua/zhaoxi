@@ -22,3 +22,28 @@ a.logout-btn{
 	color: #fff;
 	-webkit-transform: scale(0.6);
 }
+body > .container{
+	min-height: 600px;
+}
+
+#footer {
+padding-top: 50px;
+padding-bottom: 70px;
+font-family:微软雅黑,宋体,Tahoma,Verdana,Arial,Helvetica,sans-serif;
+}
+
+#footer, #footer a {
+color: #999;
+font-size: 12px;
+text-align: center;
+}
+
+.maxwidth, #footer {
+width: 990px;
+margin: 0 auto;
+}
+.copyright{
+	font-size:12px;
+}
+
+

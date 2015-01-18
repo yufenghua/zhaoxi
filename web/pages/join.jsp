@@ -18,6 +18,14 @@
       <script src="../static/thirdparty/flat-ui/js/respond.min.js"></script>
     <![endif]-->
 <link rel="stylesheet" href="../static/css/register.css">
+<link rel="stylesheet" href="../static/css/nav.css">
+<style>
+	#footer, #footer a {
+	color: #ffffff;
+	font-size: 12px;
+	text-align: center;
+	}
+</style>
 </head>
 <body>
 	<div class="container">
@@ -131,7 +139,7 @@
 				});
 				if(exist){
 					$('#regmsg').css('display','block');
-			    	$("#regerrormsg").text('用户名或密码错误，请重试');
+			    	$("#regerrormsg").text('用户名已存在o(╯□╰)o');
 			    	return false;
 				}
 				$('#register').submit();
@@ -163,7 +171,7 @@
 				    },
 				    error: function (xhr, textStatus, errorThrown) {
 				    	$('#loginmsg').css('display','block');
-				    	$("#errormsg").text('用户名或密码错误，请重试');
+				    	$("#errormsg").text('用户名或密码错误，( ╯-_-)╯');
 				    	$('#submit_login').prop('disabled', false);
 				    }
 				});
@@ -172,5 +180,19 @@
 			});
 		});
 	</script>
+	
+	<!-- 页脚 -->
+   <div id="footer">
+		<div>
+			<a href="/zhaoxi/static/aboutus/about.html" target="_blank">关于我们</a>
+			<span>|</span>
+			<a href="/zhaoxi/static/aboutus/contact.html" target="_blank">联系我们</a>
+			<span>|</span>
+			<a href="/zhaoxi/static/aboutus/faq.html" target="_blank">常见问题</a>
+			<span>|</span>
+			<a href="/zhaoxi/static/aboutus/join.html" target="_blank">加入我们</a>
+	    </div>
+		<p class="copyright">Copyright © 1998 - 2015 Zhaoxi1001. All Rights Reserved.</p>
+	</div>
 </body>
 </html>

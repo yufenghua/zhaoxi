@@ -185,7 +185,7 @@ MatchInfoMgr.prototype.match = function(id1, id2) {
 	    data: { user: id1, other: id2},
 	    success: function(data) {
 	    	if(data.suc){
-	    		showMessage('连线成功！');
+	    		showMessage('连线成功！连得越多越准，你的幸运值就越高！');
 		    	self.refresh();
 	    	}else{
 	    		showMessage('ops,连线失败了，换个人再试一次吧。'+data.msg);
