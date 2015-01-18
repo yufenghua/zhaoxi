@@ -80,18 +80,18 @@
     });
     //上线
     chat.on('online', function (peers) {
-        peerOnline = true;
         for (var i = 0, len = peers.length; i < len; i++) {
             if (peers[i] === toPeerId) {
+                peerOnline = true;
                 $('#status').html(' [在线]');
             }
         }
     });
     //下线
     chat.on('offline', function (peers) {
-        peerOnline = false;
         for (var i = 0, len = peers.length; i < len; i++) {
             if (peers[i] === toPeerId) {
+                peerOnline = false;
                 $('#status').html(' [离线]');
             }
         }
