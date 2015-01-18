@@ -5,6 +5,7 @@
     var me;
     var toPeerId;
     var watching = [];
+    var peerOnline = false;
     var container = $('#msgcontainer');
 
     if (/success=true/.test(location.search)) {
@@ -41,6 +42,25 @@
         me = user && user.length ? user[user.length - 1] : null;
     }());
     console.log(me, toPeerId);
+
+    //获取离线消息
+    $.ajax({
+        url: '/zhaoxi/user/msg.do',
+        data: {
+            action: 'listnew',
+            sender: toPeerId
+        },
+        dataType: 'json',
+        success: function (data) {
+            var cont = container[0];
+            for (var i = 0, len = data.length; i < len; i++) {
+                container.append('<div class="msg-receive">' + data[i].caption + '</div>');
+            }
+            cont.scrollTop = (cont.scrollHeight - cont.clientHeight);
+        }
+    });
+    
+    //初始化聊天程序
     var chat = new AVChatClient({
         appId: appid,
         peerId: me,
@@ -55,20 +75,21 @@
     chat.on('message', function (data) {
         var msg = data.msg;
         var cont = container[0];
-        console.log('message receive----------');
-        console.log(data);
         container.append('<div class="msg-receive">' + msg + '</div>');
         cont.scrollTop = (cont.scrollHeight - cont.clientHeight);
     });
-
+    //上线
     chat.on('online', function (peers) {
+        peerOnline = true;
         for (var i = 0, len = peers.length; i < len; i++) {
             if (peers[i] === toPeerId) {
                 $('#status').html(' [在线]');
             }
         }
     });
+    //下线
     chat.on('offline', function (peers) {
+        peerOnline = false;
         for (var i = 0, len = peers.length; i < len; i++) {
             if (peers[i] === toPeerId) {
                 $('#status').html(' [离线]');
@@ -84,13 +105,29 @@
 
     function send() {
         var msg = $('#msginput').val();
-        if (msg) {
-            chat.send(msg, toPeerId).then(function () {
-                var cont = container[0];
-                container.append('<div class="msg-send">' + msg + '</div>');
-                $('#msginput').val('').focus();
-                cont.scrollTop = (cont.scrollHeight - cont.clientHeight);
-            }, function (err) {
+        if (!msg) {
+            return;
+        }
+        function afterSend() {
+            var cont = container[0];
+            container.append('<div class="msg-send">' + msg + '</div>');
+            $('#msginput').val('').focus();
+            cont.scrollTop = (cont.scrollHeight - cont.clientHeight);
+        }
+
+        if (!peerOnline) {//不在线
+            $.ajax({
+                url: '/zhaoxi/user/msg.do',
+                data: {
+                    action: 'add',
+                    receiver: toPeerId,
+                    content: msg
+                },
+                success: afterSend
+            });
+            return;
+        } else {//在线
+            chat.send(msg, toPeerId).then(afterSend, function (err) {
                 console.log('send fail');
             });
         }
