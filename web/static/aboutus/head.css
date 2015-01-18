@@ -1,0 +1,21 @@
+.nav{
+	position: absolute;
+	right: 0;
+	float: right;
+	margin: 0;
+	padding: 0;
+}
+.nav li{
+	float: left;
+	list-style: none;
+	margin: 0 1em;
+}
+
+.nav li a{
+	color: #999;
+	text-decoration: none;
+	font-family: '黑体';
+}
+.nav li.active a{
+	color: #000;
+}
