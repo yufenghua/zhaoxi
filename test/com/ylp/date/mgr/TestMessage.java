@@ -2,6 +2,9 @@ package com.ylp.date.mgr;
 
 import java.util.List;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.junit.Test;
 
 import com.ylp.date.TestBase;
@@ -28,10 +31,21 @@ public class TestMessage extends TestBase {
 	}
 
 	@Test
-	public void testGetter() {
+	public void testGetter() throws JSONException {
 		TestContextInitor.init();
-		assertTrue(Server.getInstance().getMsgMgr().listUnRead("a1", "a11")
-				.size() > 0);
+		List<IMessage> listUnRead = Server.getInstance().getMsgMgr()
+				.listUnRead("a1", "a11");
+		JSONArray arr = new JSONArray();
+		for (IMessage iMessage : listUnRead) {
+			JSONObject obj = new JSONObject();
+			obj.put("sender", iMessage.getSender());
+			obj.put("receiver", iMessage.getReceiver());
+			obj.put("caption", iMessage.getCaption());
+			obj.put("date", iMessage.getDate());
+			arr.put(obj);
+		}
+		System.out.println(arr.toString());
+		assertTrue(listUnRead.size() > 0);
 	}
 
 	@Test

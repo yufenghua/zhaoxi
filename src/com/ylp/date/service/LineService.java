@@ -198,8 +198,7 @@ public class LineService implements Runnable {
 			String key2 = entry.getKey();
 			LineUsersObj lineUsersObj = userPool.get(key2);
 			if (StringUtils.isNotEmpty(key)) {
-				if (lineUsersObj == null
-						|| userPool.get(key).contains(id)) {
+				if (lineUsersObj == null || userPool.get(key).contains(id)) {
 					key = null;
 					continue;
 				}
@@ -209,7 +208,9 @@ public class LineService implements Runnable {
 				}
 			} else {
 				if (lineUsersObj == null
-						|| lineUsersObj.contains(id)) {
+						|| lineUsersObj.contains(id)
+						|| (CollectionTool.checkNull(lineUsersObj.getFemale()) && CollectionTool
+								.checkNull(lineUsersObj.getMale()))) {
 					continue;
 				}
 				key = key2;

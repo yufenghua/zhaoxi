@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -67,7 +68,15 @@ public class UserMessageController extends BaseController {
 		if (CollectionTool.checkNull(msgs)) {
 			return;
 		}
-		JSONArray arr = new JSONArray(msgs);
+		JSONArray arr = new JSONArray();
+		for (IMessage iMessage : msgs) {
+			JSONObject obj = new JSONObject();
+			obj.put("sender", iMessage.getSender());
+			obj.put("receiver", iMessage.getReceiver());
+			obj.put("caption", iMessage.getCaption());
+			obj.put("date", iMessage.getDate());
+			arr.put(obj);
+		}
 		res.getWriter().print(arr.toString());
 	}
 
