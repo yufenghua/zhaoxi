@@ -265,6 +265,7 @@ public class UserInfoController extends BaseController {
 		ConditionPair flowerPair = getFlowerPair(login);
 		json.put("lineCount", mgr.calcCount(linePair));
 		json.put("flowerCount", mgr.calcCount(flowerPair));
+		res.getWriter().print(json.toString());
 	}
 
 	private ConditionPair getFlowerPair(Login login) {
