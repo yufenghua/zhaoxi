@@ -25,6 +25,9 @@
 			<form id="register" action="join.do" method="post"
 				enctype="multipart/form-data">
 				<input type="hidden" name="action" value="reg" />
+				<div id="regmsg" style="display:none" class="form-group msg">
+					<p class="error" id="regerrormsg" ></p>
+				</div>
 				<div class="form-group">
 					<input type="text" name="username" class="form-control"
 						id="username_reg" placeholder="用户名" />
@@ -42,7 +45,7 @@
 						class="tip">请上传北京大学学生证/毕业证</span>
 				</div>
 				<div class="form-group">
-					<input id="submit_reg" type="submit"
+					<input id="submit_reg" type="button"
 						class="btn btn-embossed btn-primary btn-wide" value="注&nbsp;&nbsp;&nbsp;&nbsp;册" />
 				</div>
 			</form>
@@ -109,6 +112,27 @@
 				if (isEmpty(email)) {
 					showMessage('邮箱不能为空！');
 					return false;
+				}
+				var exist=false;
+				$.ajax({
+					 	type: "POST",
+					    url: "join.do",
+					    data: { 
+					    	action: 'checkexist',
+					    	id:username
+					    	},
+					    async :false,
+					    success: function(data) {
+					    	exist=data.exist;
+					    },
+					    error: function (xhr, textStatus, errorThrown) {
+					    	showMessage('出现错误'+textStatus+errorThrown);
+					    }
+				});
+				if(exist){
+					$('#regmsg').css('display','block');
+			    	$("#regerrormsg").text('用户名或密码错误，请重试');
+			    	return false;
 				}
 				$('#register').submit();
 				e.stopPropagation();

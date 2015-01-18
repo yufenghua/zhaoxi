@@ -279,6 +279,7 @@ public class UserInfoController extends BaseController {
 		typeCondition.eq("type", IRelation.TYPE_FLOWER);
 		typeCondition.eq("recognition", 1);
 		pair.setSecond(typeCondition);
+		pair.setRelation(ConditionType.PAIR_AND);
 		return pair;
 	}
 
@@ -303,7 +304,7 @@ public class UserInfoController extends BaseController {
 		typeCondition.eq("type", IRelation.TYPE_LINE);
 		typeCondition.eq("recognition", IRelation.RECOG_LINE);
 		type.setFirst(typeCondition);
-
+		pair.setRelation(ConditionType.PAIR_AND);
 		pair.setSecond(type);
 		return pair;
 	}
