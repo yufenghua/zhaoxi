@@ -65,6 +65,7 @@ public class UserMessageController extends BaseController {
 		String loginId = ControlUtil.getLogin(req).getUser().getId();
 		List<IMessage> msgs = Server.getInstance().getMsgMgr()
 				.listUnRead(sender, loginId);
+		Server.getInstance().getMsgMgr().read(sender, loginId);
 		if (CollectionTool.checkNull(msgs)) {
 			return;
 		}

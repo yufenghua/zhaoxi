@@ -2,6 +2,7 @@ package com.ylp.date.mgr.msg.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
@@ -39,14 +40,15 @@ public class MessageMgr extends BaseObjMgr implements IMsgMgr {
 			session.beginTransaction();
 			SimglePair pair = new SimglePair();
 			Condition condition = new Condition();
-			condition.eq("sender", sender);
-			condition.eq("receiver", receiver);
+			if (StringUtils.isNotEmpty(sender)) {
+				condition.eq("sender", sender);
+			}
+			if (StringUtils.isNotEmpty(receiver)) {
+				condition.eq("receiver", receiver);
+			}
 			condition.eq("readed", false);
 			pair.setFirst(condition);
 			List result = list(null, pair, session);
-			String hql = "update Message set readed=? where readed=? and sender=? and receiver=?";
-			executeUpdate(session, hql, new Object[] { true, false, sender,
-					receiver });
 			session.getTransaction().commit();
 			return result;
 		} catch (Exception e) {
@@ -55,6 +57,12 @@ public class MessageMgr extends BaseObjMgr implements IMsgMgr {
 		} finally {
 			session.close();
 		}
+	}
+
+	protected void read(String sender, String receiver, Session session) {
+		String hql = "update Message set readed=? where readed=? and sender=? and receiver=?";
+		executeUpdate(session, hql, new Object[] { true, false, sender,
+				receiver });
 	}
 
 	@Override
@@ -70,6 +78,21 @@ public class MessageMgr extends BaseObjMgr implements IMsgMgr {
 	@Override
 	protected Class getBean() {
 		return Message.class;
+	}
+
+	@Override
+	public void read(String sender, String receiver) {
+		Session session = Server.getInstance().openSession();
+		try {
+			session.beginTransaction();
+			read(sender, receiver, session);
+			session.getTransaction().commit();
+		} catch (Exception e) {
+			session.getTransaction().rollback();
+			throw new RuntimeException(e);
+		} finally {
+			session.close();
+		}
 	}
 
 }
