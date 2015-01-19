@@ -86,6 +86,10 @@ function handleWithItem(container,item){
 	 	chatButton.css('display','none');
 	 }
 	 chatDiv.append(chatButton);
+	 //未读消息
+	 if (item.msgcount!=0) {
+	 	chatDiv.append('<span class="unread">' + item.msgcount + '</span>')
+	 };
 	 li.append(chatDiv);
 
 	 container.append(li);
