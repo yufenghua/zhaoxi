@@ -3,10 +3,13 @@ package com.ylp.date.security.impl;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 
+import com.ylp.date.security.NothingChecker;
+import com.ylp.date.security.Pmchecker;
 import com.ylp.date.server.SpringNames;
 
 @Component(SpringNames.RolePmChecker)
@@ -24,8 +27,11 @@ public class RolePmcheckMgr {
 		checkerMap = null;
 	}
 
-	public RolePmChecker getChecker(String role) {
-		checkerMap.putIfAbsent(role, new RolePmChecker(role));
-		return checkerMap.get(role);
+	public Pmchecker getChecker(String role) {
+		if(StringUtils.isNotEmpty(role)){
+			checkerMap.putIfAbsent(role, new RolePmChecker(role));
+			return checkerMap.get(role);
+		}
+		return new NothingChecker();
 	}
 }
