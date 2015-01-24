@@ -80,7 +80,6 @@ MatchInfoMgr.prototype.getRefreshBtn=function(){
  * 刷新
  */
 MatchInfoMgr.prototype.refresh = function() {
-	this.clear();
 	var self = this;
 	$.ajax({
 	    type: "POST",
@@ -88,6 +87,7 @@ MatchInfoMgr.prototype.refresh = function() {
 	    contentType: "application/json; charset=utf-8",
 	    dataType: "json",
 	    success: function(data) {
+	    	self.clear();
 	    	self.userInfo = data.user;
 			self.infoId = data.id;
 			self._canMatch=data.canMatch;
@@ -185,7 +185,7 @@ MatchInfoMgr.prototype.match = function(id1, id2) {
 	    data: { user: id1, other: id2},
 	    success: function(data) {
 	    	if(data.suc){
-	    		showMessage('连线成功！');
+	    		showMessage('连线成功！连得越多越准，你的幸运值就越高！');
 		    	self.refresh();
 	    	}else{
 	    		showMessage('ops,连线失败了，换个人再试一次吧。'+data.msg);
@@ -242,12 +242,12 @@ MatchUser.prototype.init = function() {
 	$(this.liDom).draggable({
 		stop:function(event,ui){
 			if(!self.mgr.canMatch()){
-				return false;
+				return;
 			}
 			var position=ui.offset;
 			var opsiteSex=self.isSame?self.mgr.getOppositeSex():self.mgr.getSameSex();
 			if (!opsiteSex) {
-				return false;
+				return;
 			};
 			$.each(opsiteSex,function(userObjId,value){
 				var tagetPosition=value.getPosition();
@@ -324,7 +324,7 @@ MatchUser.prototype.init = function() {
 				    	showMessage('赞已发出，等待惊喜吧！');
 				    },
 				    error: function (xhr, textStatus, errorThrown) {
-				    	showMessage('出现错误' + textStatus);
+				    	showMessage('出现错误,可能已经点过赞了');
 				    }
 				});
 		})

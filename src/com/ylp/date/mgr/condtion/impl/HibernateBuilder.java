@@ -113,7 +113,12 @@ public class HibernateBuilder implements ConditionBuilder {
 		}
 		Conjunction conJoin = Restrictions.conjunction();
 		for (Map.Entry<String, Object> item : map.entrySet()) {
-			conJoin.add(Restrictions.eq(item.getKey(), item.getValue()));
+			Object value = item.getValue();
+			if(value==null){
+				conJoin.add(Restrictions.isNull(item.getKey()));
+			}else{
+				conJoin.add(Restrictions.eq(item.getKey(), value));
+			}
 		}
 		return conJoin;
 	}

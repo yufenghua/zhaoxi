@@ -1,5 +1,6 @@
 package com.ylp.date.controller.user;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.Iterator;
@@ -13,6 +14,8 @@ import org.apache.commons.fileupload.FileItemFactory;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
@@ -81,13 +84,14 @@ public class JoinController extends BaseController {
 						login.login(username, password);
 					}
 					String contextPath = req.getContextPath();
-					if(!StringUtils.isNotEmpty(contextPath)){
-						contextPath="/";
+					if (!StringUtils.isNotEmpty(contextPath)) {
+						contextPath = "/";
 					}
-					if(!StringUtils.endsWith(contextPath, "/")){
-						contextPath=contextPath+"/";
+					if (!StringUtils.endsWith(contextPath, "/")) {
+						contextPath = contextPath + "/";
 					}
-					response.sendRedirect(contextPath+"user/userinfo.do?userid="+username);
+					response.sendRedirect(contextPath
+							+ "user/userinfo.do?userid=" + username);
 					return null;
 
 				} finally {
@@ -112,6 +116,19 @@ public class JoinController extends BaseController {
 		if (StringUtils.equals(action, "reg")) {
 			return register(req, res);
 		}
+		if (StringUtils.equals(action, "checkexist")) {
+			checkIdExist(req, res);
+			return null;
+		}
 		return null;
+	}
+
+	private void checkIdExist(HttpServletRequest req, HttpServletResponse res)
+			throws Exception {
+		res.setContentType("application/json; charset=utf-8");
+		String id = req.getParameter("id");
+		JSONObject obj = new JSONObject();
+		obj.put("exist", Server.getInstance().userMgr().getObj(id) != null);
+		res.getWriter().print(obj.toString());
 	}
 }

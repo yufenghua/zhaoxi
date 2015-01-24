@@ -58,12 +58,14 @@ body {
 }
 
 .msg p.error {
-	background: #FFF2F2;
-	border-color: #FF8080;
+	background: #FFF;
 	line-height: 18px;
 	padding: 2px 10px 2px 23px
 }
 .btn-wide{
 	width:259px;
 	border:1px solid #1abc9c;
+}
+#regmsg,#loginmsg{
+	margin-top:-39px;
 }

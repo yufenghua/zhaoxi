@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.ylp.date.controller.BaseController;
 import com.ylp.date.controller.ControlUtil;
 import com.ylp.date.login.Login;
+import com.ylp.date.mgr.msg.IMessage;
 import com.ylp.date.mgr.relation.IRelation;
 import com.ylp.date.mgr.relation.IRelationBuilder;
 import com.ylp.date.mgr.relation.impl.RelationMgr;
@@ -100,6 +101,11 @@ public class UserFlowerController extends BaseController {
 		obj.put("tags", arr);
 
 		obj.put("otherid", other);
+		List<IMessage> listUnRead = Server.getInstance().getMsgMgr()
+				.listUnRead(other, userId);
+		//未读消息数
+		obj.put("msgcount", CollectionTool.checkNull(listUnRead) ? 0
+				: listUnRead.size());
 		obj.put("success", iRelation.getRecognition() == IRelation.RECOG_FLOWER);
 		List<IRelationBuilder> list = Server.getInstance()
 				.getRelationBuilderMgr().getAllBuilders(iRelation.getId());

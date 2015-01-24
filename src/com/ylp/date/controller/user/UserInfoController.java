@@ -29,6 +29,7 @@ import com.ylp.date.mgr.condtion.ConditionType;
 import com.ylp.date.mgr.condtion.impl.Condition;
 import com.ylp.date.mgr.condtion.impl.MultiPair;
 import com.ylp.date.mgr.condtion.impl.SimglePair;
+import com.ylp.date.mgr.msg.IMessage;
 import com.ylp.date.mgr.relation.IRelation;
 import com.ylp.date.mgr.relation.impl.RelationMgr;
 import com.ylp.date.mgr.tag.ITag;
@@ -39,6 +40,7 @@ import com.ylp.date.mgr.user.IUserMgr;
 import com.ylp.date.mgr.user.impl.User;
 import com.ylp.date.security.UserOper;
 import com.ylp.date.server.Server;
+import com.ylp.date.util.CollectionTool;
 import com.ylp.date.util.HttpServletReqEx;
 import com.ylp.date.util.StringTools;
 
@@ -265,6 +267,10 @@ public class UserInfoController extends BaseController {
 		ConditionPair flowerPair = getFlowerPair(login);
 		json.put("lineCount", mgr.calcCount(linePair));
 		json.put("flowerCount", mgr.calcCount(flowerPair));
+		List<IMessage> listUnRead = Server.getInstance().getMsgMgr().listUnRead(null, login.getUser().getId());
+		//未读消息数
+		json.put("msgcount", CollectionTool.checkNull(listUnRead)?0:listUnRead.size());
+		res.getWriter().print(json.toString());
 	}
 
 	private ConditionPair getFlowerPair(Login login) {
@@ -279,6 +285,7 @@ public class UserInfoController extends BaseController {
 		typeCondition.eq("type", IRelation.TYPE_FLOWER);
 		typeCondition.eq("recognition", 1);
 		pair.setSecond(typeCondition);
+		pair.setRelation(ConditionType.PAIR_AND);
 		return pair;
 	}
 
@@ -303,7 +310,7 @@ public class UserInfoController extends BaseController {
 		typeCondition.eq("type", IRelation.TYPE_LINE);
 		typeCondition.eq("recognition", IRelation.RECOG_LINE);
 		type.setFirst(typeCondition);
-
+		pair.setRelation(ConditionType.PAIR_AND);
 		pair.setSecond(type);
 		return pair;
 	}

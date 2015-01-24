@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.ylp.date.controller.BaseController;
 import com.ylp.date.controller.ControlUtil;
 import com.ylp.date.login.Login;
+import com.ylp.date.mgr.msg.IMessage;
 import com.ylp.date.mgr.relation.IRelation;
 import com.ylp.date.mgr.relation.impl.RelationMgr;
 import com.ylp.date.mgr.tag.ITag;
@@ -37,7 +38,7 @@ import com.ylp.date.util.CollectionTool;
 @Controller
 @RequestMapping("/user/usermatch")
 public class UserMatchController extends BaseController {
-	private static SimpleDateFormat format=new SimpleDateFormat("yyyy年MM月dd日");
+	private static SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
 
 	@Override
 	protected String hanldleReq(HttpServletRequest req, HttpServletResponse res)
@@ -59,8 +60,7 @@ public class UserMatchController extends BaseController {
 		Login login = ControlUtil.getLogin(req);
 		String userId = login.getUser().getId();
 		RelationMgr relationMgr = Server.getInstance().getRelationMgr();
-		List<IRelation> list = relationMgr
-				.listLine(userId);
+		List<IRelation> list = relationMgr.listLine(userId);
 		if (CollectionTool.checkNull(list)) {
 			return;
 		}
@@ -74,16 +74,17 @@ public class UserMatchController extends BaseController {
 		res.getWriter().print(jso.toString());
 	}
 
-	private JSONObject handleWithItem(String userId, IRelation iRelation, HttpServletRequest req) throws JSONException {
+	private JSONObject handleWithItem(String userId, IRelation iRelation,
+			HttpServletRequest req) throws JSONException {
 		JSONObject obj = new JSONObject();
 		Date okTime = iRelation.getOkTime();
-		if(okTime!=null){
+		if (okTime != null) {
 			obj.put("time", format.format(okTime));
 		}
 		String other = iRelation.getOther(userId);
 		obj.put("img", ControlUtil.getImgUrl(req, other));
-		
-		//用户信息
+
+		// 用户信息
 		IUser iUser = Server.getInstance().userMgr().getObj(other);
 		obj.put("userCaption", iUser.getCaption());
 		obj.put("age", iUser.getAgeRange());
@@ -101,6 +102,11 @@ public class UserMatchController extends BaseController {
 		}
 		obj.put("tags", arr);
 		obj.put("otherid", other);
+		List<IMessage> listUnRead = Server.getInstance().getMsgMgr()
+				.listUnRead(other, userId);
+		//未读消息数
+		obj.put("msgcount", CollectionTool.checkNull(listUnRead) ? 0
+				: listUnRead.size());
 		return obj;
 	}
 }
