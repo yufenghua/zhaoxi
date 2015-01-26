@@ -121,7 +121,7 @@
                 data: {
                     action: 'add',
                     receiver: toPeerId,
-                    content: msg
+                    content: encodeURIComponent(msg)
                 },
                 success: afterSend
             });
