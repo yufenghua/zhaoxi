@@ -91,7 +91,7 @@ public class JoinController extends BaseController {
 						contextPath = contextPath + "/";
 					}
 					response.sendRedirect(contextPath
-							+ "user/userinfo.do?userid=" + username);
+							+ "user/userinfo.do?fromLogin=true");
 					return null;
 
 				} finally {
