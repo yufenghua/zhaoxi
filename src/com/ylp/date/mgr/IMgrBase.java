@@ -85,13 +85,6 @@ public interface IMgrBase {
 	void regListener(ObjListener lis);
 
 	/**
-	 * 
-	 * @param pair
-	 * @return
-	 */
-	int count(ConditionPair pair);
-
-	/**
 	 * hql query
 	 * 
 	 * @param hql

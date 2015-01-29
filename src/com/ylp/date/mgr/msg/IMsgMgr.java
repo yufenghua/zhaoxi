@@ -7,6 +7,7 @@ import com.ylp.date.mgr.IMgrBase;
 public interface IMsgMgr extends IMgrBase {
 	/**
 	 * sender 和 receiver表示不设限制
+	 * 
 	 * @param sender
 	 * @param receiver
 	 * @return
@@ -15,8 +16,13 @@ public interface IMsgMgr extends IMgrBase {
 
 	/**
 	 * sender 不能为空
+	 * 
 	 * @param sender
 	 * @param receiver
 	 */
 	void read(String sender, String receiver);
+
+	long getUnreadCountForLine(String id);
+
+	long getUnreadCountForFlower(String id);
 }

@@ -46,7 +46,7 @@
  boolean fromLogin=bool==null?false:bool.booleanValue();
   %>
     <div class="container">
-      <%if(fromLogin){ %>  <h4>注册成功，给自己贴几个标签吧</h4><%} else{%>
+      <%if(fromLogin){ %>  <%} else{%>
       <header> <nav class="navbar navbar-default" role="navigation">
 	<div class="container">
 		<div class="navbar-header">

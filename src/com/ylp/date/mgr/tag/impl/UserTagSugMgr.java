@@ -5,7 +5,6 @@ import java.util.Date;
 import org.springframework.stereotype.Component;
 
 import com.ylp.date.mgr.BaseObjMgr;
-import com.ylp.date.mgr.IBaseObj;
 import com.ylp.date.mgr.tag.ITagSug;
 import com.ylp.date.mgr.tag.ITagSugMgr;
 import com.ylp.date.server.SpringNames;
@@ -13,7 +12,7 @@ import com.ylp.date.server.SpringNames;
 @Component(SpringNames.TagSugMgr)
 public class UserTagSugMgr extends BaseObjMgr implements ITagSugMgr {
 	public void init() {
-		if (count(null) == 0) {
+		if (calcCount(null) == 0) {
 			UserTagSug likeWho = new UserTagSug();
 			likeWho.setCaption("偶像");
 			likeWho.setCreateDate(new Date());

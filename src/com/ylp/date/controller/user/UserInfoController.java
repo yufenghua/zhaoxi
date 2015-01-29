@@ -2,6 +2,7 @@ package com.ylp.date.controller.user;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -30,6 +31,7 @@ import com.ylp.date.mgr.condtion.impl.Condition;
 import com.ylp.date.mgr.condtion.impl.MultiPair;
 import com.ylp.date.mgr.condtion.impl.SimglePair;
 import com.ylp.date.mgr.msg.IMessage;
+import com.ylp.date.mgr.msg.IMsgMgr;
 import com.ylp.date.mgr.relation.IRelation;
 import com.ylp.date.mgr.relation.impl.RelationMgr;
 import com.ylp.date.mgr.tag.ITag;
@@ -267,10 +269,23 @@ public class UserInfoController extends BaseController {
 		ConditionPair flowerPair = getFlowerPair(login);
 		json.put("lineCount", mgr.calcCount(linePair));
 		json.put("flowerCount", mgr.calcCount(flowerPair));
-		List<IMessage> listUnRead = Server.getInstance().getMsgMgr().listUnRead(null, login.getUser().getId());
-		//未读消息数
-		json.put("msgcount", CollectionTool.checkNull(listUnRead)?0:listUnRead.size());
+
+		IMsgMgr msgMgr = Server.getInstance().getMsgMgr();
+
+		String id = login.getUser().getId();
+		List<IMessage> listUnRead = msgMgr.listUnRead(null, id);
+		// 未读消息数
+		json.put("msgcount4f", getUnreadLineMsg(id));
+		json.put("msgcount4l", getUnreadFlowerMsg(id));
 		res.getWriter().print(json.toString());
+	}
+
+	private long getUnreadFlowerMsg(String id) {
+		return Server.getInstance().getMsgMgr().getUnreadCountForLine(id);
+	}
+
+	private long getUnreadLineMsg(String id) {
+		return Server.getInstance().getMsgMgr().getUnreadCountForFlower(id);
 	}
 
 	private ConditionPair getFlowerPair(Login login) {

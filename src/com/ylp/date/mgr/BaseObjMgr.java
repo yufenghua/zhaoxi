@@ -131,7 +131,19 @@ public abstract class BaseObjMgr implements IMgrBase {
 
 	@Override
 	public int calcCount(ConditionPair pair) {
-		return list(null, pair).size();
+		Session session = Server.getInstance().openSession();
+		try {
+			Criteria criteria = session.createCriteria(getBean());
+			setCondition(criteria, pair);
+			criteria.setProjection(Projections.rowCount());
+			return Integer.parseInt(criteria.uniqueResult().toString());
+		} catch (Exception e) {
+			Server.getInstance().handleException(e);
+			logger.error("查询数据时发生异常", e);
+		} finally {
+			session.close();
+		}
+		return 0;
 	}
 
 	/**
@@ -204,22 +216,6 @@ public abstract class BaseObjMgr implements IMgrBase {
 		}
 	}
 
-	@Override
-	public int count(ConditionPair pair) {
-		Session session = Server.getInstance().openSession();
-		try {
-			Criteria criteria = session.createCriteria(getBean());
-			setCondition(criteria, pair);
-			criteria.setProjection(Projections.rowCount());
-			return Integer.parseInt(criteria.uniqueResult().toString());
-		} catch (Exception e) {
-			Server.getInstance().handleException(e);
-			logger.error("查询数据时发生异常", e);
-		} finally {
-			session.close();
-		}
-		return 0;
-	}
 
 	@SuppressWarnings("unchecked")
 	@Override
