@@ -29,7 +29,7 @@ public class Login implements Serializable {
 	private IUser user;
 
 	public IUser getUser() {
-		return user;
+		return Server.getInstance().userMgr().getObj(user.getId());
 	}
 
 	/**
