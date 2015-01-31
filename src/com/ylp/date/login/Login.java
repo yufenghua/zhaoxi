@@ -29,6 +29,9 @@ public class Login implements Serializable {
 	private IUser user;
 
 	public IUser getUser() {
+		if(user==null){
+			return null;
+		}
 		return Server.getInstance().userMgr().getObj(user.getId());
 	}
 
