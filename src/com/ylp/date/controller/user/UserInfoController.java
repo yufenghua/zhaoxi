@@ -112,6 +112,9 @@ public class UserInfoController extends BaseController {
 			login.getPmckecker().check(UserOper.OP_AUDIT_USER, true);
 		}
 		User user = (User) Server.getInstance().userMgr().getObj(userId);
+		if(user==null){
+			throw new RuntimeException("找不到用户"+userId);
+		}
 		byte[] img = user.getCardImgBytes();
 		if (img == null || img.length == 0) {
 			return;

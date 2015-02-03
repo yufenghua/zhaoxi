@@ -14,11 +14,19 @@ public class RolePmChecker implements Pmchecker {
 	}
 
 	public boolean check(String oper, Object obj) {
-		return StringUtils.equals(role, ROLE_AUDITOR);
+		boolean equals = StringUtils.equals(role, ROLE_AUDITOR);
+		if (!equals) {
+			throw new RuntimeException("没有权限!");
+		}
+		return equals;
 	}
 
 	public boolean check(String oper, Object obj, boolean throwex) {
-		return StringUtils.equals(role, ROLE_AUDITOR);
+		boolean equals = StringUtils.equals(role, ROLE_AUDITOR);
+		if (!equals) {
+			throw new RuntimeException("没有权限!");
+		}
+		return equals;
 	}
 
 	public boolean check(String oper) {
@@ -26,7 +34,11 @@ public class RolePmChecker implements Pmchecker {
 	}
 
 	public boolean check(String oper, boolean throwex) {
-		return StringUtils.equals(role, ROLE_AUDITOR);
+		boolean equals = StringUtils.equals(role, ROLE_AUDITOR);
+		if (!equals) {
+			throw new RuntimeException("没有权限!");
+		}
+		return equals;
 	}
 
 }

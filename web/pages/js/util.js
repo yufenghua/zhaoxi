@@ -93,7 +93,7 @@ function showMessage(msg,title){
 		this._msgdialog.content = dom;
 	}
 	this._msgdialog.content.innerHTML = msg;
-	this._msgdialog.dialog("option", "title", (title || "提示"));
+	// this._msgdialog.dialog("option", "title", (title || "提示"));
 	this._msgdialog.dialog("option", "position", { my: "center", at: "center", of: this });
 	this._msgdialog.dialog("open");
 }
@@ -117,7 +117,7 @@ function showConfirm(msg,title,okfunc,cancelfunc){
 		this._cfmdialog.content = dom;
 	}
 	this._cfmdialog.content.innerHTML = msg;
-	this._cfmdialog.dialog("option", "title", (title || "提示"));
+	// this._cfmdialog.dialog("option", "title", (title || "提示"));
 	this._cfmdialog.dialog("option", "position", { my: "center", at: "center", of: this });
 	this._cfmdialog.dialog( "option", "buttons", 
 	[{

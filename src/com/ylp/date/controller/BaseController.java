@@ -18,9 +18,11 @@ public abstract class BaseController {
 			if (StringUtils.isNotEmpty(req.getCharacterEncoding())) {
 				req.setCharacterEncoding("UTF-8");
 			}
+			logger.info("接收到请求");
 			res.setCharacterEncoding("UTF-8");
 			return hanldleReq(req, res);
 		} catch (Exception e) {
+			e.printStackTrace();
 			logger.error("请求出现错误", e);
 			req.setAttribute(DATE_SERVER_EXCEPTION, e);
 			if (e instanceof RuntimeException) {

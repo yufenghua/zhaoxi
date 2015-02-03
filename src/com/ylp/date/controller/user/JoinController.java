@@ -77,6 +77,7 @@ public class JoinController extends BaseController {
 					user.setCreateDate(new Date());
 					user.setPwd(StringTools.encryptPassword(password));
 					byte[] img = new byte[stm.available()];
+					stm.read(img);
 					user.setCardImgBytes(img);
 					Server.getInstance().userMgr().add(user);
 					Login login = ControlUtil.getLogin(request);
