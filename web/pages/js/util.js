@@ -4,10 +4,10 @@ function initLogOut(){
 		global_LogOut_Btn.click(function(){
 			$.ajax({
 			    type: "POST",
-			    url: "/zhaoxi/user/login.do?action=logout",
+			    url: "/user/login.do?action=logout",
 			    async: false,
 			    success: function(data) {
-			    	window.location.href='/zhaoxi/index.jsp';
+			    	window.location.href='/index.jsp';
 			    },
 			    error: function (xhr, textStatus, errorThrown) {
 			    	showMessage('出现错误' + textStatus);

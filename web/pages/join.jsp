@@ -167,7 +167,7 @@
 				    	},
 				    success: function(data) {
 				    	$('#loginmsg').css('display','none');
-				    	window.location.href='/zhaoxi/match.do';
+				    	window.location.href='/match.do';
 				    },
 				    error: function (xhr, textStatus, errorThrown) {
 				    	$('#loginmsg').css('display','block');
@@ -184,15 +184,24 @@
 	<!-- 页脚 -->
    <div id="footer">
 		<div>
-			<a href="/zhaoxi/static/aboutus/about.html" target="_blank">关于我们</a>
+			<a href="/static/aboutus/about.html" target="_blank">关于我们</a>
 			<span>|</span>
-			<a href="/zhaoxi/static/aboutus/contact.html" target="_blank">联系我们</a>
+			<a href="/static/aboutus/contact.html" target="_blank">联系我们</a>
 			<span>|</span>
-			<a href="/zhaoxi/static/aboutus/faq.html" target="_blank">常见问题</a>
+			<a href="/static/aboutus/faq.html" target="_blank">常见问题</a>
 			<span>|</span>
-			<a href="/zhaoxi/static/aboutus/join.html" target="_blank">加入我们</a>
+			<a href="/static/aboutus/join.html" target="_blank">加入我们</a>
 	    </div>
-		<p class="copyright">Copyright © 1998 - 2015 Zhaoxi1001. All Rights Reserved.</p>
+		<p class="copyright">Copyright © 1998 - 2015 imzhaoxi. 京ICP备15006259号</p>
 	</div>
 </body>
 </html>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?b725df11d54455c0fe21ab9c5c7ef7e2";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>

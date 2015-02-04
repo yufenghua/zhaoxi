@@ -2,7 +2,6 @@
 
 $(function () {
 	function render(data) {
-		debugger;
 		var flower = parseInt(data.flowerCount);
 		var flowerMsgCount=parseInt(data.msgcount4f,10);
 		var lineMsgCount=parseInt(data.msgcount4l,10);
@@ -19,7 +18,7 @@ $(function () {
 		}
 	}
 	$.ajax({
-		url: '/zhaoxi/user/userinfo.do',
+		url: '/user/userinfo.do',
 		data: {
 			action: 'newinfo'
 		},

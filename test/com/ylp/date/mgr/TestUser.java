@@ -11,6 +11,8 @@ import org.junit.Test;
 
 import com.ylp.date.TestBase;
 import com.ylp.date.app.TestContextInitor;
+import com.ylp.date.mgr.tag.impl.UserTag;
+import com.ylp.date.mgr.tag.impl.UserTagMgr;
 import com.ylp.date.mgr.user.IUser;
 import com.ylp.date.mgr.user.IUserMgr;
 import com.ylp.date.mgr.user.impl.User;
@@ -26,10 +28,28 @@ public class TestUser extends TestBase {
 		IUserMgr userMgr = Server.getInstance().userMgr();
 		for (int i = 0; i < 100; i++) {
 			User user = getUser();
-			user.setId("a"+i);
-			user.setCaption("潘巧林"+i);
+			String id = "a" + i;
+			user.setId(id);
+			user.setCaption("潘巧林" + i);
 			user.setGender(i % 2 == 0 ? IUser.MALE : IUser.FEMALE);
+			user.setAgeRange(User.AGE_23_26);
 			userMgr.add(user);
+			List<IBaseObj> list = Server.getInstance().getUserTagSugMgr()
+					.list();
+			UserTagMgr userTagMgr = Server.getInstance().getUserTagMgr();
+			for (IBaseObj iBaseObj : list) {
+				UserTag tag = new UserTag();
+				tag.setSugId(iBaseObj.getId());
+				tag.setUserId(id);
+				if (StringUtils.equals(iBaseObj.getCaption(), "偶像")) {
+					tag.setTagContent("周杰伦");
+					userTagMgr.add(tag);
+				}
+				if (StringUtils.equals("爱好", iBaseObj.getCaption())) {
+					tag.setTagContent("羽毛球");
+					userTagMgr.add(tag);
+				}
+			}
 		}
 		// assertNotNull(userMgr.getObj(user.getId()));
 	}

@@ -18,14 +18,14 @@ public class TestMessage extends TestBase {
 	public void testMessage() throws Exception {
 		TestContextInitor.init();
 		Message msg = new Message();
-		msg.setSender("a1");
-		msg.setReceiver("a11");
+		msg.setSender("a27");
+		msg.setReceiver("a14");
 		msg.setCaption("hello 你好");
 		Server.getInstance().getMsgMgr().add(msg);
 		Thread.sleep(1000);
 		msg = new Message();
-		msg.setSender("a1");
-		msg.setReceiver("a11");
+		msg.setSender("a27");
+		msg.setReceiver("a14");
 		msg.setCaption("hello 你好,这是后面插入的");
 		Server.getInstance().getMsgMgr().add(msg);
 	}

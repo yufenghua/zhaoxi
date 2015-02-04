@@ -83,7 +83,7 @@ MatchInfoMgr.prototype.refresh = function() {
 	var self = this;
 	$.ajax({
 	    type: "POST",
-	    url: "/zhaoxi/match.do?action=getMatchInfo",
+	    url: "/match.do?action=getMatchInfo",
 	    contentType: "application/json; charset=utf-8",
 	    dataType: "json",
 	    success: function(data) {
@@ -181,7 +181,7 @@ MatchInfoMgr.prototype.match = function(id1, id2) {
 	var self = this;
 	$.ajax({
 	    type: "POST",
-	    url: "/zhaoxi/match.do?action=MatchUser",
+	    url: "/match.do?action=MatchUser",
 	    data: { user: id1, other: id2},
 	    success: function(data) {
 	    	if(data.suc){
@@ -318,13 +318,13 @@ MatchUser.prototype.init = function() {
 		this.flower.bind('click',function(){
 			$.ajax({
 				    type: "POST",
-				    url: "/zhaoxi/match.do?action=flower",
+				    url: "/match.do?action=flower",
 				    data: { target: self.userObj.id,},
 				    success: function(data) {
-				    	showMessage('赞已发出，等待惊喜吧！');
+				    	showMessage('赞已发出，每个赞都会变成一朵花，等待惊喜吧。');
 				    },
 				    error: function (xhr, textStatus, errorThrown) {
-				    	showMessage('出现错误,可能已经点过赞了');
+				    	showMessage('出现错误,已经点过赞了');
 				    }
 				});
 		})

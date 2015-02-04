@@ -12,7 +12,7 @@
         var user = location.search.match(/(\?|\&)to=([^\?\&]+)/i);
         var relId = user && user.length ? user[user.length - 1] : null;
         $.ajax({
-            url: '/zhaoxi/user/userflower.do',//TODO 同意聊天 
+            url: '/user/userflower.do',//TODO 同意聊天 
             data:{
                 action:'recognize',
                 user:relId
@@ -45,7 +45,7 @@
 
     //获取离线消息
     $.ajax({
-        url: '/zhaoxi/user/msg.do',
+        url: '/user/msg.do',
         data: {
             action: 'listnew',
             sender: toPeerId
@@ -117,7 +117,7 @@
 
         if (!peerOnline) {//不在线
             $.ajax({
-                url: '/zhaoxi/user/msg.do',
+                url: '/user/msg.do',
                 data: {
                     action: 'add',
                     receiver: toPeerId,

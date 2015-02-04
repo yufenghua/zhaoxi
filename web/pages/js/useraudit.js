@@ -13,7 +13,7 @@ UserAuditMgr.prototype._audit=function(id,isback){
 	var self=this;
 	$.ajax({
 			type: "POST",
-			url: "/zhaoxi/user/audit.do",
+			url: "/user/audit.do",
 			data: { action: 'audit',
 					userid:id,
 					isback:isback},
@@ -142,7 +142,7 @@ UserAuditMgr.prototype.list=function(){
 	var self=this;
 	$.ajax({
 		type: "POST",
-		url: "/zhaoxi/user/audit.do",
+		url: "/user/audit.do",
 		data: { action: 'listunaudit'},
 		success: function(data) {
 			if (!data) {

@@ -34,7 +34,7 @@ public class MessageMgr extends BaseObjMgr implements IMsgMgr {
 			+ "where "
 			+ "(sender in (select distinct(one) from UserRelation where otherOne=? and type=? and recognition=?) "
 			+ "or "
-			+ "sender in (select distinct(otherOne) from UserRelation where one=? and type=? and recognition=?)) and readed=?";
+			+ "sender in (select distinct(otherOne) from UserRelation where one=? and type=? and recognition=?)) and readed=? and receiver =?";
 	private static final Logger logger = LoggerFactory
 			.getLogger(MessageMgr.class);
 
@@ -132,6 +132,7 @@ public class MessageMgr extends BaseObjMgr implements IMsgMgr {
 			query.setInteger(4, typeLine);
 			query.setInteger(5, recog);
 			query.setBoolean(6, false);
+			query.setString(7, id);
 			return (Long) query.uniqueResult();
 		} catch (Exception e) {
 			Server.getInstance().handleException(e);

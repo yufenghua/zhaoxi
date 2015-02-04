@@ -4,12 +4,12 @@ function start() {
     $('#matchlistContainer ul li a.send-flower').eq(1).attr('data-intro', '喜欢，就赞TA一下！谁知道有什么惊喜呢~').attr('data-step', '2');
     introJs().start();
     $.ajax({
-        url: '/zhaoxi/user/helpinfo.do?action=read&version=1.0'
+        url: '/user/helpinfo.do?action=read&version=1.0'
     });
 }
 setTimeout(function () {
     $.ajax({
-        url: '/zhaoxi/user/helpinfo.do?action=check',
+        url: '/user/helpinfo.do?action=check',
         dataType: 'json',
         success: function (data) {
             if (!data.read) {
