@@ -1,6 +1,6 @@
 package com.ylp.date.mgr;
 /**
- * ��ҳ��ѯ����
+ * 分页条件
  * @author Qiaolin Pan
  *
  */

@@ -36,7 +36,7 @@
 		<!-- 二级缓存配置文件的位置 -->
 		<property name="hibernate.cache.provider_configuration_file_resource_path">ehcache.xml</property>
 		<!-- Display and format all executed SQL to stdout -->
-		<property name="hibernate.show_sql">false</property>
+		<property name="hibernate.show_sql">true</property>
 		<property name="hibernate.format_sql">true</property>
 		<!-- Drop and re-create the database schema on startup -->
 		<property name="hibernate.hbm2ddl.auto">update</property>
@@ -48,5 +48,6 @@
 		<mapping class="com.ylp.date.mgr.relation.impl.UserRelation" />
 		<mapping class="com.ylp.date.mgr.msg.impl.Message" />
 		<mapping class="com.ylp.date.mgr.helpinfo.impl.HelpInfo" />
+		<mapping class="com.ylp.date.mgr.plan.impl.UserPlan" />
 	</session-factory>
 </hibernate-configuration>

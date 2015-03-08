@@ -21,7 +21,7 @@ import com.ylp.date.server.Server;
 
 @Entity
 @Table(name = "DATE_USER")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class User implements IUser {
 	@Id
 	@Column(name = "ID_", nullable = false, unique = true)
@@ -55,6 +55,9 @@ public class User implements IUser {
 	private int lastShowNum;
 	@Column(name = "ROLE_")
 	private String role;
+	@Column(name = "SCHOOL_")
+	private String school;
+
 	@Lob
 	@Column(name = "CARDIMAGE_")
 	private byte[] cardImgBytes;
@@ -282,6 +285,14 @@ public class User implements IUser {
 	@Override
 	public Date getLastLine() {
 		return lastLine;
+	}
+
+	public String getSchool() {
+		return school;
+	}
+
+	public void setSchool(String school) {
+		this.school = school;
 	}
 
 }

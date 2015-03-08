@@ -59,6 +59,16 @@ public class JoinController extends BaseController {
 		if (!StringUtils.isNotEmpty(email)) {
 			throw new RuntimeException("邮箱不能为空");
 		}
+		String school = req.getParameter("school");
+		if (StringUtils.isEmpty(school)) {
+			throw new RuntimeException("学校=不能为空");
+		}
+		User user = new User();
+		user.setId(username);
+		user.setEmail(email);
+		user.setCreateDate(new Date());
+		user.setPwd(StringTools.encryptPassword(password));
+		user.setSchool(school);
 		boolean isMultipart = ServletFileUpload.isMultipartContent(request);// 检查输入请求是否为multipart表单数据。
 		if (isMultipart == true) {
 			List<FileItem> items = request.getItems();
@@ -71,35 +81,27 @@ public class JoinController extends BaseController {
 				}
 				InputStream stm = item.getInputStream();
 				try {
-					User user = new User();
-					user.setId(username);
-					user.setEmail(email);
-					user.setCreateDate(new Date());
-					user.setPwd(StringTools.encryptPassword(password));
 					byte[] img = new byte[stm.available()];
 					stm.read(img);
 					user.setCardImgBytes(img);
-					Server.getInstance().userMgr().add(user);
-					Login login = ControlUtil.getLogin(request);
-					if (!login.isLogined()) {
-						login.login(username, password);
-					}
-					String contextPath = req.getContextPath();
-					if (!StringUtils.isNotEmpty(contextPath)) {
-						contextPath = "/";
-					}
-					if (!StringUtils.endsWith(contextPath, "/")) {
-						contextPath = contextPath + "/";
-					}
-					response.sendRedirect(contextPath
-							+ "user/userinfo.do?fromLogin=true");
-					return null;
-
 				} finally {
 					stm.close();
 				}
 			}
 		}
+		Server.getInstance().userMgr().add(user);
+		Login login = ControlUtil.getLogin(request);
+		if (!login.isLogined()) {
+			login.login(username, password);
+		}
+		String contextPath = req.getContextPath();
+		if (!StringUtils.isNotEmpty(contextPath)) {
+			contextPath = "/";
+		}
+		if (!StringUtils.endsWith(contextPath, "/")) {
+			contextPath = contextPath + "/";
+		}
+		response.sendRedirect(contextPath + "user/userinfo.do?fromLogin=true");
 		return null;
 	}
 

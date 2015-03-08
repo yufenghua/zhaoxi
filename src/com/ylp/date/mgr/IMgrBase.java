@@ -92,6 +92,14 @@ public interface IMgrBase {
 	 * @return
 	 */
 	List<IBaseObj> executeQuery(String hql, Object[] params);
+	/**
+	 * 
+	 * @param hql
+	 * @param params
+	 * @param size
+	 * @return
+	 */
+	List<IBaseObj> executeQuery(String hql, Object[] params,int size);
 
 	int executeUpdate(Session session, String hql, Object[] params);
 

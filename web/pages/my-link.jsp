@@ -25,8 +25,9 @@
             <a class="navbar-brand" href="../match.do">朝夕</a>
           </div>
           <div class="collapse navbar-collapse" id="navbar-collapse-01">
-            <ul class="nav navbar-nav">           
-              <li><a href="../match.do">首页</a></li>
+            <ul class="nav navbar-nav">    
+            <li ><a href="/user/plan.do">新年计划</a></li>          
+              <li><a href="../match.do">园游会</a></li>
               <li><a href="usermatch.do" id="myLine">我的匹配</a></li>
               <li><a href="/user/userflower.do" id="myFlower">我的花</a></li>
         <li class="active"><a href="/user/userline.do">我的牵线</a></li>

@@ -39,6 +39,10 @@ public class BusinessException extends RuntimeException {
 	 * 已经送过花了
 	 */
 	public static final int CODE_SEND_FLOWER = 306;
+	/**
+	 * 查询老消息时，没有执行最新的消息id
+	 */
+	public static final int PLAN_LISTOLD_PLANID_NULL = 401;
 	private int code;
 	private String objId;
 

@@ -12,4 +12,6 @@ public class SpringNames {
 	public static final String LineService = "lineservice";
 	public static final String HelpInfoMgr = "helpinfomgr";
 	public static final String MessageMgr = "messagemgr";
+	public static final String UserPlanMgr = "userplanmgr";
+	
 }

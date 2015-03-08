@@ -82,5 +82,10 @@ public interface IUser extends IBaseObj {
 	Date getLastLine();
 
 	int getAgeRange();
+	/**
+	 * 获取学校信息
+	 * @return
+	 */
+	String getSchool();
 
 }

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import com.ylp.date.app.ApplicationListener;
 import com.ylp.date.mgr.helpinfo.impl.HelpInfoMgr;
 import com.ylp.date.mgr.msg.impl.MessageMgr;
+import com.ylp.date.mgr.plan.IUserPlanMgr;
 import com.ylp.date.mgr.relation.impl.RelationBldMgr;
 import com.ylp.date.mgr.relation.impl.RelationMgr;
 import com.ylp.date.mgr.relation.impl.UserRelation;
@@ -197,6 +198,11 @@ public class Server {
 	public HelpInfoMgr getHelpInfoMgr() {
 		return ApplicationListener.getApplicationContext().getBean(
 				SpringNames.HelpInfoMgr, HelpInfoMgr.class);
+	}
+
+	public IUserPlanMgr getPlanMgr() {
+		return ApplicationListener.getApplicationContext().getBean(
+				SpringNames.UserPlanMgr, IUserPlanMgr.class);
 	}
 
 	/**

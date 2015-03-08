@@ -216,10 +216,14 @@ public abstract class BaseObjMgr implements IMgrBase {
 		}
 	}
 
-
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<IBaseObj> executeQuery(String hql, Object[] params) {
+		return executeQuery(hql, params, -1);
+	}
+
+	@Override
+	public List<IBaseObj> executeQuery(String hql, Object[] params, int size) {
 		Session session = Server.getInstance().openSession();
 		try {
 			Query query = session.createQuery(hql);
@@ -227,6 +231,9 @@ public abstract class BaseObjMgr implements IMgrBase {
 				for (int i = 0; i < params.length; i++) {
 					query.setParameter(i, params[i]);
 				}
+			}
+			if (size != -1) {
+				query.setMaxResults(size);
 			}
 			return query.list();
 		} catch (Exception e) {

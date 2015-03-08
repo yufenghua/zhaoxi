@@ -49,8 +49,8 @@
 						placeholder="email" />
 				</div>
 				<div class="form-group">
-					<input type="file" class="form-control" name="file" /> <span
-						class="tip">请上传北京大学学生证/毕业证</span>
+					<input type="text" class="form-control" name="school"  id="file_input" placeholder="学校" /> <span
+						class="tip">&nbsp;</span>
 				</div>
 				<div class="form-group">
 					<input id="submit_reg" type="button"
@@ -94,6 +94,7 @@
 	<script src="../static/thirdparty/flat-ui/js/jquery.placeholder.js"></script>
 	<script src="../pages/js/util.js"></script>
 	<script>
+	var emailReg=/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
 		$(function() {
 			var $toggle = $('#toggle');
 			var $forms = $('#register, #login');
@@ -119,6 +120,15 @@
 				var email = $('#email_reg').val();
 				if (isEmpty(email)) {
 					showMessage('邮箱不能为空！');
+					return false;
+				}
+				if(!emailReg.test(email)){
+					showMessage('邮箱地址非法！');
+					return false;
+				}
+				var img= $('#file_input').val();
+				if(isEmpty(img)){
+					showMessage('请输入学校！');
 					return false;
 				}
 				var exist=false;
