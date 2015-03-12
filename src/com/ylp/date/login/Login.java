@@ -27,9 +27,10 @@ public class Login implements Serializable {
 	private Map<String, Object> props = Collections
 			.synchronizedMap(new HashMap<String, Object>());
 	private IUser user;
+	private String userId;
 
 	public IUser getUser() {
-		if(user==null){
+		if (user == null) {
 			return null;
 		}
 		return Server.getInstance().userMgr().getObj(user.getId());
@@ -66,6 +67,7 @@ public class Login implements Serializable {
 		}
 		if (StringTools.validatePwd(passWord, user.getPwd())) {
 			this.user = user;
+			this.userId=userId;
 			return true;
 		}
 		return false;
@@ -83,7 +85,17 @@ public class Login implements Serializable {
 			return false;
 		}
 		this.user = user;
+		this.userId = userId;
 		return true;
+	}
+
+	/**
+	 * 获取用户id
+	 * 
+	 * @return
+	 */
+	public String getUserId() {
+		return this.userId;
 	}
 
 	/**

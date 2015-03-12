@@ -40,13 +40,16 @@ public interface IRelMgr extends IMgrBase {
 
 	/**
 	 * get flower between
+	 * 
 	 * @param userId
 	 * @param userId1
 	 * @return
 	 */
 	IRelation getFlowerBetween(String userId, String userId1);
+
 	/**
 	 * get line between
+	 * 
 	 * @param userId
 	 * @param userId1
 	 * @return
@@ -62,16 +65,33 @@ public interface IRelMgr extends IMgrBase {
 	 * @throws Exception
 	 */
 	void buildLine(String userId, String one, String other) throws Exception;
+
 	/**
 	 * send flower
+	 * 
 	 * @param sender
 	 * @param receiver
 	 */
-	void sendFlower(String sender,String receiver);
+	void sendFlower(String sender, String receiver);
+
 	/**
 	 * 
 	 * @param type
 	 * @param userId
 	 */
-	void recognize(int type,String userId);
+	void recognize(int type, String userId);
+
+	/**
+	 * 建立一种关系
+	 * 
+	 * @param type
+	 *            关系类型
+	 * @param one
+	 *            关系的一个
+	 * @param other
+	 *            关系的另一方
+	 * @param builder
+	 *            关系创建者id
+	 */
+	void buildRelation(int type, String one, String other, String builder);
 }

@@ -13,6 +13,8 @@ import com.ylp.date.mgr.IBaseObj;
 public interface IRelation extends IBaseObj {
 	int TYPE_LINE = 0;
 	int TYPE_FLOWER = 1;
+	int TYPE_PLAN = 2;
+	int RECOG_PLAN = 1;
 	int RECOG_LINE = 3;
 	int RECOG_FLOWER = 2;
 
@@ -29,6 +31,7 @@ public interface IRelation extends IBaseObj {
 	 * @return
 	 */
 	String getOtherOne();
+
 	String getOther(String userId);
 
 	/**
@@ -44,5 +47,6 @@ public interface IRelation extends IBaseObj {
 	 * @return
 	 */
 	int getRecognition();
+
 	Date getOkTime();
 }

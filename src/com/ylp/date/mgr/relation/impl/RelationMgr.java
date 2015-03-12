@@ -232,14 +232,15 @@ public class RelationMgr extends BaseObjMgr implements IRelMgr {
 	}
 
 	/**
-	 * 处理lastline的问题 
+	 * 处理lastline的问题
+	 * 
 	 * @param relation
 	 * @param okTime
 	 * @throws Exception
 	 */
 	private void handleLastLine(UserRelation relation, Date okTime)
 			throws Exception {
-		//FIXME 此处代码应该在关系监听器里面来执行
+		// FIXME 此处代码应该在关系监听器里面来执行
 		IUserMgr userMgr = Server.getInstance().userMgr();
 		String oneUser = relation.getOne();
 		User one = (User) userMgr.getObj(oneUser);
@@ -365,5 +366,10 @@ public class RelationMgr extends BaseObjMgr implements IRelMgr {
 		} finally {
 			session.close();
 		}
+	}
+
+	@Override
+	public void buildRelation(int type, String one, String other, String builder) {
+
 	}
 }
