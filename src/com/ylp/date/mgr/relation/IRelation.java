@@ -49,4 +49,18 @@ public interface IRelation extends IBaseObj {
 	int getRecognition();
 
 	Date getOkTime();
+
+	/**
+	 * 关系发生的上下文类型,如新年计划 赞 连线等
+	 * 
+	 * @return
+	 */
+	int getContextType();
+
+	/**
+	 * 关系发生的上下文对象id 有可能为空，如 新年计划的id
+	 * 
+	 * @return
+	 */
+	String getContextObjId();
 }

@@ -29,9 +29,9 @@
 			<ul class="nav navbar-nav">
 				<li ><a href="/user/plan.do">新年计划</a></li>  
 				<li><a href="../match.do">园游会</a></li>
-				<li class="active"><a href="/user/usermatch.do" id="myLine">我的匹配</a></li>
+				<li ><a href="/user/usermatch.do" id="myLine">我的匹配</a></li>
 			    <li><a href="/user/userflower.do" id="myFlower">我的花</a></li>
-			     <li ><a href="/user/partner.do" id="mypartner">我的伙伴</a></li>
+			    <li class="active"><a href="/user/partner.do" id="mypartner">我的伙伴</a></li>
 				<li><a href="/user/userline.do">我的牵线</a></li>
 				<li><a href="userinfo.do?action=setting">设置</a></li>
 				<li><a href="" class="logout-btn">退出</a></li>
@@ -62,7 +62,7 @@
      <script src="/pages/js/unread.js"></script>
 	<script>
 		$(function() {
-			initDatas('usermatch.do');
+			initDatas('partner.do');
 			$('#refresh-btn').on('click', function(e) {
 				e.preventDefault();
 				window.location.reload();

@@ -16,8 +16,12 @@ import com.ylp.date.controller.BaseController;
 import com.ylp.date.controller.ControlUtil;
 import com.ylp.date.mgr.plan.IUserPlan;
 import com.ylp.date.mgr.plan.impl.UserPlan;
+import com.ylp.date.mgr.relation.IRelation;
+import com.ylp.date.mgr.relation.impl.RelationMgr;
 import com.ylp.date.mgr.user.IUser;
 import com.ylp.date.server.Server;
+import com.ylp.date.util.CollectionTool;
+
 @Controller
 @RequestMapping("user/plan")
 public class UserPlanController extends BaseController {
@@ -41,7 +45,34 @@ public class UserPlanController extends BaseController {
 			listOld(req, res);
 			return null;
 		}
+		if (StringUtils.equals(action, "agree")) {
+			agree(req, res);
+			return null;
+		}
 		return null;
+	}
+
+	private void agree(HttpServletRequest req, HttpServletResponse res) {
+		String planId = req.getParameter("plan");
+		if (StringUtils.isEmpty(planId)) {
+			throw new RuntimeException("没有指定计划");
+		}
+		IUserPlan plan = (IUserPlan) Server.getInstance().getPlanMgr()
+				.getObj(planId);
+		String userId = ControlUtil.getLogin(req).getUserId();
+		try {
+			RelationMgr relationMgr = Server.getInstance().getRelationMgr();
+			String planUserId = plan.getUserId();
+			List<IRelation> list = relationMgr.getRelationBetween(
+					IRelation.TYPE_PLAN, userId, planUserId, planId);
+			if (!CollectionTool.checkNull(list)) {
+				return;
+			}
+			relationMgr.buildRelation(IRelation.TYPE_PLAN, userId, planUserId,
+					userId, planId);
+		} catch (Exception e) {
+			Server.getInstance().handleException(e);
+		}
 	}
 
 	private void listOld(HttpServletRequest req, HttpServletResponse res) {
@@ -76,7 +107,7 @@ public class UserPlanController extends BaseController {
 		String userId = iUserPlan.getUserId();
 		obj.put("userId", userId);
 		IUser obj2 = Server.getInstance().userMgr().getObj(userId);
-		obj.put("usercaption", obj2==null?userId:obj2.getCaption());
+		obj.put("usercaption", obj2 == null ? userId : obj2.getCaption());
 		return obj;
 	}
 

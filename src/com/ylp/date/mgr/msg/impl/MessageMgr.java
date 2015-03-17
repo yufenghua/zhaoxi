@@ -149,4 +149,8 @@ public class MessageMgr extends BaseObjMgr implements IMsgMgr {
 		return getUnreadCount(id, IRelation.TYPE_FLOWER, IRelation.RECOG_FLOWER);
 	}
 
+	public long getUnreadCountForPlan(String id) {
+		return getUnreadCount(id, IRelation.TYPE_PLAN, 1);
+	}
+
 }

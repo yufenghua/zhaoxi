@@ -83,20 +83,33 @@ PlanList.prototype.addPlan=function(data,isNew){
 	var titleH=$('<h7><span style="color: #1abc9c">'+data.usercaption+'</span>发表了新年计划：<span style="font-weight: bold">'+data.content+'</span></h7>');
 	div.append(titleH);
 	if(loginId!=data.userId){
-		// var btn=$('<button>');
-		// btn.addClass('btn');
-		// btn.addClass('btn-default');
-		// btn.css('background-color','#FF3300');
-		// btn.css('font-color','red');
-		// btn.text('约');
-		// btn.click(function(){
-		// 	window.open('../static/chat/main/index.html?' +
-		//  	'me=' + loginId +
-		//  	'&to=' + data.userId +
-		//  	'&name=' + data.usercaption +
-		//  	'&success=true');
-		// });
-		// div.append(btn);
+		var btn=$('<button>');
+		btn.addClass('btn');
+		btn.addClass('btn-default');
+		btn.css('background-color','#FF3300');
+		btn.css('font-color','red');
+		btn.text('约');
+		btn.click(function(){
+			//
+			$.ajax({
+					type: "POST",
+					url: "/user/plan.do",
+					data: { action: 'agree',plan:data.id},
+					success: function() {
+						   window.open('../static/chat/main/index.html?' +
+						 	'me=' + loginId +
+						 	'&to=' + data.userId +
+						 	'&name=' + data.usercaption +
+						 	'&success=true');
+					},
+					error: function (xhr, textStatus, errorThrown) {
+							self.isListing=false;
+						    showMessage('出现错误');
+						 }
+			});
+			
+		});
+		div.append(btn);
 	}
 	
 	

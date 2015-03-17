@@ -18,7 +18,7 @@ import com.ylp.date.mgr.relation.IRelation;
 
 @Entity
 @Table(name = "DATE_RELATION")
-@Cache(usage=CacheConcurrencyStrategy.READ_WRITE)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class UserRelation implements IRelation {
 	@Column(name = "ID_", nullable = false)
 	@Id
@@ -39,6 +39,14 @@ public class UserRelation implements IRelation {
 	private Date otherOneReg;
 	@Column(name = "OKTIME_")
 	private Date okTime;
+	@Column(name = "CONTEXTTYPE_", nullable = true)
+	private int contextType;
+	@Column(name = "CONTEXTOBJID_", nullable = true)
+	private String contextObjId;
+
+	public void setContextObjId(String contextObjId) {
+		this.contextObjId = contextObjId;
+	}
 
 	public String getId() {
 		return id;
@@ -121,4 +129,17 @@ public class UserRelation implements IRelation {
 		return null;
 	}
 
+	@Override
+	public int getContextType() {
+		return contextType;
+	}
+
+	@Override
+	public String getContextObjId() {
+		return contextObjId;
+	}
+
+	public void setContextType(int contextType) {
+		this.contextType = contextType;
+	}
 }

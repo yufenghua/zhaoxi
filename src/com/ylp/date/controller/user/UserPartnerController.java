@@ -1,6 +1,5 @@
 package com.ylp.date.controller.user;
 
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -20,45 +19,45 @@ import com.ylp.date.controller.ControlUtil;
 import com.ylp.date.login.Login;
 import com.ylp.date.mgr.msg.IMessage;
 import com.ylp.date.mgr.relation.IRelation;
-import com.ylp.date.mgr.relation.IRelationBuilder;
 import com.ylp.date.mgr.relation.impl.RelationMgr;
-import com.ylp.date.mgr.relation.impl.UserRelation;
 import com.ylp.date.mgr.tag.ITag;
 import com.ylp.date.mgr.tag.impl.UserTagSugMgr;
 import com.ylp.date.mgr.user.IUser;
 import com.ylp.date.server.Server;
 import com.ylp.date.util.CollectionTool;
 
+/**
+ * 
+ * @author Qiaolin Pan
+ * 
+ */
 @Controller
-@RequestMapping("/user/userflower")
-public class UserFlowerController extends BaseController {
+@RequestMapping("user/partner")
+public class UserPartnerController extends BaseController {
 	private static SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日");
 
 	@Override
 	protected String hanldleReq(HttpServletRequest req, HttpServletResponse res)
 			throws Exception {
 		String action = req.getParameter("action");
-		if (!StringUtils.isNotEmpty(action)) {
-			return "pages/my-flower";
+		if (StringUtils.isEmpty(action)) {
+			return "pages/my-partner";
 		}
 		if (StringUtils.equals(action, "list")) {
 			res.setContentType("application/json; charset=utf-8");
-			listMatch(req, res);
-			return null;
-		}
-		if (StringUtils.equals(action, "recognize")) {
-			recognizeFlower(req, res);
+			listPartners(req, res);
 			return null;
 		}
 		return null;
 	}
 
-	private void listMatch(HttpServletRequest req, HttpServletResponse res)
-			throws JSONException, IOException {
+	private void listPartners(HttpServletRequest req, HttpServletResponse res)
+			throws Exception {
 		Login login = ControlUtil.getLogin(req);
 		String userId = login.getUser().getId();
 		RelationMgr relationMgr = Server.getInstance().getRelationMgr();
-		List<IRelation> list = relationMgr.listFlower(userId);
+		List<IRelation> list = relationMgr.listRelation(userId,
+				IRelation.TYPE_PLAN, -1);
 		if (CollectionTool.checkNull(list)) {
 			return;
 		}
@@ -68,21 +67,21 @@ public class UserFlowerController extends BaseController {
 			arr.put(handleWithItem(userId, iRelation, req));
 		}
 		jso.put("matchs", arr);
-		relationMgr.recognize(IRelation.TYPE_FLOWER, userId);
+		relationMgr.recognize(IRelation.TYPE_LINE, userId);
 		res.getWriter().print(jso.toString());
 	}
 
 	private JSONObject handleWithItem(String userId, IRelation iRelation,
 			HttpServletRequest req) throws JSONException {
 		JSONObject obj = new JSONObject();
-		List<IRelationBuilder> builders = Server.getInstance()
-				.getRelationBuilderMgr().getAllBuilders(iRelation.getId());
-		Date okTime = CollectionTool.checkNull(builders) ? null : builders.get(
-				0).getCreateTime();
-		obj.put("time", okTime == null ? "未知时间" : format.format(okTime));
-		// 用户信息
+		Date okTime = iRelation.getOkTime();
+		if (okTime != null) {
+			obj.put("time", format.format(okTime));
+		}
 		String other = iRelation.getOther(userId);
 		obj.put("img", ControlUtil.getImgUrl(req, other));
+
+		// 用户信息
 		IUser iUser = Server.getInstance().userMgr().getObj(other);
 		obj.put("userCaption", iUser.getCaption());
 		obj.put("age", iUser.getAgeRange());
@@ -99,40 +98,12 @@ public class UserFlowerController extends BaseController {
 			arr.put(json);
 		}
 		obj.put("tags", arr);
-
 		obj.put("otherid", other);
 		List<IMessage> listUnRead = Server.getInstance().getMsgMgr()
 				.listUnRead(other, userId);
-		//未读消息数
+		// 未读消息数
 		obj.put("msgcount", CollectionTool.checkNull(listUnRead) ? 0
 				: listUnRead.size());
-		obj.put("success", iRelation.getRecognition() == IRelation.RECOG_FLOWER);
-		List<IRelationBuilder> list = Server.getInstance()
-				.getRelationBuilderMgr().getAllBuilders(iRelation.getId());
-		if (!CollectionTool.checkNull(list)) {
-			// 理论上来说 这个地方是不能为空的
-			IRelationBuilder builder = list.get(0);
-			obj.put("isSend", StringUtils.equals(userId, builder.getUserId()));
-		}
 		return obj;
-	}
-
-	private void recognizeFlower(HttpServletRequest req, HttpServletResponse res) throws Exception {
-		String userId = req.getParameter("user");
-		if (!StringUtils.isNotEmpty(userId)) {
-			throw new RuntimeException("用户id不能为空");
-		}
-		Login login = ControlUtil.getLogin(req);
-		RelationMgr relationMgr = Server.getInstance()
-				.getRelationMgr();
-		UserRelation flower = (UserRelation) relationMgr
-				.getFlowerBetween(userId, login.getUser().getId());
-		if (flower == null) {
-			return;
-		}
-		flower.setRecognition(IRelation.RECOG_FLOWER);
-		flower.setOkTime(new Date());
-		relationMgr.update(flower.getId(), flower);
-		
 	}
 }

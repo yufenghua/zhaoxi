@@ -276,11 +276,15 @@ public class UserInfoController extends BaseController {
 		IMsgMgr msgMgr = Server.getInstance().getMsgMgr();
 
 		String id = login.getUser().getId();
-		List<IMessage> listUnRead = msgMgr.listUnRead(null, id);
 		// 未读消息数
 		json.put("msgcount4f", getUnreadLineMsg(id));
 		json.put("msgcount4l", getUnreadFlowerMsg(id));
+		json.put("msgcount4p", getUnreadPlanMsg(id));
 		res.getWriter().print(json.toString());
+	}
+
+	private long getUnreadPlanMsg(String id) {
+		return Server.getInstance().getMsgMgr().getUnreadCountForPlan(id);
 	}
 
 	private long getUnreadFlowerMsg(String id) {
