@@ -15,7 +15,7 @@ public interface IRelation extends IBaseObj {
 	int TYPE_FLOWER = 1;
 	int TYPE_PLAN = 2;
 	int RECOG_PLAN = 1;
-	int RECOG_LINE = 3;
+	int RECOG_LINE = 1;
 	int RECOG_FLOWER = 2;
 
 	/**
