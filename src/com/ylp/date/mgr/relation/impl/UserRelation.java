@@ -40,7 +40,7 @@ public class UserRelation implements IRelation {
 	@Column(name = "OKTIME_")
 	private Date okTime;
 	@Column(name = "CONTEXTTYPE_", nullable = true)
-	private int contextType;
+	private int contextType=-1;
 	@Column(name = "CONTEXTOBJID_", nullable = true)
 	private String contextObjId;
 

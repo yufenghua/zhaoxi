@@ -91,13 +91,19 @@ MatchInfoMgr.prototype.refresh = function() {
 	    	self.userInfo = data.user;
 			self.infoId = data.id;
 			self._canMatch=data.canMatch;
+			var opsiteUsers = data.opposite;
+			//没有异性的情况 不显示
+			if(!opsiteUsers||opsiteUsers.length==0){
+				return;
+			}
 			var sameUsers = data.same;
 			if (sameUsers) {
 				for (var i = 0; i < sameUsers.length; i++) {
 					self._addSame(sameUsers[i]);
 				}
 			}
-			var opsiteUsers = data.opposite;
+			
+
 			if (opsiteUsers) {
 				for (var i = 0; i < opsiteUsers.length; i++) {
 					self._addOpsite(opsiteUsers[i]);
@@ -188,7 +194,7 @@ MatchInfoMgr.prototype.match = function(id1, id2) {
 	    		showMessage('连线成功！连得越多越准，你的幸运值就越高！');
 		    	self.refresh();
 	    	}else{
-	    		showMessage('ops,连线失败了，换个人再试一次吧。'+data.msg);
+	    		showMessage('ops,脑子有点乱，我想静静，别问我静静是谁！');
 	    	}
 	    },
 	    error: function (xhr, textStatus, errorThrown) {
@@ -253,9 +259,7 @@ MatchUser.prototype.init = function() {
 				var tagetPosition=value.getPosition();
 				//是否重合的算法 逻辑是 二者的定位误差不超过100像素
 				if(Math.abs(position.left-tagetPosition.left)<=MatchUser.LINE_SIDE&&Math.abs(position.top-tagetPosition.top)<=MatchUser.LINE_SIDE){
-					showConfirm('确认连线'+self.userObj.name+'和'+value.userObj.name+'吗？',"",function(){
-						self.mgr.match(self.userObj.id,userObjId);
-					});
+					self.mgr.match(self.userObj.id,userObjId);
 				};
 			});
 		}
@@ -324,7 +328,7 @@ MatchUser.prototype.init = function() {
 				    	showMessage('赞已发出，每个赞都会变成一朵花，等待惊喜吧。');
 				    },
 				    error: function (xhr, textStatus, errorThrown) {
-				    	showMessage('出现错误,已经点过赞了');
+				    	showMessage('已经点过赞了');
 				    }
 				});
 		})

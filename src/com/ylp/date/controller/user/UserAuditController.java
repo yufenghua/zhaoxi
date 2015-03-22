@@ -54,7 +54,7 @@ public class UserAuditController extends BaseController {
 			throws JSONException, IOException {
 		res.setContentType("application/json; charset=utf-8");
 		String userId = req.getParameter("userid");
-		boolean isback=Boolean.valueOf(req.getParameter("isback"));
+		boolean isback = Boolean.valueOf(req.getParameter("isback"));
 		IUserMgr userMgr = Server.getInstance().userMgr();
 		IUser user = userMgr.getObj(userId);
 		JSONObject obj = new JSONObject();
@@ -66,7 +66,8 @@ public class UserAuditController extends BaseController {
 			obj.put("msg", "该用户已通过认证！");
 		} else {
 			User user2 = (User) user;
-			user2.setStatus(isback?IUser.STATE_AUDITBACK:IUser.STATE_AUDITED);
+			user2.setStatus(isback ? IUser.STATE_AUDITBACK
+					: IUser.STATE_AUDITED);
 			user2.setModeratorId(ControlUtil.getLogin(req).getUser().getId());
 			try {
 				userMgr.update(userId, user2);
@@ -93,7 +94,7 @@ public class UserAuditController extends BaseController {
 			JSONObject obj = new JSONObject();
 			obj.put("id", iUser.getId());
 			obj.put("caption", iUser.getCaption());
-			obj.put("img", ControlUtil.getCardImgUrl(req, iUser.getId()));
+			obj.put("img", ControlUtil.getImgUrl(req, iUser.getId()));
 			obj.put("agerender", iUser.getAgeRange());
 			obj.put("tags", getSugs(iUser));
 			arr.put(obj);
@@ -103,15 +104,16 @@ public class UserAuditController extends BaseController {
 	}
 
 	private JSONArray getSugs(IUser iUser) throws Exception {
-		String userId=iUser.getId();
-		List<ITag> sugs = Server.getInstance().getUserTagMgr().getTagsByUser(userId);
-		JSONArray arr=new JSONArray();
-		if(CollectionTool.checkNull(sugs)){
+		String userId = iUser.getId();
+		List<ITag> sugs = Server.getInstance().getUserTagMgr()
+				.getTagsByUser(userId);
+		JSONArray arr = new JSONArray();
+		if (CollectionTool.checkNull(sugs)) {
 			return arr;
 		}
 		UserTagSugMgr userTagSugMgr = Server.getInstance().getUserTagSugMgr();
 		for (ITag iTag : sugs) {
-			JSONObject obj=new JSONObject();
+			JSONObject obj = new JSONObject();
 			obj.put("tag", iTag.getCaption());
 			obj.put("sug", userTagSugMgr.getObj(iTag.getTagSug()).getCaption());
 			arr.put(obj);

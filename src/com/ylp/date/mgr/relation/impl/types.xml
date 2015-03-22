@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <types>
 	<type id="0" caption="连线" homo="false" bidirectional="true"
-		recognize="3" />
+		recognize="1" />
 	<type id="1" caption="点赞" homo="false" bidirectional="false"
 		recognize="2" />
 	<type id="2" caption="伙伴" homo="true" bidirectional="false"

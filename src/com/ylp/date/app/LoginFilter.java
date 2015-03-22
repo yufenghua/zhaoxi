@@ -15,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 
 import com.ylp.date.controller.ControlUtil;
 import com.ylp.date.login.Login;
+import com.ylp.date.mgr.user.IUser;
 
 public class LoginFilter implements Filter {
 
@@ -44,14 +45,30 @@ public class LoginFilter implements Filter {
 			if (StringUtils.contains(string, "login.do")
 					|| StringUtils.contains(string, "join.do")) {
 				String action = req.getParameter("action");
-				//登出时，不能做拦截
+				// 登出时，不能做拦截
 				if (StringUtils.equals(action, "logout")) {
 					arg2.doFilter(arg0, arg1);
 					return;
 				}
 				HttpServletResponse res = (HttpServletResponse) arg1;
+				if (login.getUser().getStatus() == IUser.STATE_AUDITBACK) {
+					res.sendRedirect(req.getContextPath() + "/user/userinfo.do");
+					return;
+				}
 				res.sendRedirect(req.getContextPath() + "/match.do");
 				return;
+			} else {
+				if (StringUtils.contains(string, "userinfo.do")) {
+					arg2.doFilter(arg0, arg1);
+					return;
+				} else {
+					HttpServletResponse res = (HttpServletResponse) arg1;
+					if (login.getUser().getStatus() == IUser.STATE_AUDITBACK) {
+						res.sendRedirect(req.getContextPath()
+								+ "/user/userinfo.do");
+						return;
+					}
+				}
 			}
 			arg2.doFilter(arg0, arg1);
 			return;

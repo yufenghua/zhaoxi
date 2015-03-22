@@ -231,6 +231,7 @@ public class UserInfoController extends BaseController {
 			} finally {
 				stm.close();
 			}
+			user.setStatus(IUser.STATE_UNAUDIT);
 			// 允许没有图片的情况下 更新用户数据
 			userMgr.update(userid, user);
 			if (!StringUtils.isNotEmpty(from)) {

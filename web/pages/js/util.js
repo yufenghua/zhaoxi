@@ -82,20 +82,21 @@ function getAgeRangeText(age){
  * @returns
  */
 function showMessage(msg,title){
-	if(!this._msgdialog){
-		var dom = document.createElement("div");
-		this._msgdialog = $(dom).dialog({
-			autoOpen : false,
-			draggable : true,
-			modal : true,
-			resizable: false
-		});
-		this._msgdialog.content = dom;
-	}
-	this._msgdialog.content.innerHTML = msg;
-	// this._msgdialog.dialog("option", "title", (title || "提示"));
-	this._msgdialog.dialog("option", "position", { my: "center", at: "center", of: this });
-	this._msgdialog.dialog("open");
+	alert(msg);
+	// if(!this._msgdialog){
+	// 	var dom = document.createElement("div");
+	// 	this._msgdialog = $(dom).dialog({
+	// 		autoOpen : false,
+	// 		draggable : true,
+	// 		modal : true,
+	// 		resizable: false
+	// 	});
+	// 	this._msgdialog.content = dom;
+	// }
+	// this._msgdialog.content.innerHTML = msg;
+	// // this._msgdialog.dialog("option", "title", (title || "提示"));
+	// this._msgdialog.dialog("option", "position", { my: "center", at: "center", of: this });
+	// this._msgdialog.dialog("open");
 }
 
 /**

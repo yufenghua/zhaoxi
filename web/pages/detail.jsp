@@ -27,6 +27,8 @@
   User user=(User)request.getAttribute("user");
   boolean userNull=user==null;
   boolean isGender=true;
+  boolean hasImage=!(user.getImg()==null||user.getImg().length==0);
+  boolean isAuditBack=user.getStatus()==user.STATE_AUDITBACK;
   String checked=" checked=\"checked\"";
   boolean age1=userNull||user.getAgeRange()==User.AGE_18_20;
   boolean age2=!userNull&&user.getAgeRange()==User.AGE_20_23;
@@ -59,7 +61,7 @@
 				<li ><a href="usermatch.do" id="myLine">我的匹配</a></li>
 			   <li><a href="/user/userflower.do" id="myFlower">我的花</a></li>
 			      <li ><a href="/user/partner.do" id="mypartner">我的伙伴</a></li>
-        <li><a href="/user/userline.do">我的牵线</a></li>
+        		<li><a href="/user/userline.do">我的牵线</a></li>
 				<li class="active"><a href="">设置</a></li>
 				<li><a href="" class="logout-btn">退出</a></li>
 			</ul>
@@ -88,6 +90,10 @@
               <div class="form-group">
                <img src="../static/img/upsuc.png" style='display:inline-block;margin-left:51px;width:60px;'/>
                 <label style="font-size:20px;"><%=msg %></label>
+              </div>
+             <%} else{%>
+             <div class="form-group">
+                <label style="font-size:20px;">朝夕是个有诚意的地方，上传一张真实的照片吧</label>
               </div>
              <%} %>
               <div class="form-group">
@@ -157,6 +163,7 @@
     <script src="../pages/js/util.js"></script>
     <script src="/pages/js/unread.js"></script>
     <script>
+    	var hasImage=<%=hasImage%>;
         $(function () {
             var input = document.getElementById('avatarInput');
             var cont = document.getElementById('avatar');
@@ -164,10 +171,17 @@
             var summitBtn=$('#form_submitbutton');
             summitBtn.click(function(evt){
             	var userCaption=$("#usercaption").val();
+            	var img=$('#avatarInput').val();
+            	debugger;
+            	if(!hasImage&&validate(img)){
+            		showMessage('选择一张照片吧');
+            		return false;
+            	}
             	if(validate(userCaption)){
             		showMessage('昵称必须输入哦');
             		return false;
             	}else{
+            		summitBtn.attr("disabled",true); 
             		$('#submitform').submit();
             	}
             });
